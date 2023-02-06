@@ -1,8 +1,12 @@
 OBJS_DIR = objs
 
 SRCS	:=	$(shell find srcs/*.c -exec basename \ {} \;)
+SRCS_PARSING	:=	$(shell find srcs/parsing/*.c -exec basename \ {} \;)
+SRCS_UTILS	:=	$(shell find srcs/utils/*.c -exec basename \ {} \;)
 
 OBJS = ${patsubst %.c,${OBJS_DIR}/%.o,${SRCS}}
+OBJS_PARSING = ${patsubst %.c,${OBJS_DIR}/%.o,${SRCS_PARSING}}
+OBJS_UTILS = ${patsubst %.c,${OBJS_DIR}/%.o,${SRCS_UTILS}}
 
 HEADERS = cub3d.h
 
@@ -16,8 +20,8 @@ CFLAGS =
 
 # -- RULES -- #
 
-${NAME}: ${LIB} ${OBJS_DIR} ${OBJS} ${HEADERS}
-	@${CC} ${CFLAGS} ${OBJS} ${LIB} -L/usr/local/lib -I/usr/local/include -o ${NAME}
+${NAME}: ${LIB} ${OBJS_DIR} ${OBJS} ${OBJS_PARSING} ${OBJS_UTILS} ${HEADERS}
+	@${CC} ${CFLAGS} ${OBJS} ${OBJS_PARSING} ${OBJS_UTILS} ${LIB} -L/usr/local/lib -I/usr/local/include -o ${NAME}
 	@echo "\033[32m$ ${NAME} compiled !"
 	@echo "----------------------------\033[0m"
 
@@ -31,6 +35,12 @@ $(OBJS_DIR):
 	@echo "\033[33mcompiling ${NAME}..."
 
 ${OBJS_DIR}/%.o: srcs/%.c
+	@${CC} ${CFLAGS} -I. -c $< -o $@
+
+${OBJS_DIR}/%.o: srcs/parsing/%.c
+	@${CC} ${CFLAGS} -I. -c $< -o $@
+
+${OBJS_DIR}/%.o: srcs/utils/%.c
 	@${CC} ${CFLAGS} -I. -c $< -o $@
 
 clean:
