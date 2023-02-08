@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 16:14:46 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/06 19:30:56 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/08 19:38:48 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,25 @@ void	save_rgb_in_indentifier(int *identifier, char *info)
 	free_split(rgb_split);
 }
 
+int	check_map_line(char *line)
+{
+	if (str_search(line, "\n", 1) == TRUE)
+		return (FALSE);
+	else if (str_search(line, "NO", 2) == TRUE)
+		return (FALSE);
+	else if (str_search(line, "SO", 2) == TRUE)
+		return (FALSE);
+	else if (str_search(line, "WE", 2) == TRUE)
+		return (FALSE);
+	else if (str_search(line, "EA", 2) == TRUE)
+		return (FALSE);
+	else if (str_search(line, "F", 1) == TRUE)
+		return (FALSE);
+	else if (str_search(line, "C", 1) == TRUE)
+		return (FALSE);
+	return	(TRUE);
+}
+
 void	identifier_manager(t_parsing *parsing, char *line)
 {
 	if (str_search(line, "NO", 2) == TRUE)
@@ -49,7 +68,42 @@ void	identifier_manager(t_parsing *parsing, char *line)
 		save_rgb_in_indentifier(parsing->rgb_floor, line);
 	else if (str_search(line, "C", 1) == TRUE)
 		save_rgb_in_indentifier(parsing->rgb_plafond, line);
-	// calculer la hauteur de la carte et 
+	else if (check_map_line(line) == TRUE)
+		parsing->map_height++;
+}
+
+void create_map_tab(t_parsing *parsing, char *line)
+{
+	static int	i;
+	int			j;
+	int			k;
+	int			space;
+
+	j = 1;
+	space = 0;
+	while (line[j])
+	{
+		if (line[j] == ' ')
+			space++;
+		j++;
+	}
+	j--;
+	if (line[j] != '\n')
+		j++;
+	j -= space;
+	parsing->map[i] = malloc(sizeof(int *) * j);
+	parsing->map_width[i] = j;
+	j = 0;
+	k = 0;
+	while (line[j])
+	{
+		while (line[j] == ' ')
+			j++;
+		parsing->map[i][k] = line[j] - 48;
+		j++;
+		k++;
+	}
+	i++;
 }
 
 void	parser(t_parsing *parsing, char *path)
@@ -62,6 +116,18 @@ void	parser(t_parsing *parsing, char *path)
 	while (line)
 	{
 		identifier_manager(parsing, line);
+		free(line);
+		line = get_next_line(fd);
+	}
+	close(fd);
+	parsing->map_width = malloc(sizeof(int) * parsing->map_height);
+	parsing->map = malloc(sizeof(int *) * parsing->map_height);
+	fd = open(path, O_RDONLY);
+	line = get_next_line(fd);
+	while (line)
+	{
+		if (check_map_line(line) == TRUE)
+			create_map_tab(parsing, line);
 		printf("%s", line);
 		free(line);
 		line = get_next_line(fd);
