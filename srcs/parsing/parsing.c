@@ -72,6 +72,13 @@ void	identifier_manager(t_parsing *parsing, char *line)
 		parsing->map_height++;
 }
 
+int	is_player_orientation(char c)
+{
+	if (c == 'N' || c == 'E' || c == 'S' || c == 'W')
+		return (TRUE);
+	return (FALSE);
+}
+
 void create_map_tab(t_parsing *parsing, char *line)
 {
 	static int	i;
@@ -82,26 +89,23 @@ void create_map_tab(t_parsing *parsing, char *line)
 	j = 1;
 	space = 0;
 	while (line[j])
-	{
-		if (line[j] == ' ')
-			space++;
 		j++;
-	}
 	j--;
 	if (line[j] != '\n')
 		j++;
-	j -= space;
 	parsing->map[i] = malloc(sizeof(int *) * j);
 	parsing->map_width[i] = j;
 	j = 0;
 	k = 0;
 	while (line[j])
 	{
-		while (line[j] == ' ')
-			j++;
-		parsing->map[i][k] = line[j] - 48;
+		if (line[j] == ' ')
+			parsing->map[i][j] = 676;
+		else if (is_player_orientation(line[j]) == TRUE)
+			parsing->map[i][j] = line[j];
+		else
+			parsing->map[i][j] = line[j] - 48;
 		j++;
-		k++;
 	}
 	i++;
 }
