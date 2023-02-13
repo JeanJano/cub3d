@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/08 19:41:07 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/13 18:44:11 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,11 @@ int	main(int ac, char **av)
 {
 	t_parsing	parsing;
 
-	if (ac != 2)
+	if (ac != 2 || check_extension(av[1]) == FALSE)
 		return (1);
 	init_parsing(&parsing);
 	parser(&parsing, av[1]);
-	print_parsing(&parsing);
+	// print_parsing(&parsing);
+	check_valid_map(&parsing);
 	return (0);
 }

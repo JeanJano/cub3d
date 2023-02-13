@@ -23,6 +23,8 @@ typedef struct	s_parsing
 }	t_parsing;
 
 void	parser(t_parsing *parsing, char *path);
+int		check_valid_map(t_parsing *parsing);
+int		check_extension(char *file_name);
 
 int		str_search(const char *big, const char *little, size_t len);
 char	*strdup_no_breakline(char *line);
