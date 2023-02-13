@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 16:14:46 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/08 19:38:48 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/13 21:18:39 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ void	parser(t_parsing *parsing, char *path)
 	{
 		if (check_map_line(line) == TRUE)
 			create_map_tab(parsing, line);
-		printf("%s", line);
+		// printf("%s", line);
 		free(line);
 		line = get_next_line(fd);
 	}
