@@ -6,14 +6,16 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:39:05 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/14 16:51:09 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/15 16:17:53 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-// to do :
-// 	aucun vide ne peut toucher de zero
+// to do:
+// 	CHECK pour savoir si la carte est ferme de regarder si elle est ferme en haut et en bas
+//  test alan
+
 
 void	error_message(char *message)
 {
@@ -118,10 +120,25 @@ int	check_wall(int *line, int end_line)
 	return (TRUE);
 }
 
+int	check_wall_up_down(t_parsing *parsing, int i)
+{
+	int	j;
+
+	j = 0;
+	while (j < parsing->map_width[i])
+	{
+		if (j > parsing->map_width[i - 1] - 1 && parsing->map[i][j] == 0)
+			return (FALSE);
+		if (j > parsing->map_width[i + 1] - 1 && parsing->map[i][j] == 0)
+			return (FALSE);
+		j++;
+	}
+	return (TRUE);
+}
+
 int	check_map_wall(t_parsing *parsing)
 {
 	int	i;
-	int	j;
 
 	i = 0;
 	while (i < parsing->map_height)
@@ -135,6 +152,44 @@ int	check_map_wall(t_parsing *parsing)
 		{
 			if (check_wall(parsing->map[i], parsing->map_width[i]) == FALSE)
 				return (FALSE);
+			if (check_wall_up_down(parsing, i) == FALSE)
+				return (FALSE);
+		}
+		i++;
+	}
+	return (TRUE);
+}
+
+int	check_void_around(int i, int j, t_parsing *parsing)
+{
+	if (i > 0 && parsing->map[i - 1][j] == 0)
+		return (FALSE);
+	if (i < parsing->map_height - 1 && parsing->map[i + 1][j] == 0)
+		return (FALSE);
+	if (j > 0 && parsing->map[i][j - 1] == 0)
+		return (FALSE);
+	if (j < parsing->map_width[i] && parsing->map[i][j + 1] == 0)
+		return (FALSE);
+	return (TRUE);
+}
+
+int	check_void_map(t_parsing *parsing)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < parsing->map_height)
+	{
+		j = 0;
+		while (j < parsing->map_width[i])
+		{
+			if (parsing->map[i][j] == 676)
+			{
+				if (check_void_around(i, j, parsing) == FALSE)
+					return (FALSE);
+			}
+			j++;
 		}
 		i++;
 	}
@@ -147,6 +202,8 @@ int	check_valid_map(t_parsing *parsing)
 		return (error_message("Incorrect composant in the map"), FALSE);
 	if (get_number_player(parsing) != 1)
 		return (error_message("Incorrect number of player"), FALSE);
+	if (check_void_map(parsing) == FALSE)
+		return (error_message("Incorrect void next to space"), FALSE);
 	if (check_map_wall(parsing) == FALSE)
 		return (error_message("Incorrect close wall"), FALSE);
 	return (TRUE);
