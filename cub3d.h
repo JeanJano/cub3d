@@ -5,9 +5,17 @@
 # include <stdio.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+# include <X11/keysym.h>
+# include "mlx/mlx.h"
+// # include "mlx/mlx_int.h"
+# include <stdlib.h>
+# include <math.h>
 
 # define FALSE 0
 # define TRUE 1
+
+# define WINDOW_WIDTH 1500
+# define WINDOW_HEIGHT 800
 
 typedef struct	s_parsing
 {
@@ -21,6 +29,28 @@ typedef struct	s_parsing
 	int		*map_width;
 	int		**map;
 }	t_parsing;
+
+typedef struct s_img
+{
+	void	*mlx_img;
+	char	*addr;
+	int		bpp;
+	int		line_len;
+	int		endian;
+}			t_img;
+
+typedef struct s_mlx
+{
+	void	*mlx_ptr;
+	void	*win_ptr;
+	t_img	img;
+}			t_mlx;
+
+typedef	struct s_cub
+{
+	t_parsing	parsing;
+	t_mlx		mlx;
+}				t_cub;
 
 void	parser(t_parsing *parsing, char *path);
 int		check_valid_map(t_parsing *parsing);
@@ -39,6 +69,6 @@ char	*strdup_no_breakline(char *line);
 void	error_message(char *message);
 
 void	free_split(char **arr);
-void	free_struct(t_parsing *parsing);
+void	free_struct(t_cub **cub);
 
 #endif

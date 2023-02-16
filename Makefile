@@ -21,7 +21,8 @@ CFLAGS =
 # -- RULES -- #
 
 ${NAME}: ${LIB} ${OBJS_DIR} ${OBJS} ${OBJS_PARSING} ${OBJS_UTILS} ${HEADERS}
-	@${CC} ${CFLAGS} ${OBJS} ${OBJS_PARSING} ${OBJS_UTILS} ${LIB} -L/usr/local/lib -I/usr/local/include -o ${NAME}
+	make -C mlx --no-print-directory
+	@${CC} ${CFLAGS} ${OBJS} ${OBJS_PARSING} ${OBJS_UTILS} ${LIB} -Lmlx -lmlx -lXext -lX11 -lm -lz -L/usr/local/lib -I/usr/local/include -Imlx -o ${NAME}
 	@echo "\033[32m$ ${NAME} compiled !"
 	@echo "----------------------------\033[0m"
 

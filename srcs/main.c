@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/16 15:25:02 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/16 18:05:41 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,22 +61,76 @@ void	init_parsing(t_parsing *parsing)
 	parsing->rgb_plafond[2] = 0;
 }
 
+int	init_mlx(t_cub *cub)
+{
+	cub->mlx.mlx_ptr = mlx_init();
+	if (cub->mlx.mlx_ptr == NULL)
+		return (FALSE);
+	cub->mlx.win_ptr = mlx_new_window(cub->mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
+	if (cub->mlx.win_ptr == NULL)
+	{
+		free(cub->mlx.mlx_ptr);
+		return (FALSE);
+	}
+	return (TRUE);
+}
+
+//fenetre
+
+int	draw(t_cub **cub)
+{
+	return (0);
+}
+
+//event
+int	deal_key(int key, t_cub **cub)
+{
+	if (key == XK_Escape)
+	{
+		mlx_destroy_image((*cub)->mlx.mlx_ptr, (*cub)->mlx.img.mlx_img);
+		mlx_destroy_window((*cub)->mlx.mlx_ptr, (*cub)->mlx.win_ptr);
+		mlx_destroy_display((*cub)->mlx.mlx_ptr);
+		free_struct(cub);
+	}
+	return (0);
+}
+
+int	ft_close(t_cub **cub)
+{
+	deal_key(XK_Escape, cub);
+	return (0);
+}
+
 int	main(int ac, char **av)
 {
+	t_cub		*cub;
 	t_parsing	parsing;
 
 	if (ac != 2)
 		return (error_message("wrong number of argument"), 1);
 	if (check_extension(av[1]) == FALSE)
 		return (error_message("wrong extension file"), 1);
+	cub = malloc(sizeof(t_cub));
 	init_parsing(&parsing);
-	parser(&parsing, av[1]);
+	cub->parsing = parsing;
+	parser(&cub->parsing, av[1]);
 	// print_parsing(&parsing);
-	if (check_valid_map(&parsing) == FALSE)
+	if (check_valid_map(&cub->parsing) == FALSE)
 	{
-		free_struct(&parsing);
+		free_struct(&cub);
 		return (1);
 	}
-	free_struct(&parsing);
+	if (init_mlx(cub) == FALSE)
+	{
+		free_struct(&cub);
+		return (1);
+	}
+	cub->mlx.img.mlx_img = mlx_new_image(cub->mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
+	cub->mlx.img.addr = mlx_get_data_addr(cub->mlx.img.mlx_img, &cub->mlx.img.bpp, &cub->mlx.img.line_len, &cub->mlx.img.endian);
+	mlx_loop_hook(cub->mlx.mlx_ptr, &draw, &cub);
+	mlx_key_hook(cub->mlx.win_ptr, deal_key, &cub);
+	mlx_hook(cub->mlx.win_ptr, 33, 0, ft_close, &cub);
+	mlx_loop(cub->mlx.mlx_ptr);
+	free_struct(&cub);
 	return (0);
 }
