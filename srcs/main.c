@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/13 21:18:54 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/16 15:03:54 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,10 @@ int	main(int ac, char **av)
 {
 	t_parsing	parsing;
 
-	if (ac != 2 || check_extension(av[1]) == FALSE)
-		return (1);
+	if (ac != 2)
+		return (error_message("wrong number of argument"), 1);
+	if (check_extension(av[1]) == FALSE)
+		return (error_message("wrong extension file"), 1);
 	init_parsing(&parsing);
 	parser(&parsing, av[1]);
 	// print_parsing(&parsing);

@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 19:23:57 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/06 19:24:30 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/16 14:39:32 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,11 @@ char	*strdup_no_breakline(char *line)
 		i++;
 	}
 	return (res);
+}
+
+void	error_message(char *message)
+{
+	ft_putstr_fd("Error\n", 2);
+	ft_putstr_fd(message, 2);
+	ft_putstr_fd("\n", 2);
 }
