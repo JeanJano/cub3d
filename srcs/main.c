@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/16 15:03:54 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/16 15:25:02 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,10 @@ int	main(int ac, char **av)
 	parser(&parsing, av[1]);
 	// print_parsing(&parsing);
 	if (check_valid_map(&parsing) == FALSE)
+	{
+		free_struct(&parsing);
 		return (1);
+	}
+	free_struct(&parsing);
 	return (0);
 }

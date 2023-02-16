@@ -39,5 +39,6 @@ char	*strdup_no_breakline(char *line);
 void	error_message(char *message);
 
 void	free_split(char **arr);
+void	free_struct(t_parsing *parsing);
 
 #endif
