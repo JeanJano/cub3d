@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/16 18:05:41 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/16 18:20:50 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,9 @@ int	deal_key(int key, t_cub **cub)
 		mlx_destroy_image((*cub)->mlx.mlx_ptr, (*cub)->mlx.img.mlx_img);
 		mlx_destroy_window((*cub)->mlx.mlx_ptr, (*cub)->mlx.win_ptr);
 		mlx_destroy_display((*cub)->mlx.mlx_ptr);
+		free((*cub)->mlx.mlx_ptr);
 		free_struct(cub);
+		exit(0);
 	}
 	return (0);
 }
@@ -131,6 +133,5 @@ int	main(int ac, char **av)
 	mlx_key_hook(cub->mlx.win_ptr, deal_key, &cub);
 	mlx_hook(cub->mlx.win_ptr, 33, 0, ft_close, &cub);
 	mlx_loop(cub->mlx.mlx_ptr);
-	free_struct(&cub);
 	return (0);
 }
