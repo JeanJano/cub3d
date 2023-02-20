@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 14:30:56 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/16 14:39:01 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/20 18:04:06 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	check_void_around(int i, int j, t_parsing *parsing)
 {
-	if (i > 0 && parsing->map[i - 1][j] == 0)
+	if (i < parsing->map_height - 1 && i > 0 && j < parsing->map_width[i - 1] && parsing->map[i - 1][j] == 0)
 		return (FALSE);
-	if (i < parsing->map_height - 1 && parsing->map[i + 1][j] == 0)
+	if (i < parsing->map_height - 1 && j < parsing->map_width[i + 1] && parsing->map[i + 1][j] == 0)
 		return (FALSE);
 	if (j > 0 && parsing->map[i][j - 1] == 0)
 		return (FALSE);

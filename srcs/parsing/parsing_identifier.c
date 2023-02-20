@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 14:35:55 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/20 16:29:02 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/20 16:38:27 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ void	save_string_in_identifier(char **identifier, char *info)
 	char	**info_split;
 
 	info_split = ft_split(info, ' ');
-	*identifier = strdup_no_breakline(info_split[1]);
+	if (*identifier == NULL)
+		*identifier = strdup_no_breakline(info_split[1]);
 	free_split(info_split);
 }
 

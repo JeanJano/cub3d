@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/20 15:40:10 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/20 16:40:42 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ int	main(int ac, char **av)
 	cub->distance = 500;
 	cub->init_distance = 500;
 	parser(&cub->parsing, av[1]);
-	// print_parsing(&parsing);
+	// print_parsing(&cub->parsing);
 	if (check_valid_map(&cub->parsing) == FALSE)
 	{
 		free_struct(&cub);
