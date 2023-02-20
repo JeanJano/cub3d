@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 16:14:46 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/16 15:07:21 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/20 16:04:50 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,8 @@ void	create_map_tab(t_parsing *parsing, char *line)
 {
 	static int	i;
 	int			j;
-	int			k;
-	int			space;
 
 	j = 1;
-	space = 0;
 	while (line[j])
 		j++;
 	j--;
@@ -36,7 +33,6 @@ void	create_map_tab(t_parsing *parsing, char *line)
 	parsing->map[i] = malloc(sizeof(int *) * j);
 	parsing->map_width[i] = j;
 	j = 0;
-	k = 0;
 	while (line[j])
 	{
 		if (line[j] == ' ')
@@ -56,6 +52,8 @@ void	parser(t_parsing *parsing, char *path)
 	int		fd;
 
 	fd = open(path, O_RDONLY);
+	if (fd == -1)
+		return ;
 	line = get_next_line(fd);
 	while (line)
 	{
@@ -72,7 +70,6 @@ void	parser(t_parsing *parsing, char *path)
 	{
 		if (check_map_line(line) == TRUE)
 			create_map_tab(parsing, line);
-		// printf("%s", line);
 		free(line);
 		line = get_next_line(fd);
 	}

@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/16 18:20:50 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/20 15:40:10 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,29 +77,58 @@ int	init_mlx(t_cub *cub)
 
 //fenetre
 
+void	img_pix_put(t_img *img, int x, int y, int color)
+{
+	char	*pixel;
+
+	if (y < 0 || x < 0 || x > WINDOW_WIDTH || y > WINDOW_HEIGHT)
+		return ;
+	pixel = img->addr + (y * img->line_len + x * (img->bpp / 8));
+	*(int *)pixel = color;
+}
+
+static void	draw_backgroud(t_cub **cub)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y <= WINDOW_WIDTH)
+	{
+		x = 0;
+		while (x <= WINDOW_HEIGHT)
+		{
+			img_pix_put(&(*cub)->mlx.img, y, x, 0x00000000);
+			x++;
+		}
+		y++;
+	}
+}
+
+void	draw_line(t_cub **cub)
+{
+	int	i;
+	int	j;
+
+	i = (*cub)->init_distance;
+	// printf("distance: %d\n", (*cub)->distance);
+	while (i > (*cub)->distance - 250)
+	{
+		j = 500;
+		while (j < 700)
+		{
+			img_pix_put(&(*cub)->mlx.img, j, i, 0x00FFFF00);
+			j++;
+		}
+		i--;
+	}
+}
+
 int	draw(t_cub **cub)
 {
-	return (0);
-}
-
-//event
-int	deal_key(int key, t_cub **cub)
-{
-	if (key == XK_Escape)
-	{
-		mlx_destroy_image((*cub)->mlx.mlx_ptr, (*cub)->mlx.img.mlx_img);
-		mlx_destroy_window((*cub)->mlx.mlx_ptr, (*cub)->mlx.win_ptr);
-		mlx_destroy_display((*cub)->mlx.mlx_ptr);
-		free((*cub)->mlx.mlx_ptr);
-		free_struct(cub);
-		exit(0);
-	}
-	return (0);
-}
-
-int	ft_close(t_cub **cub)
-{
-	deal_key(XK_Escape, cub);
+	draw_backgroud(cub);
+	draw_line(cub);
+	mlx_put_image_to_window((*cub)->mlx.mlx_ptr, (*cub)->mlx.win_ptr, (*cub)->mlx.img.mlx_img, -1, 0);
 	return (0);
 }
 
@@ -115,6 +144,8 @@ int	main(int ac, char **av)
 	cub = malloc(sizeof(t_cub));
 	init_parsing(&parsing);
 	cub->parsing = parsing;
+	cub->distance = 500;
+	cub->init_distance = 500;
 	parser(&cub->parsing, av[1]);
 	// print_parsing(&parsing);
 	if (check_valid_map(&cub->parsing) == FALSE)
@@ -129,7 +160,7 @@ int	main(int ac, char **av)
 	}
 	cub->mlx.img.mlx_img = mlx_new_image(cub->mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
 	cub->mlx.img.addr = mlx_get_data_addr(cub->mlx.img.mlx_img, &cub->mlx.img.bpp, &cub->mlx.img.line_len, &cub->mlx.img.endian);
-	mlx_loop_hook(cub->mlx.mlx_ptr, &draw, &cub);
+	mlx_loop_hook(cub->mlx.mlx_ptr, draw, &cub);
 	mlx_key_hook(cub->mlx.win_ptr, deal_key, &cub);
 	mlx_hook(cub->mlx.win_ptr, 33, 0, ft_close, &cub);
 	mlx_loop(cub->mlx.mlx_ptr);

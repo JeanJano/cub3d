@@ -50,6 +50,8 @@ typedef	struct s_cub
 {
 	t_parsing	parsing;
 	t_mlx		mlx;
+	double		distance;
+	double		init_distance;
 }				t_cub;
 
 void	parser(t_parsing *parsing, char *path);
@@ -63,6 +65,9 @@ int		check_wall(int *line, int end_line);
 int		check_wall_up_down(t_parsing *parsing, int i);
 void	identifier_manager(t_parsing *parsing, char *line);
 int		check_map_line(char *line);
+
+int		deal_key(int key, t_cub **cub);
+int		ft_close(t_cub **cub);
 
 int		str_search(const char *big, const char *little, size_t len);
 char	*strdup_no_breakline(char *line);

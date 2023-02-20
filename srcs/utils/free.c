@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 18:45:29 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/16 16:23:02 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/20 13:25:35 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,6 @@ void	free_int_arr(int **arr, int number_of_line)
 	while (i < number_of_line)
 	{
 		free(arr[i]);
-		// j = 0;
-		// while (j < ligne_length[i])
-		// {
-		// 	free
-		// 	j++;
-		// }
 		i++;
 	}
 	free(arr);
