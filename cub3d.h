@@ -54,7 +54,7 @@ typedef	struct s_cub
 	double		init_distance;
 }				t_cub;
 
-void	parser(t_parsing *parsing, char *path);
+int		parser(t_parsing *parsing, char *path);
 int		check_valid_map(t_parsing *parsing);
 int		check_extension(char *file_name);
 int		check_all_composant(int i);
