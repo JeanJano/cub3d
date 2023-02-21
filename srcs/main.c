@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/20 19:56:31 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/21 15:51:41 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ void	init_parsing(t_parsing *parsing)
 	parsing->path_west = NULL;
 	parsing->map_height = 0;
 	parsing->map_width = NULL;
-	parsing->rgb_floor[0] = 0;
-	parsing->rgb_floor[1] = 0;
-	parsing->rgb_floor[2] = 0;
-	parsing->rgb_plafond[0] = 0;
-	parsing->rgb_plafond[1] = 0;
-	parsing->rgb_plafond[2] = 0;
+	parsing->rgb_floor[0] = -1;
+	parsing->rgb_floor[1] = -1;
+	parsing->rgb_floor[2] = -1;
+	parsing->rgb_plafond[0] = -1;
+	parsing->rgb_plafond[1] = -1;
+	parsing->rgb_plafond[2] = -1;
 }
 
 int	init_mlx(t_cub *cub)

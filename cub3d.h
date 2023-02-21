@@ -64,6 +64,7 @@ int		check_first_and_last_wall(int *line, int end_line);
 int		check_wall(int *line, int end_line);
 int		check_wall_up_down(t_parsing *parsing, int i);
 void	identifier_manager(t_parsing *parsing, char *line);
+int		check_valid_identifier(t_parsing *parsing);
 int		check_map_line(char *line);
 
 int		deal_key(int key, t_cub **cub);

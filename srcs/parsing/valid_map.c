@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:39:05 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/16 15:06:58 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/21 15:53:43 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,7 @@ int	check_valid_map(t_parsing *parsing)
 		return (error_message("Incorrect void next to space"), FALSE);
 	if (check_map_wall(parsing) == FALSE)
 		return (error_message("Incorrect close wall"), FALSE);
+	if (check_valid_identifier(parsing) == FALSE)
+		return (error_message("Incorrect identifier"), FALSE);
 	return (TRUE);
 }

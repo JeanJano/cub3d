@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 14:35:55 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/20 18:49:51 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/21 15:53:02 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,29 @@ void	identifier_manager(t_parsing *parsing, char *line)
 		save_rgb_in_indentifier(parsing->rgb_plafond, line);
 	else if (check_map_line(line) == TRUE)
 		parsing->map_height++;
+}
+
+int	check_valid_identifier(t_parsing *parsing)
+{
+	if (parsing->path_east == NULL)
+		return (FALSE);
+	if (parsing->path_north == NULL)
+		return (FALSE);
+	if (parsing->path_south == NULL)
+		return (FALSE);
+	if (parsing->path_west == NULL)
+		return (FALSE);
+	if (parsing->rgb_floor[0] > 255 || parsing->rgb_floor[0] < 0)
+		return (FALSE);
+	if (parsing->rgb_floor[1] > 255 || parsing->rgb_floor[1] < 0)
+		return (FALSE);
+	if (parsing->rgb_floor[2] > 255 || parsing->rgb_floor[2] < 0)
+		return (FALSE);
+	if (parsing->rgb_plafond[0] > 255 || parsing->rgb_plafond[0] < 0)
+		return (FALSE);
+	if (parsing->rgb_plafond[1] > 255 || parsing->rgb_plafond[1] < 0)
+		return (FALSE);
+	if (parsing->rgb_plafond[2] > 255 || parsing->rgb_plafond[2] < 0)
+		return (FALSE);
+	return (TRUE);
 }
