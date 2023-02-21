@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 16:14:46 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/20 20:04:46 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/21 16:10:22 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,34 @@ void	create_map_tab(t_parsing *parsing, char *line)
 	i++;
 }
 
+int	parser_map(char *line, t_parsing *parsing, int fd)
+{
+	int	i;
+
+	i = 0;
+	while (line)
+	{
+		if (i > 0 && line[0] == '\n')
+		{
+			while (line)
+			{
+				free(line);
+				line = get_next_line(fd);
+			}
+			parsing->map_height = i;
+			return (FALSE);
+		}
+		if (check_map_line(line) == TRUE)
+		{
+			create_map_tab(parsing, line);
+			i++;
+		}
+		free(line);
+		line = get_next_line(fd);
+	}
+	return (TRUE);
+}
+
 int	parser(t_parsing *parsing, char *path)
 {
 	char	*line;
@@ -66,27 +94,8 @@ int	parser(t_parsing *parsing, char *path)
 	parsing->map = malloc(sizeof(int *) * parsing->map_height);
 	fd = open(path, O_RDONLY);
 	line = get_next_line(fd);
-	int i = 0;
-	while (line)
-	{
-		if (i > 0 && line[0] == '\n')
-		{
-			while (line)
-			{
-				free(line);
-				line = get_next_line(fd);
-			}
-			parsing->map_height = i;
-			return (FALSE);
-		}
-		if (check_map_line(line) == TRUE)
-		{
-			create_map_tab(parsing, line);
-			i++;	
-		}
-		free(line);
-		line = get_next_line(fd);
-	}
+	if (parser_map(line, parsing, fd) == FALSE)
+		return (FALSE);
 	close(fd);
 	return (TRUE);
 }
