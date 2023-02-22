@@ -54,6 +54,9 @@ typedef	struct s_cub
 	double		init_distance;
 }				t_cub;
 
+// **************************** //
+//			parsing             //
+// **************************** //
 int		parser(t_parsing *parsing, char *path);
 int		check_valid_map(t_parsing *parsing);
 int		check_extension(char *file_name);
@@ -76,5 +79,8 @@ void	error_message(char *message);
 
 void	free_split(char **arr);
 void	free_struct(t_cub **cub);
-
+// **************************** //
+//			dda algo            //
+// **************************** //
+double get_vector_distance(double playerX, double playerY, double angle);
 #endif

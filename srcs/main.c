@@ -137,32 +137,42 @@ int	main(int ac, char **av)
 	t_cub		*cub;
 	t_parsing	parsing;
 
-	if (ac != 2)
-		return (error_message("wrong number of argument"), 1);
-	if (check_extension(av[1]) == FALSE)
-		return (error_message("wrong extension file"), 1);
-	cub = malloc(sizeof(t_cub));
-	init_parsing(&parsing);
-	cub->parsing = parsing;
-	cub->distance = 500;
-	cub->init_distance = 500;
-	parser(&cub->parsing, av[1]);
-	// print_parsing(&cub->parsing);
-	if (check_valid_map(&cub->parsing) == FALSE)
+    double playerX = 5.0;
+    double playerY = 5.0;
+	double angle = atof(av[1]);
+   
+    for (double angle = 0; angle < 60; angle += 0.06)
 	{
-		free_struct(&cub);
-		return (1);
-	}
-	if (init_mlx(cub) == FALSE)
-	{
-		free_struct(&cub);
-		return (1);
-	}
-	cub->mlx.img.mlx_img = mlx_new_image(cub->mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
-	cub->mlx.img.addr = mlx_get_data_addr(cub->mlx.img.mlx_img, &cub->mlx.img.bpp, &cub->mlx.img.line_len, &cub->mlx.img.endian);
-	mlx_loop_hook(cub->mlx.mlx_ptr, draw, &cub);
-	mlx_key_hook(cub->mlx.win_ptr, deal_key, &cub);
-	mlx_hook(cub->mlx.win_ptr, 33, 0, ft_close, &cub);
-	mlx_loop(cub->mlx.mlx_ptr);
-	return (0);
+		get_vector_distance(playerX, playerY, angle);
+		// draw_line(distance, x);
+    }
+
+	// if (ac != 2)
+	// 	return (error_message("wrong number of argument"), 1);
+	// if (check_extension(av[1]) == FALSE)
+	// 	return (error_message("wrong extension file"), 1);
+	// cub = malloc(sizeof(t_cub));
+	// init_parsing(&parsing);
+	// cub->parsing = parsing;
+	// cub->distance = 500;
+	// cub->init_distance = 500;
+	// parser(&cub->parsing, av[1]);
+	// // print_parsing(&cub->parsing);
+	// if (check_valid_map(&cub->parsing) == FALSE)
+	// {
+	// 	free_struct(&cub);
+	// 	return (1);
+	// }
+	// if (init_mlx(cub) == FALSE)
+	// {
+	// 	free_struct(&cub);
+	// 	return (1);
+	// }
+	// cub->mlx.img.mlx_img = mlx_new_image(cub->mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
+	// cub->mlx.img.addr = mlx_get_data_addr(cub->mlx.img.mlx_img, &cub->mlx.img.bpp, &cub->mlx.img.line_len, &cub->mlx.img.endian);
+	// mlx_loop_hook(cub->mlx.mlx_ptr, draw, &cub);
+	// mlx_key_hook(cub->mlx.win_ptr, deal_key, &cub);
+	// mlx_hook(cub->mlx.win_ptr, 33, 0, ft_close, &cub);
+	// mlx_loop(cub->mlx.mlx_ptr);
+	// return (0);
 }
