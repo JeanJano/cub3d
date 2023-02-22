@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/21 15:51:41 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/22 17:49:58 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,46 @@ int	init_mlx(t_cub *cub)
 	return (TRUE);
 }
 
+double	get_player_position_x(t_parsing *parsing)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < parsing->map_height)
+	{
+		j = 0;
+		while (j < parsing->map_width[i])
+		{
+			if (check_player_composant(parsing->map[i][j]) == TRUE)
+				return (i + 1);
+			j++;
+		}
+		i++;
+	}
+	return (-1);
+}
+
+double	get_player_position_y(t_parsing *parsing)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < parsing->map_height)
+	{
+		j = 0;
+		while (j < parsing->map_width[i])
+		{
+			if (check_player_composant(parsing->map[i][j]) == TRUE)
+				return (j + 1);
+			j++;
+		}
+		i++;
+	}
+	return (-1);
+}
+
 //fenetre
 
 void	img_pix_put(t_img *img, int x, int y, int color)
@@ -107,20 +147,33 @@ static void	draw_backgroud(t_cub **cub)
 
 void	draw_line(t_cub **cub)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	// double	vision;
 
-	i = (*cub)->init_distance;
+	// printf("test: %d\n", (*cub)->parsing.map_height);
+	double	x = get_player_position_x(&(*cub)->parsing);
+	double	y = get_player_position_y(&(*cub)->parsing);
+	printf("player position: x %f, y %f\n", x, y);
+	// vision = get_vector_distance(x, y, 60);
+	// printf("vision: %f\n", vision);
+	// (*cub)->init_distance = (*cub)->distance;
+	i = 0;
+	double angle = 0;
 	// printf("distance: %d\n", (*cub)->distance);
-	while (i > (*cub)->distance - 250)
+	while (i < WINDOW_WIDTH)
 	{
-		j = 500;
-		while (j < 700)
+		(*cub)->distance = get_vector_distance(x, y, angle) * 50;
+		printf("distance: %f\n", (*cub)->distance);
+		printf("angle: %f\n", angle);
+		j = 0;
+		while (j < (*cub)->distance)
 		{
-			img_pix_put(&(*cub)->mlx.img, j, i, 0x00FFFF00);
+			img_pix_put(&(*cub)->mlx.img, /* (*cub)->distance +  */i, j, 0x00FFFF00);
 			j++;
 		}
-		i--;
+		i++;
+		angle += 0.0428;
 	}
 }
 
@@ -137,11 +190,18 @@ int	main(int ac, char **av)
 	t_cub		*cub;
 	t_parsing	parsing;
 
-    double playerX = 5.0;
-    double playerY = 5.0;
-	double angle = atof(av[1]);
-   
-    for (double angle = 0; angle < 60; angle += 0.06)
+	if (ac != 2)
+		return (error_message("wrong number of argument"), 1);
+	if (check_extension(av[1]) == FALSE)
+		return (error_message("wrong extension file"), 1);
+	cub = malloc(sizeof(t_cub));
+	init_parsing(&parsing);
+	cub->parsing = parsing;
+	// cub->distance = 500;
+	// cub->init_distance = 500;
+	parser(&cub->parsing, av[1]);
+	// print_parsing(&cub->parsing);
+	if (check_valid_map(&cub->parsing) == FALSE)
 	{
 		get_vector_distance(playerX, playerY, angle);
 		// draw_line(distance, x);
