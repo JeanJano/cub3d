@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 16:14:46 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/21 16:10:22 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/23 18:47:51 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,12 @@ void	create_map_tab(t_parsing *parsing, char *line)
 	i++;
 }
 
+
+
 int	parser_map(char *line, t_parsing *parsing, int fd)
 {
 	int	i;
+	int	test = 0;
 
 	i = 0;
 	while (line)
@@ -57,10 +60,14 @@ int	parser_map(char *line, t_parsing *parsing, int fd)
 		{
 			while (line)
 			{
+				if (line[0] != '\n')
+					test = 1;
 				free(line);
 				line = get_next_line(fd);
 			}
 			parsing->map_height = i;
+			if (test == 1)
+				return (error_message("Incorrect character after map"), 2);
 			return (FALSE);
 		}
 		if (check_map_line(line) == TRUE)
@@ -94,8 +101,11 @@ int	parser(t_parsing *parsing, char *path)
 	parsing->map = malloc(sizeof(int *) * parsing->map_height);
 	fd = open(path, O_RDONLY);
 	line = get_next_line(fd);
-	if (parser_map(line, parsing, fd) == FALSE)
+	int	map = parser_map(line, parsing, fd);
+	if (map == FALSE)
 		return (FALSE);
+	if (map == 2)
+		return (2);
 	close(fd);
 	return (TRUE);
 }
