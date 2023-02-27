@@ -216,7 +216,7 @@ int	main(int ac, char **av)
 		free_struct(&cub);
 		return (1);
 	}
-	// get_vector_distance(5, 5, 25, cub.parsing);
+	get_vector_distance(5.4, 4, 0, cub.parsing);
 	// if (init_mlx(&cub) == FALSE)
 	// {
 	// 	free_struct(&cub);
