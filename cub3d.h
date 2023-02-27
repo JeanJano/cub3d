@@ -2,12 +2,12 @@
 # define CUB3D_H
 
 # include "./libft/libft.h"
+// # include "mlx/mlx_int.h"
 # include <stdio.h>
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <X11/keysym.h>
 # include "mlx/mlx.h"
-// # include "mlx/mlx_int.h"
 # include <stdlib.h>
 # include <math.h>
 
@@ -54,6 +54,24 @@ typedef	struct s_cub
 	double		init_distance;
 }				t_cub;
 
+typedef	struct s_dda
+{
+    double x_cos;
+    double y_sin;
+	double x_scale; // x scale to move 1 y
+	double y_scale; // y scale to move 1 x
+
+    double x_horizontal;
+    double y_horizontal;
+	double horizontal_length;
+
+	double x_vertical;
+	double y_vertical;
+	double vertical_length;
+
+	int quartile;
+}				t_dda;
+
 // **************************** //
 //			parsing             //
 // **************************** //
@@ -78,9 +96,9 @@ char	*strdup_no_breakline(char *line);
 void	error_message(char *message);
 
 void	free_split(char **arr);
-void	free_struct(t_cub **cub);
+void	free_struct(t_cub *cub);
 // **************************** //
 //			dda algo            //
 // **************************** //
-double get_vector_distance(double playerX, double playerY, double angle);
+double get_vector_distance(double playerX, double playerY, double angle, t_parsing parsing);
 #endif

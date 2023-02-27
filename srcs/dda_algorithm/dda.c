@@ -1,21 +1,20 @@
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
-const int MAP_WIDTH = 10;
-const int MAP_HEIGHT = 10;
+#include "cub3d.h"
 
-int map[10][10] = {
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 1, 0, 0, 0, 0, 1, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 1, 0, 0, 0, 0, 1, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
-};
+// const int MAP_WIDTH = 10;
+// const int MAP_HEIGHT = 10;
+
+// int map[10][10] = {
+//     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+//     {1, 0, 1, 0, 0, 0, 0, 1, 0, 1},
+//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+//     {1, 0, 1, 0, 0, 0, 0, 1, 0, 1},
+//     {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+//     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+// };
 
 void get_next_vertical_intersec(double *x, double *y, double y_scale, int quartile)
 {
@@ -29,7 +28,7 @@ void get_next_vertical_intersec(double *x, double *y, double y_scale, int quarti
 		*y = *y + (y_scale * -1);
 	else
 		*y = *y - y_scale;
-	// printf("checked in 1 x=%f y=%f xIndex=%d yIndex=%d\n", *x, *y, (int)*x, (int)*y);
+	printf("checked in 1 x=%f y=%f xIndex=%d yIndex=%d\n", *x, *y, (int)*x, (int)*y);
 }
 
 void get_next_horizontal_intersec(double *x, double *y, double x_scale, int quartile)
@@ -46,31 +45,30 @@ void get_next_horizontal_intersec(double *x, double *y, double x_scale, int quar
 		*y = *y + 1;
 	else
 		*y = *y - 1;
-	// printf("checked in 2 x=%f y=%f xIndex=%d yIndex=%d\n", *x, *y, (int)*x, (int)*y);
+	printf("checked in 2 x=%f y=%f xIndex=%d yIndex=%d\n", *x, *y, (int)*x, (int)*y);
 }
 
-struct myStructure {
-  int myNum;
-  char myLetter;
-  char myString[30]; // String
-};
+// void get_first_vertical_intersec()
 
-double get_vector_distance(double playerX, double playerY, double angle) {
-    double x_cos = cos(angle * ( M_PI / 180));
-    double y_sin = sin(angle * (M_PI / 180));
-	double x_scale = (1 / y_sin) * x_cos; // x scale to move 1 y
-	double y_scale = (1 / x_cos) * y_sin; // y scale to move 1 x
+double get_vector_distance(double playerX, double playerY, double angle, t_parsing parsing)
+{
+	t_dda data;
 
-	// printf("x_cos=%f y_sin=%f\n", x_cos, y_sin);
-	// printf("x_scale=%f y_scale=%f\n", x_scale, y_scale);
+	data.x_cos  = cos(angle * ( M_PI / 180));
+    data.y_sin = sin(angle * (M_PI / 180));
+	data.x_scale = (1 / data.y_sin) * data.x_cos; // x scale to move 1 y
+	data.y_scale = (1 / data.x_cos) * data.y_sin; // y scale to move 1 x
 
-    double x_horizontal = playerX;
-    double y_horizontal = playerY;
-	double horizontal_length = 0;
+	printf("x_cos=%f y_sin=%f\n", data.x_cos, data.y_sin);
+	// printf("x_scale=%f y_scale=%f\n", data.x_scale, data.y_scale);
 
-	double x_vertical = playerX;
-	double y_vertical = playerY;
-	double vertical_length = 0;
+    data.x_horizontal = playerX;
+    data.y_horizontal = playerY;
+	data.horizontal_length = 0;
+
+	data.x_vertical = playerX;
+	data.y_vertical = playerY;
+	data.vertical_length = 0;
 
 	int quartile;
 
@@ -83,75 +81,73 @@ double get_vector_distance(double playerX, double playerY, double angle) {
 	else if (angle >= 271 && angle <= 360)
 		quartile = 4;
 
-    while (x_vertical >= 0 && x_vertical < MAP_WIDTH && y_vertical >= 0 && y_vertical < MAP_HEIGHT)
+	int map_height = 0;
+	int map_width = 0;
+
+    while (data.x_vertical >= 0 && data.x_vertical < parsing.map_width[(int)data.y_vertical] && data.y_vertical >= 0 && data.y_vertical < parsing.map_height)
     {
-			get_next_vertical_intersec(&x_vertical, &y_vertical, y_scale, quartile);
-			if (x_vertical < 0 || x_vertical > MAP_WIDTH || y_vertical < 0 || y_vertical > MAP_HEIGHT)
+			get_next_vertical_intersec(&data.x_vertical, &data.y_vertical, data.y_scale, quartile);
+			if (data.x_vertical < 0 || data.x_vertical > parsing.map_width[(int)data.y_vertical] || data.y_vertical < 0 || data.y_vertical > parsing.map_height)
 				break ;
 			if (quartile == 1)
 			{
-				if (map[(int)y_vertical][(int)x_vertical] == 1)
+				if (parsing.map[(int)data.y_vertical][(int)data.x_vertical] == 1)
 					break ;
 			}
 			else if (quartile == 2)
 			{
-				if (map[(int)y_vertical][(int)x_vertical - 1] == 1)
+				if (parsing.map[(int)data.y_vertical][(int)data.x_vertical - 1] == 1)
 					break ;
 			}
 			else if (quartile == 3)
 			{
-				// printf("FOUND AT %d, %d or %f, %f\n", (int)x_vertical-1, (int)y_vertical, x_vertical - 1, y_vertical);
-				if (map[(int)y_vertical][(int)x_vertical - 1] == 1)
+				if (parsing.map[(int)data.y_vertical][(int)data.x_vertical - 1] == 1)
 					break ;
 			}
 			else if (quartile == 4)
 			{
-				if (map[(int)y_vertical][(int)x_vertical] == 1)
+				if (parsing.map[(int)data.y_vertical][(int)data.x_vertical] == 1)
 					break ;
 			}
     }
-	// printf("deltaX=%f deltaY=%f\n", fabs(x_vertical - playerX), fabs(y_vertical - playerY));
-	// printf("dest=%f\n", fabs(x_vertical - playerX) * fabs(x_cos) + fabs(y_vertical - playerY) * fabs(y_sin));
-	vertical_length = fabs(x_vertical - playerX) * fabs(x_cos) + fabs(y_vertical - playerY) * fabs(y_sin);
-	// printf("vertical_length=%f at: %f, %f\n", vertical_length, x, y);
-    while (x_horizontal >= 0 && x_horizontal < MAP_WIDTH && y_horizontal >= 0 && y_horizontal < MAP_HEIGHT)
+	data.vertical_length = fabs(data.x_vertical - playerX) * fabs(data.x_cos) + fabs(data.y_vertical - playerY) * fabs(data.y_sin);
+    while (data.x_horizontal >= 0 && data.x_horizontal < parsing.map_width[(int)data.y_vertical] && data.y_horizontal >= 0 && data.y_horizontal < parsing.map_height)
     {
-			get_next_horizontal_intersec(&x_horizontal, &y_horizontal, x_scale, quartile);
-			if (x_horizontal < 0 || x_horizontal > MAP_WIDTH || y_horizontal < 0 || y_horizontal > MAP_HEIGHT)
+			get_next_horizontal_intersec(&data.x_horizontal, &data.y_horizontal, data.x_scale, quartile);
+			if (data.x_horizontal < 0 || data.x_horizontal > parsing.map_width[(int)data.y_vertical] || data.y_horizontal < 0 || data.y_horizontal > parsing.map_height)
 				break ;
 			if (quartile == 1)
 			{
-				if (map[(int)y_horizontal][(int)x_horizontal] == 1)
+				if (parsing.map[(int)data.y_horizontal][(int)data.x_horizontal] == 1)
 					break ;
 			}
 			else if (quartile == 2)
 			{
 				// printf("ici--------------------\n");
-				if (map[(int)y_horizontal][(int)x_horizontal] == 1)
+				if (parsing.map[(int)data.y_horizontal][(int)data.x_horizontal] == 1)
 					break ;
 			}
 			else if (quartile == 3)
 			{
-				// printf("FOUND AT %d, %d or %f, %f\n", (int)ceil(x_horizontal) - 1, (int)y_horizontal - 1, x_horizontal, y_horizontal);
-				if (map[(int)y_horizontal - 1][(int)ceil(x_horizontal) - 1] == 1)
+				// printf("FOUND AT %d, %d or %f, %f\n", (int)ceil(data.x_horizontal) - 1, (int)data.y_horizontal - 1, data.x_horizontal, data.y_horizontal);
+				if (parsing.map[(int)data.y_horizontal - 1][(int)ceil(data.x_horizontal) - 1] == 1)
 					break ;
 			}
 			else if (quartile == 4)
 			{
-				if (map[(int)y_horizontal - 1][(int)x_horizontal] == 1)
+				if (parsing.map[(int)data.y_horizontal - 1][(int)data.x_horizontal] == 1)
 					break ;
 			}
     }
-	horizontal_length = fabs(x_horizontal - playerX) * fabs(x_cos) + fabs(y_horizontal - playerY) * fabs(y_sin);
-	// printf("horizontal_length=%f at: %f, %f\n", horizontal_length, x_horizontal, y_horizontal);
-	if (vertical_length > horizontal_length)
+	data.horizontal_length = fabs(data.x_horizontal - playerX) * fabs(data.x_cos) + fabs(data.y_horizontal - playerY) * fabs(data.y_sin);
+	if (data.vertical_length > data.horizontal_length)
 	{
-		// printf("horizontal_length=%f at: %f, %f\n", horizontal_length, x_horizontal, y_horizontal);
-		return (horizontal_length);
+		printf("horizontal_length=%f at: %f, %f\n", data.horizontal_length, data.x_horizontal, data.y_horizontal);
+		return (data.horizontal_length);
 	}
 	else
 	{
-		// printf("vertical_length=%f at: %f, %f\n", vertical_length, x_vertical, y_vertical);
-		return (vertical_length);
+		printf("vertical_length=%f at: %f, %f\n", data.vertical_length, data.x_vertical, data.y_vertical);
+		return (data.vertical_length);
 	}
 }

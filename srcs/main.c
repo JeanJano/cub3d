@@ -44,7 +44,7 @@ void	print_parsing(t_parsing *parsing)
 	}
 }
 
-void	init_parsing(t_parsing *parsing)
+void	init_parsing_struct(t_parsing *parsing)
 {
 	parsing->map = NULL;
 	parsing->path_east = NULL;
@@ -175,7 +175,7 @@ void	draw_line(t_cub **cub)
 		// 	img_pix_put(&(*cub)->mlx.img, (*cub)->distance + i, j + 150, 0x00FF6F06);
 		// 	j++;
 		// }
-		(*cub)->distance = get_vector_distance(3, 3, angle);
+		// (*cub)->distance = get_vector_distance(3, 3, angle);
 		j = (*cub)->distance * 35;
 		while (j > (*cub)->distance)
 		{
@@ -197,56 +197,36 @@ int	draw(t_cub **cub)
 
 int	main(int ac, char **av)
 {
-	t_cub		*cub;
+	t_cub		cub;
 	t_parsing	parsing;
-
-	// if (ac != 2)
-	// 	return (error_message("wrong number of argument"), 1);
-	// if (check_extension(av[1]) == FALSE)
-	// 	return (error_message("wrong extension file"), 1);
-	// cub = malloc(sizeof(t_cub));
-	// init_parsing(&parsing);
-	// cub->parsing = parsing;
-	// // cub->distance = 500;
-	// // cub->init_distance = 500;
-	// parser(&cub->parsing, av[1]);
-	// // print_parsing(&cub->parsing);
-	// if (check_valid_map(&cub->parsing) == FALSE)
-	// {
-	// 	get_vector_distance(playerX, playerY, angle);
-	// 	// draw_line(distance, x);
-    // }
 
 	if (ac != 2)
 		return (error_message("wrong number of argument"), 1);
 	if (check_extension(av[1]) == FALSE)
 		return (error_message("wrong extension file"), 1);
-	cub = malloc(sizeof(t_cub));
-	init_parsing(&parsing);
-	cub->parsing = parsing;
-	// cub->distance = 500;
-	// cub->init_distance = 500;
-	if (parser(&cub->parsing, av[1]) == 2)
+	init_parsing_struct(&parsing);
+	cub.parsing = parsing;
+	if (parser(&cub.parsing, av[1]) == 2)
 	{
 		free_struct(&cub);
 		return (1);
 	}
-	// print_parsing(&cub->parsing);
-	if (check_valid_map(&cub->parsing) == FALSE)
+	if (check_valid_map(&cub.parsing) == FALSE)
 	{
 		free_struct(&cub);
 		return (1);
 	}
-	if (init_mlx(cub) == FALSE)
-	{
-		free_struct(&cub);
-		return (1);
-	}
-	cub->mlx.img.mlx_img = mlx_new_image(cub->mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
-	cub->mlx.img.addr = mlx_get_data_addr(cub->mlx.img.mlx_img, &cub->mlx.img.bpp, &cub->mlx.img.line_len, &cub->mlx.img.endian);
-	mlx_loop_hook(cub->mlx.mlx_ptr, draw, &cub);
-	mlx_key_hook(cub->mlx.win_ptr, deal_key, &cub);
-	mlx_hook(cub->mlx.win_ptr, 33, 0, ft_close, &cub);
-	mlx_loop(cub->mlx.mlx_ptr);
+	// get_vector_distance(5, 5, 25, cub.parsing);
+	// if (init_mlx(&cub) == FALSE)
+	// {
+	// 	free_struct(&cub);
+	// 	return (1);
+	// }
+	// cub.mlx.img.mlx_img = mlx_new_image(cub.mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
+	// cub.mlx.img.addr = mlx_get_data_addr(cub.mlx.img.mlx_img, &cub.mlx.img.bpp, &cub.mlx.img.line_len, &cub.mlx.img.endian);
+	// mlx_loop_hook(cub.mlx.mlx_ptr, draw, &cub);
+	// mlx_key_hook(cub.mlx.win_ptr, deal_key, &cub);
+	// mlx_hook(cub.mlx.win_ptr, 33, 0, ft_close, &cub);
+	// mlx_loop(cub.mlx.mlx_ptr);
 	return (0);
 }

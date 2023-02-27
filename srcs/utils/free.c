@@ -39,13 +39,12 @@ void	free_int_arr(int **arr, int number_of_line)
 	free(arr);
 }
 
-void	free_struct(t_cub **cub)
+void	free_struct(t_cub *cub)
 {
-	free((*cub)->parsing.path_east);
-	free((*cub)->parsing.path_north);
-	free((*cub)->parsing.path_south);
-	free((*cub)->parsing.path_west);
-	free_int_arr((*cub)->parsing.map, (*cub)->parsing.map_height);
-	free((*cub)->parsing.map_width);
-	free(*cub);
+	free(cub->parsing.path_east);
+	free(cub->parsing.path_north);
+	free(cub->parsing.path_south);
+	free(cub->parsing.path_west);
+	free_int_arr(cub->parsing.map, cub->parsing.map_height);
+	free(cub->parsing.map_width);
 }
