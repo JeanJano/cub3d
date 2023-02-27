@@ -1,0 +1,18 @@
+==933140== Memcheck, a memory error detector
+==933140== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==933140== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==933140== Command: ./cub3D Cub3D-Destroyer/maps/maps_buged/invalid_nbrs_in_map_RGB.cub
+==933140== 
+Error
+Incorrect composant in the map
+==933140== 
+==933140== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==933140== 
+==933140== HEAP SUMMARY:
+==933140==     in use at exit: 0 bytes in 0 blocks
+==933140==   total heap usage: 1,432 allocs, 1,432 frees, 13,468 bytes allocated
+==933140== 
+==933140== All heap blocks were freed -- no leaks are possible
+==933140== 
+==933140== For lists of detected and suppressed errors, rerun with: -s
+==933140== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

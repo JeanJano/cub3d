@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/23 19:06:33 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/27 18:11:43 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,12 +162,10 @@ void	draw_line(t_cub **cub)
 	// (*cub)->init_distance = (*cub)->distance;
 	i = 0;
 	angle = 0;
-	wall_heigth = 10;
 	// printf("distance: %d\n", (*cub)->distance);
 	while (i < WINDOW_WIDTH)
 	{
 		// (*cub)->distance = get_vector_distance(3, 3, angle) * 35;
-		// printf("distance: %f\n", (*cub)->distance);
 		// printf("angle: %f\n", angle);
 		// j = (*cub)->distance / 35;
 		// while (j < (*cub)->distance)
@@ -175,13 +173,33 @@ void	draw_line(t_cub **cub)
 		// 	img_pix_put(&(*cub)->mlx.img, (*cub)->distance + i, j + 150, 0x00FF6F06);
 		// 	j++;
 		// }
-		// (*cub)->distance = get_vector_distance(3, 3, angle);
-		j = (*cub)->distance * 35;
-		while (j > (*cub)->distance)
+		(*cub)->distance = get_vector_distance(3, 3, angle);
+		printf("distance: %f\n", (*cub)->distance);
+		// wall_heigth = ((*cub)->distance * 0.9) * 80;
+		wall_heigth = (10 / (*cub)->distance) * 300;
+		printf("wall_height: %f\n", wall_heigth);
+		// j = (*cub)->distance * 35;
+		j = (WINDOW_HEIGHT / 2) - ((int)wall_heigth / 2);
+		printf("j: %d\n", j);
+		while (j < (int)wall_heigth)
 		{
-			img_pix_put(&(*cub)->mlx.img, (*cub)->distance / 5 + i, j + 10, 0x00FF6F06);
-			j--;
+			img_pix_put(&(*cub)->mlx.img, i, j, 0x00FF6F06);
+			j++;
 		}
+
+		// while (j > (*cub)->distance)
+		// {
+		// 	img_pix_put(&(*cub)->mlx.img, (*cub)->distance + i, j + ((*cub)->distance * 20), 0x00FF6F06);
+		// 	j--;
+		// }
+
+		// while (j < 100 * (*cub)->distance)
+		// {
+		// 	img_pix_put(&(*cub)->mlx.img, i + (*cub)->distance, j - ((int)(*cub)->distance * 20), 0x00FF6F06);
+		// 	j++;
+		// }
+
+
 		i++;
 		angle += 0.0428;
 	}

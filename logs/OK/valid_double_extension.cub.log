@@ -1,0 +1,23 @@
+==933717== Memcheck, a memory error detector
+==933717== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==933717== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==933717== Command: ./cub3D Cub3D-Destroyer/maps/maps_buged/valid_double_extension.cub.cub
+==933717== 
+Error
+Incorrect void next to space
+==933717== 
+==933717== FILE DESCRIPTORS: 4 open (3 std) at exit.
+==933717== Open file descriptor 3: Cub3D-Destroyer/maps/maps_buged/valid_double_extension.cub.cub
+==933717==    at 0x4BE16EB: open (open64.c:41)
+==933717==    by 0x403300: parser (parsing.c:102)
+==933717==    by 0x402DD5: main (main.c:247)
+==933717== 
+==933717== 
+==933717== HEAP SUMMARY:
+==933717==     in use at exit: 0 bytes in 0 blocks
+==933717==   total heap usage: 2,902 allocs, 2,902 frees, 28,956 bytes allocated
+==933717== 
+==933717== All heap blocks were freed -- no leaks are possible
+==933717== 
+==933717== For lists of detected and suppressed errors, rerun with: -s
+==933717== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

@@ -14,7 +14,7 @@ HEADERS = cub3d.h
 
 LIB = ./libft/libft.a
 
-NAME = cub3d
+NAME = cub3D
 
 CC = cc -g
 # CFLAGS = -Werror -Wall -Wextra

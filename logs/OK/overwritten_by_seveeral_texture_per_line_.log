@@ -1,0 +1,23 @@
+==933450== Memcheck, a memory error detector
+==933450== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==933450== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==933450== Command: ./cub3D Cub3D-Destroyer/maps/maps_buged/overwritten_by_seveeral_texture_per_line_.cub
+==933450== 
+Error
+Incorrect void next to space
+==933450== 
+==933450== FILE DESCRIPTORS: 4 open (3 std) at exit.
+==933450== Open file descriptor 3: Cub3D-Destroyer/maps/maps_buged/overwritten_by_seveeral_texture_per_line_.cub
+==933450==    at 0x4BE16EB: open (open64.c:41)
+==933450==    by 0x403300: parser (parsing.c:102)
+==933450==    by 0x402DD5: main (main.c:247)
+==933450== 
+==933450== 
+==933450== HEAP SUMMARY:
+==933450==     in use at exit: 0 bytes in 0 blocks
+==933450==   total heap usage: 3,202 allocs, 3,202 frees, 31,452 bytes allocated
+==933450== 
+==933450== All heap blocks were freed -- no leaks are possible
+==933450== 
+==933450== For lists of detected and suppressed errors, rerun with: -s
+==933450== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
