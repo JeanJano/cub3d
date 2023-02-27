@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 18:45:29 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/27 18:22:24 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/27 18:30:19 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,5 @@ void	free_struct(t_cub **cub)
 	free((*cub)->parsing.path_west);
 	free_int_arr((*cub)->parsing.map, (*cub)->parsing.map_height);
 	free((*cub)->parsing.map_width);
+	free(*cub);
 }

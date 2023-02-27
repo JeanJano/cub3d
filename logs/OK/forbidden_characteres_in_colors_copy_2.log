@@ -1,0 +1,23 @@
+==946860== Memcheck, a memory error detector
+==946860== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==946860== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==946860== Command: ./cub3D Cub3D-Destroyer/maps/maps_buged/forbidden_characteres_in_colors_copy_2.cub
+==946860== 
+Error
+Incorrect void next to space
+==946860== 
+==946860== FILE DESCRIPTORS: 4 open (3 std) at exit.
+==946860== Open file descriptor 3: Cub3D-Destroyer/maps/maps_buged/forbidden_characteres_in_colors_copy_2.cub
+==946860==    at 0x4BE16EB: open (open64.c:41)
+==946860==    by 0x403180: parser (parsing.c:102)
+==946860==    by 0x402D08: main (main.c:196)
+==946860== 
+==946860== 
+==946860== HEAP SUMMARY:
+==946860==     in use at exit: 0 bytes in 0 blocks
+==946860==   total heap usage: 2,902 allocs, 2,902 frees, 28,956 bytes allocated
+==946860== 
+==946860== All heap blocks were freed -- no leaks are possible
+==946860== 
+==946860== For lists of detected and suppressed errors, rerun with: -s
+==946860== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

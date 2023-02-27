@@ -1,0 +1,18 @@
+==946842== Memcheck, a memory error detector
+==946842== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==946842== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==946842== Command: ./cub3D Cub3D-Destroyer/maps/maps_buged/empty_file
+==946842== 
+Error
+wrong extension file
+==946842== 
+==946842== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==946842== 
+==946842== HEAP SUMMARY:
+==946842==     in use at exit: 0 bytes in 0 blocks
+==946842==   total heap usage: 0 allocs, 0 frees, 0 bytes allocated
+==946842== 
+==946842== All heap blocks were freed -- no leaks are possible
+==946842== 
+==946842== For lists of detected and suppressed errors, rerun with: -s
+==946842== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

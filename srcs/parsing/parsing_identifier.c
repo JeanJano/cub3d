@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 14:35:55 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/21 15:53:02 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/27 18:53:53 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,19 @@ void	save_rgb_in_indentifier(int *identifier, char *info)
 {
 	char	**info_split;
 	char	**rgb_split;
+	int		count;
 
 	info_split = ft_split(info, ' ');
 	rgb_split = ft_split(info_split[1], ',');
+	count = 0;
+	while (rgb_split[count])
+		count++;
+	if (count < 3)
+	{
+		free_split(info_split);
+		free_split(rgb_split);
+		return ;
+	}
 	identifier[0] = ft_atoi(rgb_split[0]);
 	identifier[1] = ft_atoi(rgb_split[1]);
 	identifier[2] = ft_atoi(rgb_split[2]);
