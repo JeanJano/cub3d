@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/27 18:11:43 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/27 18:25:21 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,34 +151,15 @@ void	draw_line(t_cub **cub)
 	int		j;
 	double	angle;
 	double	wall_heigth;
-	// double	vision;
 
-	// printf("test: %d\n", (*cub)->parsing.map_height);
-	// double	x = get_player_position_x(&(*cub)->parsing);
-	// double	y = get_player_position_y(&(*cub)->parsing);
-	// printf("player position: x %f, y %f\n", x, y);
-	// vision = get_vector_distance(x, y, 60);
-	// printf("vision: %f\n", vision);
-	// (*cub)->init_distance = (*cub)->distance;
 	i = 0;
 	angle = 0;
-	// printf("distance: %d\n", (*cub)->distance);
 	while (i < WINDOW_WIDTH)
 	{
-		// (*cub)->distance = get_vector_distance(3, 3, angle) * 35;
-		// printf("angle: %f\n", angle);
-		// j = (*cub)->distance / 35;
-		// while (j < (*cub)->distance)
-		// {
-		// 	img_pix_put(&(*cub)->mlx.img, (*cub)->distance + i, j + 150, 0x00FF6F06);
-		// 	j++;
-		// }
-		(*cub)->distance = get_vector_distance(3, 3, angle);
+		(*cub)->distance = get_vector_distance(3, 3, angle, (*cub)->parsing);
 		printf("distance: %f\n", (*cub)->distance);
-		// wall_heigth = ((*cub)->distance * 0.9) * 80;
 		wall_heigth = (10 / (*cub)->distance) * 300;
 		printf("wall_height: %f\n", wall_heigth);
-		// j = (*cub)->distance * 35;
 		j = (WINDOW_HEIGHT / 2) - ((int)wall_heigth / 2);
 		printf("j: %d\n", j);
 		while (j < (int)wall_heigth)
@@ -186,19 +167,6 @@ void	draw_line(t_cub **cub)
 			img_pix_put(&(*cub)->mlx.img, i, j, 0x00FF6F06);
 			j++;
 		}
-
-		// while (j > (*cub)->distance)
-		// {
-		// 	img_pix_put(&(*cub)->mlx.img, (*cub)->distance + i, j + ((*cub)->distance * 20), 0x00FF6F06);
-		// 	j--;
-		// }
-
-		// while (j < 100 * (*cub)->distance)
-		// {
-		// 	img_pix_put(&(*cub)->mlx.img, i + (*cub)->distance, j - ((int)(*cub)->distance * 20), 0x00FF6F06);
-		// 	j++;
-		// }
-
 
 		i++;
 		angle += 0.0428;
@@ -215,7 +183,7 @@ int	draw(t_cub **cub)
 
 int	main(int ac, char **av)
 {
-	t_cub		cub;
+	t_cub		*cub;
 	t_parsing	parsing;
 
 	if (ac != 2)
@@ -223,28 +191,29 @@ int	main(int ac, char **av)
 	if (check_extension(av[1]) == FALSE)
 		return (error_message("wrong extension file"), 1);
 	init_parsing_struct(&parsing);
-	cub.parsing = parsing;
-	if (parser(&cub.parsing, av[1]) == 2)
+	cub = malloc(sizeof(t_cub));
+	cub->parsing = parsing;
+	if (parser(&cub->parsing, av[1]) == 2)
 	{
 		free_struct(&cub);
 		return (1);
 	}
-	if (check_valid_map(&cub.parsing) == FALSE)
+	if (check_valid_map(&cub->parsing) == FALSE)
 	{
 		free_struct(&cub);
 		return (1);
 	}
-	get_vector_distance(5.4, 4, 0, cub.parsing);
-	// if (init_mlx(&cub) == FALSE)
-	// {
-	// 	free_struct(&cub);
-	// 	return (1);
-	// }
-	// cub.mlx.img.mlx_img = mlx_new_image(cub.mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
-	// cub.mlx.img.addr = mlx_get_data_addr(cub.mlx.img.mlx_img, &cub.mlx.img.bpp, &cub.mlx.img.line_len, &cub.mlx.img.endian);
-	// mlx_loop_hook(cub.mlx.mlx_ptr, draw, &cub);
-	// mlx_key_hook(cub.mlx.win_ptr, deal_key, &cub);
-	// mlx_hook(cub.mlx.win_ptr, 33, 0, ft_close, &cub);
-	// mlx_loop(cub.mlx.mlx_ptr);
+	get_vector_distance(5.4, 4, 0, cub->parsing);
+	if (init_mlx(cub) == FALSE)
+	{
+		free_struct(&cub);
+		return (1);
+	}
+	cub->mlx.img.mlx_img = mlx_new_image(cub->mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
+	cub->mlx.img.addr = mlx_get_data_addr(cub->mlx.img.mlx_img, &cub->mlx.img.bpp, &cub->mlx.img.line_len, &cub->mlx.img.endian);
+	mlx_loop_hook(cub->mlx.mlx_ptr, draw, &cub);
+	mlx_key_hook(cub->mlx.win_ptr, deal_key, &cub);
+	mlx_hook(cub->mlx.win_ptr, 33, 0, ft_close, &cub);
+	mlx_loop(cub->mlx.mlx_ptr);
 	return (0);
 }
