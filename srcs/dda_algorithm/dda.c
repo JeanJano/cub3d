@@ -112,8 +112,8 @@ void get_first_vertical_intersec(double x, double y, double angle)
 	double dx = ((int)x + 1) - x;
 	double dy = dx / tan(angle * (M_PI / 180));
 	x = x + dx;
-	y = y + 
-	printf("dx=%f dy=%f\n", dx, dy);
+	// y = y + 
+	// printf("dx=%f dy=%f\n", dx, dy);
 
 }
 

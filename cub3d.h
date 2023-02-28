@@ -51,7 +51,9 @@ typedef	struct s_cub
 	t_parsing	parsing;
 	t_mlx		mlx;
 	double		distance;
-	double		init_distance;
+	double		player_x;
+	double		player_y;
+	double		vision;
 }				t_cub;
 
 typedef	struct s_dda
@@ -101,4 +103,13 @@ void	free_struct(t_cub **cub);
 //			dda algo            //
 // **************************** //
 double get_vector_distance(double playerX, double playerY, double angle, t_parsing parsing);
+// **************************** //
+//			projection          //
+// **************************** //
+int		draw(t_cub **cub);
+void	img_pix_put(t_img *img, int x, int y, int color);
+double	get_player_position_x(t_parsing *parsing);
+double	get_player_position_y(t_parsing *parsing);
+double	get_player_position_vision(t_parsing *parsing);
+
 #endif

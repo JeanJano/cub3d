@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/27 18:55:30 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/28 19:38:43 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,110 +75,19 @@ int	init_mlx(t_cub *cub)
 	return (TRUE);
 }
 
-double	get_player_position_x(t_parsing *parsing)
+void	init_player(t_cub *cub)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < parsing->map_height)
-	{
-		j = 0;
-		while (j < parsing->map_width[i])
-		{
-			if (check_player_composant(parsing->map[i][j]) == TRUE)
-				return (i + 1);
-			j++;
-		}
-		i++;
-	}
-	return (-1);
-}
-
-double	get_player_position_y(t_parsing *parsing)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < parsing->map_height)
-	{
-		j = 0;
-		while (j < parsing->map_width[i])
-		{
-			if (check_player_composant(parsing->map[i][j]) == TRUE)
-				return (j + 1);
-			j++;
-		}
-		i++;
-	}
-	return (-1);
-}
-
-//fenetre
-
-void	img_pix_put(t_img *img, int x, int y, int color)
-{
-	char	*pixel;
-
-	if (y < 0 || x < 0 || x > WINDOW_WIDTH || y > WINDOW_HEIGHT)
-		return ;
-	pixel = img->addr + (y * img->line_len + x * (img->bpp / 8));
-	*(int *)pixel = color;
-}
-
-static void	draw_backgroud(t_cub **cub)
-{
-	int	x;
-	int	y;
-
-	y = 0;
-	while (y <= WINDOW_WIDTH)
-	{
-		x = 0;
-		while (x <= WINDOW_HEIGHT)
-		{
-			img_pix_put(&(*cub)->mlx.img, y, x, 0x00000000);
-			x++;
-		}
-		y++;
-	}
-}
-
-void	draw_line(t_cub **cub)
-{
-	int		i;
-	int		j;
-	double	angle;
-	double	wall_heigth;
-
-	i = 0;
-	angle = 0;
-	while (i < WINDOW_WIDTH)
-	{
-		(*cub)->distance = get_vector_distance(3, 3, angle, (*cub)->parsing);
-		printf("distance: %f\n", (*cub)->distance);
-		wall_heigth = (10 / (*cub)->distance) * 300;
-		printf("wall_height: %f\n", wall_heigth);
-		j = (WINDOW_HEIGHT / 2) - ((int)wall_heigth / 2);
-		printf("j: %d\n", j);
-		while (j < (int)wall_heigth)
-		{
-			img_pix_put(&(*cub)->mlx.img, i, j, 0x00FF6F06);
-			j++;
-		}
-
-		i++;
-		angle += 0.0428;
-	}
-}
-
-int	draw(t_cub **cub)
-{
-	draw_backgroud(cub);
-	draw_line(cub);
-	mlx_put_image_to_window((*cub)->mlx.mlx_ptr, (*cub)->mlx.win_ptr, (*cub)->mlx.img.mlx_img, -1, 0);
-	return (0);
+	cub->player_x = get_player_position_x(&cub->parsing);
+	cub->player_y = get_player_position_y(&cub->parsing);
+	cub->vision = get_player_position_vision(&cub->parsing);
+	if (cub->vision == 78)
+		cub->vision = 270;
+	if (cub->vision == 69)
+		cub->vision = 0;
+	if (cub->vision == 87)
+		cub->vision = 180;
+	if (cub->vision == 83)
+		cub->vision = 90;
 }
 
 int	main(int ac, char **av)
@@ -204,18 +113,19 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	get_vector_distance(5.4, 4, 0, cub->parsing);
-	// if (init_mlx(cub) == FALSE)
-	// {
-	// 	free_struct(&cub);
-	// 	return (1);
-	// }
-	// cub->mlx.img.mlx_img = mlx_new_image(cub->mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
-	// cub->mlx.img.addr = mlx_get_data_addr(cub->mlx.img.mlx_img, &cub->mlx.img.bpp, &cub->mlx.img.line_len, &cub->mlx.img.endian);
-	// mlx_loop_hook(cub->mlx.mlx_ptr, draw, &cub);
-	// mlx_key_hook(cub->mlx.win_ptr, deal_key, &cub);
-	// mlx_hook(cub->mlx.win_ptr, 33, 0, ft_close, &cub);
-	// mlx_loop(cub->mlx.mlx_ptr);
+	if (init_mlx(cub) == FALSE)
+	{
+		free_struct(&cub);
+		return (1);
+	}
+	init_player(cub);
+	cub->mlx.img.mlx_img = mlx_new_image(cub->mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
+	cub->mlx.img.addr = mlx_get_data_addr(cub->mlx.img.mlx_img, &cub->mlx.img.bpp, &cub->mlx.img.line_len, &cub->mlx.img.endian);
+	mlx_loop_hook(cub->mlx.mlx_ptr, draw, &cub);
+	mlx_key_hook(cub->mlx.win_ptr, deal_key, &cub);
+	mlx_hook(cub->mlx.win_ptr, 33, 0, ft_close, &cub);
+	mlx_loop(cub->mlx.mlx_ptr);
 
-	free_struct(&cub);
+	// free_struct(&cub);
 	return (0);
 }
