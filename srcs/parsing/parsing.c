@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 16:14:46 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/23 18:47:51 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/28 15:22:09 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,27 +46,36 @@ void	create_map_tab(t_parsing *parsing, char *line)
 	i++;
 }
 
-
-
-int	parser_map(char *line, t_parsing *parsing, int fd)
+int	error_char_after_map(int fd, char *line)
 {
-	int	i;
-	int	test = 0;
+	int	count;
+
+	count = 0;
+	while (line)
+	{
+		if (line[0] != '\n')
+			count = 1;
+		free(line);
+		line = get_next_line(fd);
+	}
+	if (count == 1)
+		return (TRUE);
+	return (FALSE);
+}
+
+int	parser_map(t_parsing *parsing, int fd)
+{
+	int		i;
+	char	*line;
 
 	i = 0;
+	line = get_next_line(fd);
 	while (line)
 	{
 		if (i > 0 && line[0] == '\n')
 		{
-			while (line)
-			{
-				if (line[0] != '\n')
-					test = 1;
-				free(line);
-				line = get_next_line(fd);
-			}
 			parsing->map_height = i;
-			if (test == 1)
+			if (error_char_after_map(fd, line) == TRUE)
 				return (error_message("Incorrect character after map"), 2);
 			return (FALSE);
 		}
@@ -85,6 +94,7 @@ int	parser(t_parsing *parsing, char *path)
 {
 	char	*line;
 	int		fd;
+	int		map;
 
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
@@ -100,12 +110,11 @@ int	parser(t_parsing *parsing, char *path)
 	parsing->map_width = malloc(sizeof(int) * parsing->map_height);
 	parsing->map = malloc(sizeof(int *) * parsing->map_height);
 	fd = open(path, O_RDONLY);
-	line = get_next_line(fd);
-	int	map = parser_map(line, parsing, fd);
+	map = parser_map(parsing, fd);
+	close(fd);
 	if (map == FALSE)
 		return (FALSE);
 	if (map == 2)
 		return (2);
-	close(fd);
 	return (TRUE);
 }
