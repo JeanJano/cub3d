@@ -6,33 +6,54 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 13:21:25 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/28 18:00:05 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/01 16:55:06 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+// void	
+
 void	move_key(int key, t_cub **cub)
 {
 	if (key == XK_w && (*cub)->parsing.map[(int)(*cub)->player_x + 1][(int)(*cub)->player_y] != 1)
 	{
-		printf("map: %d\n", (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y]);
-		(*cub)->player_x += 0.2;
+		// printf("map: %d\n", (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y]);
+		printf("w\n");
+		(*cub)->player_x = (*cub)->player_x + (cos((*cub)->vision) * (*cub)->move_incr);
+		(*cub)->player_y = (*cub)->player_y + (sin((*cub)->vision) * (*cub)->move_incr);
+		(*cub)->player_x = ceilf((*cub)->player_x * 100) / 100;
+		(*cub)->player_y = ceilf((*cub)->player_y * 100) / 100;
 	}
-	if (key == XK_s && (*cub)->parsing.map[(int)(*cub)->player_x - 1][(int)(*cub)->player_y] != 1)
+	// if (key == XK_s && (*cub)->parsing.map[(int)(*cub)->player_x - 1][(int)(*cub)->player_y] != 1)
+	// {
+	// 	// printf("map: %d\n", (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y]);
+	// 	(*cub)->player_x -= (*cub)->move_incr;
+	// }
+	// if (key == XK_a && (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y - 1] != 1)
+	// {
+	// 	// printf("map: %d\n", (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y]);
+	// 	(*cub)->player_y -= (*cub)->move_incr;
+	// }
+	// if (key == XK_d && (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y + 1] != 1)
+	// {
+	// 	// printf("map: %d\n", (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y]);
+	// 	(*cub)->player_y += (*cub)->move_incr;
+	// }
+
+	if (key == XK_Left)
 	{
-		printf("map: %d\n", (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y]);
-		(*cub)->player_x -= 0.2;
+		printf("vision: %f\n", (*cub)->vision);
+		(*cub)->vision -= (*cub)->vision_incr;
+		if ((*cub)->vision <= 0)
+			(*cub)->vision = 360;
 	}
-	if (key == XK_a && (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y - 1] != 1)
+	if (key == XK_Right)
 	{
-		printf("map: %d\n", (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y]);
-		(*cub)->player_y -= 0.2;
-	}
-	if (key == XK_d && (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y + 1] != 1)
-	{
-		printf("map: %d\n", (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y]);
-		(*cub)->player_y += 0.2;
+		printf("vision: %f\n", (*cub)->vision);
+		(*cub)->vision += (*cub)->vision_incr;
+		if ((*cub)->vision >= 360)
+			(*cub)->vision = 0;
 	}
 }
 

@@ -7,6 +7,7 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <X11/keysym.h>
+# include <X11/X.h>
 # include "mlx/mlx.h"
 # include <stdlib.h>
 # include <math.h>
@@ -54,6 +55,8 @@ typedef	struct s_cub
 	double		player_x;
 	double		player_y;
 	double		vision;
+	double		vision_incr;
+	double		move_incr;
 }				t_cub;
 
 typedef	struct s_dda
