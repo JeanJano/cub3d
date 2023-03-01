@@ -216,7 +216,7 @@ int	main(int ac, char **av)
 		free_struct(&cub);
 		return (1);
 	}
-	get_vector_distance(5.4, 4, 0, cub.parsing);
+	printf("length=%f\n", get_vector_distance(5.99, 4, 0, cub.parsing));
 	// if (init_mlx(&cub) == FALSE)
 	// {
 	// 	free_struct(&cub);
