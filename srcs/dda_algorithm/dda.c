@@ -16,8 +16,6 @@
 //     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 // };
 
-
-
 int check_map_vertical(double x, double y, int quartile, t_parsing parsing_struct)
 {	
 	if (quartile == 1)
@@ -92,57 +90,60 @@ int check_map_horizontal(int x, int y, int quartile, t_parsing parsing_struct)
 	return (0);
 }
 
-double get_vector_distance(double player_x, double player_y, double angle, t_parsing parsing_struct) {
-    double x_cos = cos(angle * ( M_PI / 180));
-    double y_sin = sin(angle * (M_PI / 180));
-	double	x_scale = (1 / y_sin) * x_cos; // x scale to move 1 y
-	double	y_scale = (1 / x_cos) * y_sin; // y scale to move 1 x
- 
-	printf("x_cos=%f y_sin=%f\n", x_cos, y_sin);
-	printf("x_scale=%f y_scale=%f\n", x_scale, y_scale);
+void init_dda_struct(t_dda *dda_data, double player_x, double player_y, double angle)
+{
+	dda_data->x_cos = cos(angle * ( M_PI / 180));
+    dda_data->y_sin = sin(angle * (M_PI / 180));
+	dda_data->x_scale = (1 / dda_data->y_sin) * dda_data->x_cos; // x scale to move 1 y
+	dda_data->y_scale = (1 / dda_data->x_cos) * dda_data->y_sin; // y scale to move 1 x
 
-	double x_vertical = player_x;
-	double y_vertical = player_y;
-	double vertical_length = 0;
+	dda_data->x_vertical = player_x;
+	dda_data->y_vertical = player_y;
+	dda_data->vertical_length = 0;
 
-    double x_horizontal = player_x;
-    double y_horizontal = player_y;
-	double horizontal_length = 0;
+    dda_data->x_horizontal = player_x;
+    dda_data->y_horizontal = player_y;
+	dda_data->horizontal_length = 0;
 
-	int map_x = (int)player_x;
-	int step_x;
-	int map_y = (int)player_y;
-	int step_y;
+	// int map_x = (int)player_x;
+	// int step_x;
+	// int map_y = (int)player_y;
+	// int step_y;
 
-	int quartile;
-	// GET QUARTILE
 	if (angle >= 0 && angle < 90)
 	{
-		step_x = 1;
-		step_y = 1;
-		quartile = 1;
+		// step_x = 1;
+		// step_y = 1;
+		dda_data->quartile = 1;
 	}
 	else if (angle >= 90 && angle < 180)
 	{
-		step_x = -1;
-		step_y = 1;
-		quartile = 2;
+		// step_x = -1;
+		// step_y = 1;
+		dda_data->quartile = 2;
 	}
 	else if (angle >= 180 && angle < 270)
 	{
-		step_x = -1;
-		step_y = -1;
-		quartile = 3;
+		// step_x = -1;
+		// step_y = -1;
+		dda_data->quartile = 3;
 	}
 	else if (angle >= 270 && angle < 360)
 	{
-		step_x = 1;
-		step_y = -1;
-		quartile = 4;
+		// step_x = 1;
+		// step_y = -1;
+		dda_data->quartile = 4;
 	}
-	// VERTICAL CHECK
-	printf("--------------------------------------\n|           VERTICAL CHECK           |\n--------------------------------------\n");
-	get_first_vertical_intersec(&x_vertical, &y_vertical, y_scale, quartile);
+}
+
+double vertical_check(t_dda dda_data, t_parsing parsing_struct)
+{
+	double	x_vertical = dda_data.x_vertical;
+	double	y_vertical = dda_data.y_vertical;
+	double	quartile = dda_data.quartile;
+	double	y_scale = dda_data.y_scale;
+
+	get_first_vertical_intersec(&x_vertical, &y_vertical, dda_data);
 	printf("first vertical intersec x=%f y=%f\n", x_vertical, y_vertical);
     while (y_vertical >= 0 && y_vertical < parsing_struct.map_height && x_vertical >= 0 && x_vertical < parsing_struct.map_width[(int)y_vertical])
     {
@@ -151,9 +152,17 @@ double get_vector_distance(double player_x, double player_y, double angle, t_par
 		get_next_vertical_intersec(&x_vertical, &y_vertical, y_scale, quartile);
 		printf("next vertical intersec x=%f y=%f\n", x_vertical, y_vertical);
     }
-	vertical_length = fabs(x_vertical - player_x) * fabs(x_cos) + fabs(y_vertical - player_y) * fabs(y_sin);
-	// HORIZONTAL CHECK
-	printf("--------------------------------------\n|          HORIZONTAL CHECK          |\n--------------------------------------\n");
+	// vertical_length = fabs(x_vertical - player_x) * fabs(x_cos) + fabs(y_vertical - player_y) * fabs(y_sin);
+	return (0);
+}
+
+double horizontal_check(t_dda dda_data, t_parsing parsing_struct)
+{
+	double	x_horizontal = dda_data.x_vertical;
+	double	y_horizontal = dda_data.y_vertical;
+	double	quartile = dda_data.quartile;
+	double	x_scale = dda_data.y_scale;
+
 	get_first_horizontal_intersec(&x_horizontal, &y_horizontal, x_scale, quartile);
 	printf("first horizontal intersec x=%f y=%f\n", x_horizontal, y_horizontal);
 	while (y_horizontal >= 0 && y_horizontal < parsing_struct.map_height && x_horizontal >= 0 && x_horizontal < parsing_struct.map_width[(int)y_horizontal])
@@ -163,10 +172,28 @@ double get_vector_distance(double player_x, double player_y, double angle, t_par
 		get_next_horizontal_intersec(&x_horizontal, &y_horizontal, x_scale, quartile);
 		printf("next horizontal intersec x=%f y=%f\n", x_horizontal, y_horizontal);
 	}
-	horizontal_length = fabs(x_horizontal - player_x) * fabs(x_cos) + fabs(y_horizontal - player_y) * fabs(y_sin);
+	// horizontal_length = fabs(x_horizontal - player_x) * fabs(x_cos) + fabs(y_horizontal - player_y) * fabs(y_sin);
+	return (0);
+}
+
+
+double get_vector_distance(double player_x, double player_y, double angle, t_parsing parsing_struct)
+{
+	t_dda dda_data;
+ 
+	init_dda_struct(&dda_data, player_x, player_y, angle);
+	// printf("x_cos=%f y_sin=%f\n", x_cos, y_sin);
+	// printf("x_scale=%f y_scale=%f\n", x_scale, y_scale);
+
+	// VERTICAL CHECK
+	printf("--------------------------------------\n|           VERTICAL CHECK           |\n--------------------------------------\n");
+	dda_data.vertical_length = vertical_check(dda_data, parsing_struct);
+	// HORIZONTAL CHECK
+	printf("--------------------------------------\n|          HORIZONTAL CHECK          |\n--------------------------------------\n");
+	dda_data.horizontal_length = horizontal_check(dda_data, parsing_struct);
 	// GET BEST LENGTH
-	if (vertical_length > horizontal_length)
-		return (horizontal_length);
+	if (dda_data.vertical_length > dda_data.horizontal_length)
+		return (dda_data.horizontal_length);
 	else
-		return (vertical_length);
+		return (dda_data.vertical_length);
 }

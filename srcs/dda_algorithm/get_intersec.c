@@ -1,35 +1,32 @@
 #include "cub3d.h"
 
-void get_first_vertical_intersec(double *x, double *y, double y_scale, int quartile)
+void get_first_vertical_intersec(double *x, double *y, t_dda dda_data)
 {
 	double dx;
-	
-	if (quartile == 1)
+
+	if (dda_data.quartile == 1)
 	{
+		// printf("1=%f 2=%f\n", ((int)*x + 1) - *x, (floor(*x) + 1) - *x);
 		dx = ((int)*x + 1) - *x;
-		*y = *y + y_scale * dx;
+		*y = *y + dda_data.y_scale * dx;
 		*x = *x + ((int)*x + 1) - *x;
 	}
-	else if (quartile == 2)
+	else if (dda_data.quartile == 2)
 	{
 		dx = *x - (int)*x;
-		// if (dx == 0)
-		// 	dx = 1;
-		*y = *y - y_scale * dx;
+		*y = *y - dda_data.y_scale * dx;
 		*x = *x - dx;
 	}
-	else if (quartile == 3) // same as 2
+	else if (dda_data.quartile == 3) // same as 2
 	{
 		dx = *x - (int)*x;
-		// if (dx == 0)
-		// 	dx = 1;
-		*y = *y - y_scale * dx;
+		*y = *y - dda_data.y_scale * dx;
 		*x = *x - dx;
 	}
 	else // same as 1
 	{
 		dx = ((int)*x + 1) - *x;
-		*y = *y + y_scale * dx;
+		*y = *y + dda_data.y_scale * dx;
 		*x = *x + ((int)*x + 1) - *x;
 	}
 	// printf("first vertical intersec x=%f test=%f\n", *x, *y);
