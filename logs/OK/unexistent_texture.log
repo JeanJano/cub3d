@@ -1,0 +1,37 @@
+==775065== Memcheck, a memory error detector
+==775065== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==775065== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==775065== Command: ./cub3D Cub3D-Destroyer/maps/maps_buged/unexistent_texture.cub
+==775065== 
+==775065== Conditional jump or move depends on uninitialised value(s)
+==775065==    at 0x404374: check_wall (valid_map_close.c:49)
+==775065==    by 0x403F43: check_map_wall (valid_map.c:72)
+==775065==    by 0x4040FB: check_valid_map (valid_map.c:113)
+==775065==    by 0x40317F: main (main.c:112)
+==775065== 
+==775065== Conditional jump or move depends on uninitialised value(s)
+==775065==    at 0x40439A: check_wall (valid_map_close.c:49)
+==775065==    by 0x403F43: check_map_wall (valid_map.c:72)
+==775065==    by 0x4040FB: check_valid_map (valid_map.c:113)
+==775065==    by 0x40317F: main (main.c:112)
+==775065== 
+==775065== Conditional jump or move depends on uninitialised value(s)
+==775065==    at 0x4043B1: check_wall (valid_map_close.c:51)
+==775065==    by 0x403F43: check_map_wall (valid_map.c:72)
+==775065==    by 0x4040FB: check_valid_map (valid_map.c:113)
+==775065==    by 0x40317F: main (main.c:112)
+==775065== 
+Error
+Incorrect close wall
+==775065== 
+==775065== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==775065== 
+==775065== HEAP SUMMARY:
+==775065==     in use at exit: 0 bytes in 0 blocks
+==775065==   total heap usage: 3,047 allocs, 3,047 frees, 30,322 bytes allocated
+==775065== 
+==775065== All heap blocks were freed -- no leaks are possible
+==775065== 
+==775065== Use --track-origins=yes to see where uninitialised values come from
+==775065== For lists of detected and suppressed errors, rerun with: -s
+==775065== ERROR SUMMARY: 3 errors from 3 contexts (suppressed: 0 from 0)

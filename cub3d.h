@@ -115,4 +115,6 @@ double	get_player_position_x(t_parsing *parsing);
 double	get_player_position_y(t_parsing *parsing);
 double	get_player_position_vision(t_parsing *parsing);
 
+int	draw_test_move(t_cub **cub);
+
 #endif

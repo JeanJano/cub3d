@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/01 15:53:33 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/06 16:40:38 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	init_player(t_cub *cub)
 		cub->vision = 180;
 	if (cub->vision == 83)
 		cub->vision = 90;
-	cub->vision_incr = 0.2;
+	cub->vision_incr = 1;
 	cub->move_incr = 0.2;
 }
 
@@ -123,7 +123,8 @@ int	main(int ac, char **av)
 	init_player(cub);
 	cub->mlx.img.mlx_img = mlx_new_image(cub->mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
 	cub->mlx.img.addr = mlx_get_data_addr(cub->mlx.img.mlx_img, &cub->mlx.img.bpp, &cub->mlx.img.line_len, &cub->mlx.img.endian);
-	mlx_loop_hook(cub->mlx.mlx_ptr, draw, &cub);
+	// mlx_loop_hook(cub->mlx.mlx_ptr, draw, &cub);
+	mlx_loop_hook(cub->mlx.mlx_ptr, draw_test_move, &cub);
 	mlx_hook(cub->mlx.win_ptr, KeyPress, KeyPressMask, deal_key, &cub);
 	mlx_hook(cub->mlx.win_ptr, 33, 0, ft_close, &cub);
 	mlx_loop(cub->mlx.mlx_ptr);

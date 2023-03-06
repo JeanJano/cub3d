@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 18:53:06 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/01 14:33:01 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/06 16:39:31 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,41 @@ void	draw_line(t_cub **cub)
 	}
 }
 
-void	move_player(t_cub **cub)
-{
-	
-	printf("x: %f, y: %f, vision: %f\n", (*cub)->player_x, (*cub)->player_y, (*cub)->vision);
-}
-
 int	draw(t_cub **cub)
 {
 	draw_backgroud(cub);
-	move_player(cub);
+	printf("x: %f, y: %f, vision: %f\n", (*cub)->player_x, (*cub)->player_y, (*cub)->vision);
 	draw_line(cub);
+	mlx_put_image_to_window((*cub)->mlx.mlx_ptr, (*cub)->mlx.win_ptr, (*cub)->mlx.img.mlx_img, -1, 0);
+	return (0);
+}
+
+int	draw_test_move(t_cub **cub)
+{
+	int i = 350;
+	int j;
+	draw_backgroud(cub);
+	printf("x: %f, y: %f, vision: %f\n", (*cub)->player_x * 20, (*cub)->player_y * 20, (*cub)->vision);
+	while (i < 400)
+	{
+		j = 450;
+		while (j < 500)
+		{
+			img_pix_put(&(*cub)->mlx.img, ((*cub)->player_x * 30 + i), ((*cub)->player_y * 30 + j),  0x00FF6F06);
+			j++;
+		}
+		i++;
+	}
+	// while (i < 400)
+	// {
+	// 	j = 450;
+	// 	while (j < 500)
+	// 	{
+	// 		img_pix_put(&(*cub)->mlx.img, (*cub)->player_x + i, (*cub)->player_y + j,  0x00FF6F06);
+	// 		j++;
+	// 	}
+	// 	i++;
+	// }
 	mlx_put_image_to_window((*cub)->mlx.mlx_ptr, (*cub)->mlx.win_ptr, (*cub)->mlx.img.mlx_img, -1, 0);
 	return (0);
 }
