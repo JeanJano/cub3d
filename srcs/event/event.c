@@ -59,7 +59,6 @@ int	deal_key(int key, t_cub **cub)
 		mlx_destroy_window((*cub)->mlx.mlx_ptr, (*cub)->mlx.win_ptr);
 		mlx_destroy_display((*cub)->mlx.mlx_ptr);
 		free((*cub)->mlx.mlx_ptr);
-		free_struct(cub);
 		exit(0);
 	}
 	// printf("key: %d\n", key);

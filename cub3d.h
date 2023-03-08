@@ -105,6 +105,13 @@ void	free_struct(t_cub **cub);
 // **************************** //
 double get_vector_distance(double playerX, double playerY, double angle, t_parsing parsing);
 // **************************** //
+//			get_intersec            //
+// **************************** //
+void get_first_vertical_intersec(double *x, double *y, t_dda dda_data);
+void get_next_vertical_intersec(double *x, double *y, double y_scale, int quartile);
+void get_first_horizontal_intersec(double *x, double *y, double x_scale, int quartile);
+void get_next_horizontal_intersec(double *x, double *y, double x_scale, int quartile);
+// **************************** //
 //			projection          //
 // **************************** //
 int		draw(t_cub **cub);
