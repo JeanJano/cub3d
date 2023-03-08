@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/23 19:06:33 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/08 16:07:06 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,129 +75,26 @@ int	init_mlx(t_cub *cub)
 	return (TRUE);
 }
 
-double	get_player_position_x(t_parsing *parsing)
+void	init_player(t_cub *cub)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < parsing->map_height)
-	{
-		j = 0;
-		while (j < parsing->map_width[i])
-		{
-			if (check_player_composant(parsing->map[i][j]) == TRUE)
-				return (i + 1);
-			j++;
-		}
-		i++;
-	}
-	return (-1);
-}
-
-double	get_player_position_y(t_parsing *parsing)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < parsing->map_height)
-	{
-		j = 0;
-		while (j < parsing->map_width[i])
-		{
-			if (check_player_composant(parsing->map[i][j]) == TRUE)
-				return (j + 1);
-			j++;
-		}
-		i++;
-	}
-	return (-1);
-}
-
-//fenetre
-
-void	img_pix_put(t_img *img, int x, int y, int color)
-{
-	char	*pixel;
-
-	if (y < 0 || x < 0 || x > WINDOW_WIDTH || y > WINDOW_HEIGHT)
-		return ;
-	pixel = img->addr + (y * img->line_len + x * (img->bpp / 8));
-	*(int *)pixel = color;
-}
-
-static void	draw_backgroud(t_cub **cub)
-{
-	int	x;
-	int	y;
-
-	y = 0;
-	while (y <= WINDOW_WIDTH)
-	{
-		x = 0;
-		while (x <= WINDOW_HEIGHT)
-		{
-			img_pix_put(&(*cub)->mlx.img, y, x, 0x00000000);
-			x++;
-		}
-		y++;
-	}
-}
-
-void	draw_line(t_cub **cub)
-{
-	int		i;
-	int		j;
-	double	angle;
-	double	wall_heigth;
-	// double	vision;
-
-	// printf("test: %d\n", (*cub)->parsing.map_height);
-	// double	x = get_player_position_x(&(*cub)->parsing);
-	// double	y = get_player_position_y(&(*cub)->parsing);
-	// printf("player position: x %f, y %f\n", x, y);
-	// vision = get_vector_distance(x, y, 60);
-	// printf("vision: %f\n", vision);
-	// (*cub)->init_distance = (*cub)->distance;
-	i = 0;
-	angle = 0;
-	wall_heigth = 10;
-	// printf("distance: %d\n", (*cub)->distance);
-	while (i < WINDOW_WIDTH)
-	{
-		// (*cub)->distance = get_vector_distance(3, 3, angle) * 35;
-		// printf("distance: %f\n", (*cub)->distance);
-		// printf("angle: %f\n", angle);
-		// j = (*cub)->distance / 35;
-		// while (j < (*cub)->distance)
-		// {
-		// 	img_pix_put(&(*cub)->mlx.img, (*cub)->distance + i, j + 150, 0x00FF6F06);
-		// 	j++;
-		// }
-		// (*cub)->distance = get_vector_distance(3, 3, angle);
-		j = (*cub)->distance * 35;
-		while (j > (*cub)->distance)
-		{
-			img_pix_put(&(*cub)->mlx.img, (*cub)->distance / 5 + i, j + 10, 0x00FF6F06);
-			j--;
-		}
-		i++;
-		angle += 0.0428;
-	}
-}
-
-int	draw(t_cub **cub)
-{
-	draw_backgroud(cub);
-	draw_line(cub);
-	mlx_put_image_to_window((*cub)->mlx.mlx_ptr, (*cub)->mlx.win_ptr, (*cub)->mlx.img.mlx_img, -1, 0);
-	return (0);
+	cub->player_x = get_player_position_x(&cub->parsing);
+	cub->player_y = get_player_position_y(&cub->parsing);
+	cub->vision = get_player_position_vision(&cub->parsing);
+	if (cub->vision == 78)
+		cub->vision = 270;
+	if (cub->vision == 69)
+		cub->vision = 0;
+	if (cub->vision == 87)
+		cub->vision = 180;
+	if (cub->vision == 83)
+		cub->vision = 90;
+	cub->vision_incr = 1;
+	cub->move_incr = 0.2;
 }
 
 int	main(int ac, char **av)
 {
-	t_cub		cub;
+	t_cub		*cub;
 	t_parsing	parsing;
 
 	if (ac != 2)
@@ -205,28 +102,33 @@ int	main(int ac, char **av)
 	if (check_extension(av[1]) == FALSE)
 		return (error_message("wrong extension file"), 1);
 	init_parsing_struct(&parsing);
-	cub.parsing = parsing;
-	if (parser(&cub.parsing, av[1]) == 2)
+	cub = malloc(sizeof(t_cub));
+	cub->parsing = parsing;
+	if (parser(&cub->parsing, av[1]) == 2)
 	{
 		free_struct(&cub);
 		return (1);
 	}
-	if (check_valid_map(&cub.parsing) == FALSE)
+	if (check_valid_map(&cub->parsing) == FALSE)
 	{
 		free_struct(&cub);
 		return (1);
 	}
-	printf("length=%f\n", get_vector_distance(5.3, 4.6, 22.5, cub.parsing));
-	// if (init_mlx(&cub) == FALSE)
-	// {
-	// 	free_struct(&cub);
-	// 	return (1);
-	// }
-	// cub.mlx.img.mlx_img = mlx_new_image(cub.mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
-	// cub.mlx.img.addr = mlx_get_data_addr(cub.mlx.img.mlx_img, &cub.mlx.img.bpp, &cub.mlx.img.line_len, &cub.mlx.img.endian);
-	// mlx_loop_hook(cub.mlx.mlx_ptr, draw, &cub);
-	// mlx_key_hook(cub.mlx.win_ptr, deal_key, &cub);
-	// mlx_hook(cub.mlx.win_ptr, 33, 0, ft_close, &cub);
-	// mlx_loop(cub.mlx.mlx_ptr);
+	get_vector_distance(5.4, 4, 0, cub->parsing);
+	if (init_mlx(cub) == FALSE)
+	{
+		free_struct(&cub);
+		return (1);
+	}
+	init_player(cub);
+	cub->mlx.img.mlx_img = mlx_new_image(cub->mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
+	cub->mlx.img.addr = mlx_get_data_addr(cub->mlx.img.mlx_img, &cub->mlx.img.bpp, &cub->mlx.img.line_len, &cub->mlx.img.endian);
+	// mlx_loop_hook(cub->mlx.mlx_ptr, draw, &cub);
+	mlx_loop_hook(cub->mlx.mlx_ptr, draw_test_move, &cub);
+	mlx_hook(cub->mlx.win_ptr, KeyPress, KeyPressMask, deal_key, &cub);
+	mlx_hook(cub->mlx.win_ptr, 33, 0, ft_close, &cub);
+	mlx_loop(cub->mlx.mlx_ptr);
+
+	// free_struct(&cub);
 	return (0);
 }

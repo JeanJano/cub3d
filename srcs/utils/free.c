@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 18:45:29 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/23 18:55:38 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/02/27 18:30:19 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,13 @@ void	free_int_arr(int **arr, int number_of_line)
 	free(arr);
 }
 
-void	free_struct(t_cub *cub)
+void	free_struct(t_cub **cub)
 {
-	free(cub->parsing.path_east);
-	free(cub->parsing.path_north);
-	free(cub->parsing.path_south);
-	free(cub->parsing.path_west);
-	free_int_arr(cub->parsing.map, cub->parsing.map_height);
-	free(cub->parsing.map_width);
+	free((*cub)->parsing.path_east);
+	free((*cub)->parsing.path_north);
+	free((*cub)->parsing.path_south);
+	free((*cub)->parsing.path_west);
+	free_int_arr((*cub)->parsing.map, (*cub)->parsing.map_height);
+	free((*cub)->parsing.map_width);
+	free(*cub);
 }
