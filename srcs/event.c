@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 13:21:25 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/06 18:35:10 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/08 14:15:35 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	move_forward(t_cub **cub)
 		(*cub)->player_x += sin(((*cub)->vision - 270) * (M_PI / 180)) * (*cub)->move_incr;
 		(*cub)->player_y -= cos(((*cub)->vision - 270) * (M_PI / 180)) * (*cub)->move_incr;	
 	}
-	else if ((*cub)->vision == 0)
+	else if ((*cub)->vision == 0 || (*cub)->vision == 360)
 		(*cub)->player_x += (*cub)->move_incr;
 	else if ((*cub)->vision == 90)
 		(*cub)->player_y += (*cub)->move_incr;
@@ -68,7 +68,7 @@ void	move_backward(t_cub **cub)
 		(*cub)->player_x -= sin(((*cub)->vision - 270) * (M_PI / 180)) * (*cub)->move_incr;
 		(*cub)->player_y += cos(((*cub)->vision - 270) * (M_PI / 180)) * (*cub)->move_incr;	
 	}
-	else if ((*cub)->vision == 0)
+	else if ((*cub)->vision == 0 || (*cub)->vision == 360)
 		(*cub)->player_x -= (*cub)->move_incr;
 	else if ((*cub)->vision == 90)
 		(*cub)->player_y -= (*cub)->move_incr;
@@ -76,6 +76,70 @@ void	move_backward(t_cub **cub)
 		(*cub)->player_x += (*cub)->move_incr;
 	else if ((*cub)->vision == 270)
 		(*cub)->player_y += (*cub)->move_incr;
+}
+
+void	move_left(t_cub **cub)
+{
+	if ((*cub)->vision > 0 && (*cub)->vision < 90)
+	{
+		(*cub)->player_x += sin((((*cub)->vision + 270) - 270) * (M_PI / 180)) * (*cub)->move_incr;
+		(*cub)->player_y -= cos((((*cub)->vision + 270) - 270) * (M_PI / 180)) * (*cub)->move_incr;
+	}
+	else if ((*cub)->vision > 90 && (*cub)->vision < 180)
+	{
+		(*cub)->player_x += sin(((90 - ((*cub)->vision - 90))) * (M_PI / 180)) * (*cub)->move_incr;
+		(*cub)->player_y += cos(((90 - ((*cub)->vision - 90))) * (M_PI / 180)) * (*cub)->move_incr;
+	}
+	else if ((*cub)->vision > 180 && (*cub)->vision < 270)
+	{
+		(*cub)->player_x -= sin(((((*cub)->vision) - 90) - 90) * (M_PI / 180)) * (*cub)->move_incr;
+		(*cub)->player_y += cos(((((*cub)->vision) - 90) - 90) * (M_PI / 180)) * (*cub)->move_incr;
+	}
+	else if ((*cub)->vision > 270 && (*cub)->vision < 360)
+	{
+		(*cub)->player_x -= sin(((270 - ((*cub)->vision) + 90)) * (M_PI / 180)) * (*cub)->move_incr;
+		(*cub)->player_y -= cos(((270 - ((*cub)->vision) + 90)) * (M_PI / 180)) * (*cub)->move_incr;
+	}
+	else if ((*cub)->vision == 0 || (*cub)->vision == 360)
+		(*cub)->player_y -= (*cub)->move_incr;
+	else if ((*cub)->vision == 90)
+		(*cub)->player_x += (*cub)->move_incr;
+	else if ((*cub)->vision == 180)
+		(*cub)->player_y += (*cub)->move_incr;
+	else if ((*cub)->vision == 270)
+		(*cub)->player_x -= (*cub)->move_incr;
+}
+
+void	move_right(t_cub **cub)
+{
+	if ((*cub)->vision > 0 && (*cub)->vision < 90)
+	{
+		(*cub)->player_x -= sin((((*cub)->vision + 270) - 270) * (M_PI / 180)) * (*cub)->move_incr;
+		(*cub)->player_y += cos((((*cub)->vision + 270) - 270) * (M_PI / 180)) * (*cub)->move_incr;
+	}
+	else if ((*cub)->vision > 90 && (*cub)->vision < 180)
+	{
+		(*cub)->player_x -= sin(((90 - ((*cub)->vision - 90))) * (M_PI / 180)) * (*cub)->move_incr;
+		(*cub)->player_y -= cos(((90 - ((*cub)->vision - 90))) * (M_PI / 180)) * (*cub)->move_incr;
+	}
+	else if ((*cub)->vision > 180 && (*cub)->vision < 270)
+	{
+		(*cub)->player_x -= sin((((*cub)->vision)) * (M_PI / 180)) * (*cub)->move_incr;
+		(*cub)->player_y += cos((((*cub)->vision)) * (M_PI / 180)) * (*cub)->move_incr;
+	}
+	else if ((*cub)->vision > 270 && (*cub)->vision < 360)
+	{
+		(*cub)->player_x += sin(((270 - ((*cub)->vision) + 90)) * (M_PI / 180)) * (*cub)->move_incr;
+		(*cub)->player_y += cos(((270 - ((*cub)->vision) + 90)) * (M_PI / 180)) * (*cub)->move_incr;
+	}
+	else if ((*cub)->vision == 0 || (*cub)->vision == 360)
+		(*cub)->player_y += (*cub)->move_incr;
+	else if ((*cub)->vision == 90)
+		(*cub)->player_x -= (*cub)->move_incr;
+	else if ((*cub)->vision == 180)
+		(*cub)->player_y -= (*cub)->move_incr;
+	else if ((*cub)->vision == 270)
+		(*cub)->player_x += (*cub)->move_incr;
 }
 
 void	move_key(int key, t_cub **cub)
@@ -91,16 +155,16 @@ void	move_key(int key, t_cub **cub)
 		move_backward(cub);
 	}
 	
-	// if (key == XK_a && (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y - 1] != 1)
-	// {
-	// 	// printf("map: %d\n", (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y]);
-	// 	(*cub)->player_y -= (*cub)->move_incr;
-	// }
-	// if (key == XK_d && (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y + 1] != 1)
-	// {
-	// 	// printf("map: %d\n", (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y]);
-	// 	(*cub)->player_y += (*cub)->move_incr;
-	// }
+	if (key == XK_a /* && (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y - 1] != 1 */)
+	{
+		printf("a\n");
+		move_left(cub);
+	}
+	if (key == XK_d /* && (*cub)->parsing.map[(int)(*cub)->player_x][(int)(*cub)->player_y + 1] != 1 */)
+	{
+		printf("d\n");
+		move_right(cub);
+	}
 
 	if (key == XK_Left)
 	{
