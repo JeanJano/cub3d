@@ -61,18 +61,18 @@ typedef	struct s_cub
 
 typedef	struct s_dda
 {
-    double x_cos;
-    double y_sin;
-	double x_scale; // x scale to move 1 y
-	double y_scale; // y scale to move 1 x
+	double	x_cos;
+	double	y_sin;
+	double	x_scale; // x scale to move 1 y
+	double	y_scale; // y scale to move 1 x
 
-    double x_horizontal;
-    double y_horizontal;
-	double horizontal_length;
+	double	x_horizontal;
+	double	y_horizontal;
+	double	horizontal_length;
 
-	double x_vertical;
-	double y_vertical;
-	double vertical_length;
+	double	x_vertical;
+	double	y_vertical;
+	double	vertical_length;
 
 	int quartile;
 }				t_dda;
@@ -92,14 +92,12 @@ int		check_wall_up_down(t_parsing *parsing, int i);
 void	identifier_manager(t_parsing *parsing, char *line);
 int		check_valid_identifier(t_parsing *parsing);
 int		check_map_line(char *line);
-
-int		deal_key(int key, t_cub **cub);
-int		ft_close(t_cub **cub);
-
+// **************************** //
+//			utils               //
+// **************************** //
 int		str_search(const char *big, const char *little, size_t len);
 char	*strdup_no_breakline(char *line);
 void	error_message(char *message);
-
 void	free_split(char **arr);
 void	free_struct(t_cub **cub);
 // **************************** //
@@ -114,6 +112,17 @@ void	img_pix_put(t_img *img, int x, int y, int color);
 double	get_player_position_x(t_parsing *parsing);
 double	get_player_position_y(t_parsing *parsing);
 double	get_player_position_vision(t_parsing *parsing);
+// **************************** //
+//			event               //
+// **************************** //
+int		deal_key(int key, t_cub **cub);
+int		ft_close(t_cub **cub);
+void	move_right(t_cub **cub);
+void	move_left(t_cub **cub);
+void	move_backward(t_cub **cub);
+void	move_forward(t_cub **cub);
+
+
 
 int	draw_test_move(t_cub **cub);
 

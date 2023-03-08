@@ -5,12 +5,14 @@ SRCS_PARSING	:=	$(shell find srcs/parsing/*.c -exec basename \ {} \;)
 SRCS_UTILS	:=	$(shell find srcs/utils/*.c -exec basename \ {} \;)
 SRCS_DDA_ALGORITHM	:=	$(shell find srcs/dda_algorithm/*.c -exec basename \ {} \;)
 SRCS_PROJECTION	:=	$(shell find srcs/projection/*.c -exec basename \ {} \;)
+SRCS_EVENT	:=	$(shell find srcs/event/*.c -exec basename \ {} \;)
 
 OBJS = ${patsubst %.c,${OBJS_DIR}/%.o,${SRCS}}
 OBJS_PARSING = ${patsubst %.c,${OBJS_DIR}/%.o,${SRCS_PARSING}}
 OBJS_UTILS = ${patsubst %.c,${OBJS_DIR}/%.o,${SRCS_UTILS}}
 OBJS_DDA_ALGORITHM = ${patsubst %.c,${OBJS_DIR}/%.o,${SRCS_DDA_ALGORITHM}}
 OBJS_PROJECTION = ${patsubst %.c,${OBJS_DIR}/%.o,${SRCS_PROJECTION}}
+OBJS_EVENT = ${patsubst %.c,${OBJS_DIR}/%.o,${SRCS_EVENT}}
 
 HEADERS = cub3d.h
 
@@ -24,9 +26,9 @@ CFLAGS =
 
 # -- RULES -- #
 
-${NAME}: ${LIB} ${OBJS_DIR} ${OBJS} ${OBJS_PARSING} ${OBJS_UTILS} ${OBJS_DDA_ALGORITHM} ${OBJS_PROJECTION} ${HEADERS}
+${NAME}: ${LIB} ${OBJS_DIR} ${OBJS} ${OBJS_PARSING} ${OBJS_UTILS} ${OBJS_DDA_ALGORITHM} ${OBJS_PROJECTION} ${OBJS_EVENT} ${HEADERS}
 	make -C mlx --no-print-directory
-	@${CC} ${CFLAGS} ${OBJS} ${OBJS_PARSING} ${OBJS_UTILS} ${OBJS_DDA_ALGORITHM} ${OBJS_PROJECTION} ${LIB} -Lmlx -lmlx -lXext -lX11 -lm -lz -L/usr/local/lib -I/usr/local/include -Imlx -o ${NAME}
+	@${CC} ${CFLAGS} ${OBJS} ${OBJS_PARSING} ${OBJS_UTILS} ${OBJS_DDA_ALGORITHM} ${OBJS_PROJECTION} ${OBJS_EVENT} ${LIB} -Lmlx -lmlx -lXext -lX11 -lm -lz -L/usr/local/lib -I/usr/local/include -Imlx -o ${NAME}
 	@echo "\033[32m$ ${NAME} compiled !"
 	@echo "----------------------------\033[0m"
 
@@ -52,6 +54,9 @@ ${OBJS_DIR}/%.o: srcs/dda_algorithm/%.c
 	@${CC} ${CFLAGS} -I. -c $< -o $@
 
 ${OBJS_DIR}/%.o: srcs/projection/%.c
+	@${CC} ${CFLAGS} -I. -c $< -o $@
+
+${OBJS_DIR}/%.o: srcs/event/%.c
 	@${CC} ${CFLAGS} -I. -c $< -o $@
 
 clean:
