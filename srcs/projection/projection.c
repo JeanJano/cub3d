@@ -38,12 +38,12 @@ void	draw_line(t_cub **cub)
 	double	wall_heigth;
 
 	i = 0;
-	angle = 0;
+	angle = (*cub)->vision_incr;
 	while (i < WINDOW_WIDTH)
 	{
 		(*cub)->distance = get_vector_distance(3, 3, angle, (*cub)->parsing);
 		// printf("distance: %f\n", (*cub)->distance);
-		wall_heigth = (10 / (*cub)->distance) * 300;
+		wall_heigth = (10 / (*cub)->distance) * 400;
 		// printf("wall_height: %f\n", wall_heigth);
 		j = (WINDOW_HEIGHT / 2) - ((int)wall_heigth / 2);
 		// printf("j: %d\n", j);
@@ -52,7 +52,6 @@ void	draw_line(t_cub **cub)
 			img_pix_put(&(*cub)->mlx.img, i, j, 0x00FF6F06);
 			j++;
 		}
-
 		i++;
 		angle += 0.0428;
 	}

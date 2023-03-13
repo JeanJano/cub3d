@@ -11,12 +11,15 @@
 # include "mlx/mlx.h"
 # include <stdlib.h>
 # include <math.h>
-
+# include <float.h>
 # define FALSE 0
 # define TRUE 1
 
 # define WINDOW_WIDTH 1400
 # define WINDOW_HEIGHT 800
+
+# define VERTICAL_HIT 1
+# define HORIZONTAL_HIT 2
 
 typedef struct	s_parsing
 {
@@ -61,18 +64,21 @@ typedef	struct s_cub
 
 typedef	struct s_dda
 {
-	double	x_cos;
-	double	y_sin;
-	double	x_scale; // x scale to move 1 y
-	double	y_scale; // y scale to move 1 x
+	double angle;
+    double x_cos;
+    double y_sin;
+	double x_scale; // x scale to move 1 y
+	double y_scale; // y scale to move 1 x
 
-	double	x_horizontal;
-	double	y_horizontal;
-	double	horizontal_length;
+    double x_horizontal;
+    double y_horizontal;
+	double delta_dist_horizontal;
+	double horizontal_length;
 
-	double	x_vertical;
-	double	y_vertical;
-	double	vertical_length;
+	double x_vertical;
+	double y_vertical;
+	double delta_dist_vertical;
+	double vertical_length;
 
 	int quartile;
 }				t_dda;
@@ -107,10 +113,10 @@ double get_vector_distance(double playerX, double playerY, double angle, t_parsi
 // **************************** //
 //			get_intersec            //
 // **************************** //
-void get_first_vertical_intersec(double *x, double *y, t_dda dda_data);
-void get_next_vertical_intersec(double *x, double *y, double y_scale, int quartile);
-void get_first_horizontal_intersec(double *x, double *y, double x_scale, int quartile);
-void get_next_horizontal_intersec(double *x, double *y, double x_scale, int quartile);
+void get_first_vertical_intersec(double *x, double *y, t_dda *dda_data);
+void get_next_vertical_intersec(double *x, double *y, t_dda *dda_data);
+void get_first_horizontal_intersec(double *x, double *y, t_dda *dda_data);
+void get_next_horizontal_intersec(double *x, double *y, t_dda *dda_data);
 // **************************** //
 //			projection          //
 // **************************** //
@@ -129,8 +135,7 @@ void	move_left(t_cub **cub);
 void	move_backward(t_cub **cub);
 void	move_forward(t_cub **cub);
 
-
-
 int	draw_test_move(t_cub **cub);
+
 
 #endif
