@@ -1,76 +1,88 @@
 #include "cub3d.h"
 
-void get_first_vertical_intersec(double *x, double *y, t_dda dda_data)
+void get_first_vertical_intersec(double *x, double *y, t_dda *dda_data)
 {
 	double dx;
 
-	if (dda_data.quartile == 1)
+	if (dda_data->angle == 90 || dda_data->angle == 270)
 	{
-		// printf("1=%f 2=%f\n", ((int)*x + 1) - *x, (floor(*x) + 1) - *x);
+		dda_data->vertical_length = DBL_MAX;
+		// printf("NOT HITTING ANY VERTICAL length=%f\n", dda_data->vertical_length);
+		return ; 
+	}
+	if (dda_data->quartile == 1)
+	{
 		dx = ((int)*x + 1) - *x;
-		*y = *y + dda_data.y_scale * dx;
+		*y = *y + dda_data->y_scale * dx;
 		*x = *x + ((int)*x + 1) - *x;
 	}
-	else if (dda_data.quartile == 2)
+	else if (dda_data->quartile == 2)
 	{
 		dx = *x - (int)*x;
-		*y = *y - dda_data.y_scale * dx;
+		*y = *y - dda_data->y_scale * dx;
 		*x = *x - dx;
 	}
-	else if (dda_data.quartile == 3) // same as 2
+	else if (dda_data->quartile == 3) // same as 2
 	{
 		dx = *x - (int)*x;
-		*y = *y - dda_data.y_scale * dx;
+		*y = *y - dda_data->y_scale * dx;
 		*x = *x - dx;
 	}
 	else // same as 1
 	{
 		dx = ((int)*x + 1) - *x;
-		*y = *y + dda_data.y_scale * dx;
+		*y = *y + dda_data->y_scale * dx;
 		*x = *x + ((int)*x + 1) - *x;
 	}
-	// printf("first vertical intersec x=%f test=%f\n", *x, *y);
+	dda_data->vertical_length = fabs(dx / fabs(sin((90 - dda_data->angle) * ( M_PI / 180))));
+	// printf("first vertical intersec x=%f y=%f length=%f\n", *x, *y, dda_data->vertical_length);
 }
 
-void get_next_vertical_intersec(double *x, double *y, double y_scale, int quartile)
+void get_next_vertical_intersec(double *x, double *y, t_dda *dda_data)
 {
-	// printf("ratio=%f\n", y_scale);
-	if (quartile == 1 || quartile == 4)
+	if (dda_data->quartile == 1 || dda_data->quartile == 4)
 		*x = *x + 1;
 	else
 		*x = *x - 1;
-	if (quartile == 1 || quartile == 4)
-		*y = *y + y_scale;
-	else if (quartile == 2)
-		*y = *y + (y_scale * -1);
+	if (dda_data->quartile == 1 || dda_data->quartile == 4)
+		*y = *y + dda_data->y_scale;
+	else if (dda_data->quartile == 2)
+		*y = *y + (dda_data->y_scale * -1);
 	else
-		*y = *y - y_scale;
-	// printf("checked in 1 x=%f y=%f xIndex=%d yIndex=%d\n", *x, *y, (int)*x, (int)*y);
+		*y = *y - dda_data->y_scale;
+	dda_data->vertical_length += dda_data->delta_dist_vertical;
+	// printf("next vertical intersec x=%f y=%f length=%f\n", *x, *y, dda_data->vertical_length);
 }
 
-void get_first_horizontal_intersec(double *x, double *y, double x_scale, int quartile)
+void get_first_horizontal_intersec(double *x, double *y, t_dda *dda_data)
 {
 	double dy;
 	
-	if (quartile == 1)
+	if (dda_data->angle == 0 || dda_data->angle == 180)
+	{
+		dda_data->horizontal_length = DBL_MAX;
+		// printf("NOT HITTING ANY HORIZONTAL length=%f\n", dda_data->horizontal_length);
+		return ;
+	}
+	if (dda_data->quartile == 1)
 	{
 		dy = ((int)*y + 1) - *y;
 		*y = *y + dy;
-		*x = *x + (dy * x_scale);
+		*x = *x + (dy * dda_data->x_scale);
 	}
-	else if (quartile == 2)
+	else if (dda_data->quartile == 2)
 	{
 		dy = ((int)*y + 1) - *y;
 		*y = *y + dy;
-		*x = *x + x_scale * dy;
+		*x = *x + dda_data->x_scale * dy;
 	}
-	else if (quartile == 3)
+	else if (dda_data->quartile == 3)
 	{
 		dy = *y - (int)*y;
 		// if (dy == 0)
 		// 	dy = 1;
 		*y = *y - dy;
-		*x = *x - x_scale * dy;
+		*x = *x - dda_data->x_scale * dy;
 	}
 	else
 	{
@@ -78,24 +90,26 @@ void get_first_horizontal_intersec(double *x, double *y, double x_scale, int qua
 		// if (dy == 0)
 		// 	dy = 1;
 		*y = *y - dy;
-		*x = *x - x_scale * dy;
+		*x = *x - dda_data->x_scale * dy;
 	}
-	// printf("first horizontal intersec x=%f y=%f dy=%f\n", *x, *y, dy);
+	dda_data->horizontal_length = fabs(dy / fabs(cos((90 - dda_data->angle) * ( M_PI / 180))));
+	// printf("first horizontal intersec x=%f y=%f length=%f\n", *x, *y, dda_data->horizontal_length);
 }
 
-void get_next_horizontal_intersec(double *x, double *y, double x_scale, int quartile)
+void get_next_horizontal_intersec(double *x, double *y, t_dda *dda_data)
 {
-	if (quartile == 1)
-		*x = *x + x_scale;
-	else if (quartile == 2)
-		*x = *x + x_scale;
-	else if (quartile == 3)
-		*x = *x - x_scale;
+	if (dda_data->quartile == 1)
+		*x = *x + dda_data->x_scale;
+	else if (dda_data->quartile == 2)
+		*x = *x + dda_data->x_scale;
+	else if (dda_data->quartile == 3)
+		*x = *x - dda_data->x_scale;
 	else
-		*x = *x + -x_scale;
-	if (quartile == 1 || quartile == 2)
+		*x = *x + -dda_data->x_scale;
+	if (dda_data->quartile == 1 || dda_data->quartile == 2)
 		*y = *y + 1;
 	else
 		*y = *y - 1;
-	// printf("checked in 2 x=%f y=%f xIndex=%d yIndex=%d\n", *x, *y, (int)*x, (int)*y);
+	dda_data->horizontal_length += dda_data->delta_dist_horizontal;
+	// printf("next horizontal intersec x=%f y=%f length=%f\n", *x, *y, dda_data->horizontal_length);
 }

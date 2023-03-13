@@ -114,7 +114,9 @@ int	main(int ac, char **av)
 		free_struct(&cub);
 		return (1);
 	}
-	// get_vector_distance(5.4, 4, 0, cub->parsing);
+	// for (double i = 0; i < 360; i += 0.06)
+	// 	get_vector_distance(5.4, 4, i, cub->parsing);
+
 	if (init_mlx(cub) == FALSE)
 	{
 		free_struct(&cub);

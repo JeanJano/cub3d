@@ -38,13 +38,13 @@ void	draw_line(t_cub **cub)
 	double	wall_heigth;
 
 	i = 0;
-	angle = 0;
+	angle = (*cub)->vision_incr;
 	while (i < WINDOW_WIDTH)
 	{
-		(*cub)->distance = get_vector_distance((*cub)->player_x, (*cub)->player_y, (*cub)->vision, (*cub)->parsing);
-		printf("distance: %f\n", (*cub)->distance);
-		wall_heigth = (10 / (*cub)->distance) * 300;
-		printf("wall_height: %f\n", wall_heigth);
+		(*cub)->distance = get_vector_distance(3, 3, angle, (*cub)->parsing);
+		// printf("distance: %f\n", (*cub)->distance);
+		wall_heigth = (10 / (*cub)->distance) * 400;
+		// printf("wall_height: %f\n", wall_heigth);
 		j = (WINDOW_HEIGHT / 2) - ((int)wall_heigth / 2);
 		// printf("j: %d\n", j);
 		while (j < (int)wall_heigth)
