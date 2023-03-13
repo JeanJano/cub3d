@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 18:53:06 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/06 16:39:31 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/08 16:36:46 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ void	draw_line(t_cub **cub)
 	angle = 0;
 	while (i < WINDOW_WIDTH)
 	{
-		(*cub)->distance = get_vector_distance(3, 3, angle, (*cub)->parsing);
-		// printf("distance: %f\n", (*cub)->distance);
+		(*cub)->distance = get_vector_distance((*cub)->player_x, (*cub)->player_y, (*cub)->vision, (*cub)->parsing);
+		printf("distance: %f\n", (*cub)->distance);
 		wall_heigth = (10 / (*cub)->distance) * 300;
-		// printf("wall_height: %f\n", wall_heigth);
+		printf("wall_height: %f\n", wall_heigth);
 		j = (WINDOW_HEIGHT / 2) - ((int)wall_heigth / 2);
 		// printf("j: %d\n", j);
 		while (j < (int)wall_heigth)
@@ -52,7 +52,6 @@ void	draw_line(t_cub **cub)
 			img_pix_put(&(*cub)->mlx.img, i, j, 0x00FF6F06);
 			j++;
 		}
-
 		i++;
 		angle += 0.0428;
 	}
