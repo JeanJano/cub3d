@@ -122,6 +122,7 @@ void get_next_horizontal_intersec(double *x, double *y, t_dda *dda_data);
 // **************************** //
 int		draw(t_cub **cub);
 void	img_pix_put(t_img *img, int x, int y, int color);
+int		convert_color(int *color_tab);
 double	get_player_position_x(t_parsing *parsing);
 double	get_player_position_y(t_parsing *parsing);
 double	get_player_position_vision(t_parsing *parsing);

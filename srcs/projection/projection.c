@@ -6,38 +6,40 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 18:53:06 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/14 17:09:02 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/14 19:27:20 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static void	draw_backgroud(t_cub **cub)
+void	draw_ceil(t_cub **cub, int i, int j)
 {
-	int	x;
-	int	y;
+	int incr;
 
-	y = 0;
-	while (y <= WINDOW_WIDTH)
+	incr = 0;
+	while (incr < j)
 	{
-		x = 0;
-		while (x <= WINDOW_HEIGHT)
-		{
-			img_pix_put(&(*cub)->mlx.img, y, x, 0x00000000);
-			x++;
-		}
-		y++;
+		img_pix_put(&(*cub)->mlx.img, i, incr, convert_color((*cub)->parsing.rgb_plafond));
+		incr++;
 	}
 }
 
-int	color(int *color_tab)
+void	draw_floor(t_cub **cub, int i, int j)
 {
-	int color;
+	while (j < WINDOW_HEIGHT)
+	{
+		img_pix_put(&(*cub)->mlx.img, i, j, convert_color((*cub)->parsing.rgb_floor));
+		j++;
+	}
+}
 
-	color = color_tab[2];
-	color += color_tab[1] << 8;
-	color += color_tab[0] << 16;
-	return (color);
+void	draw_wall(t_cub **cub, int i, int j, double wall_heigth)
+{
+	while (j < (int)wall_heigth)
+	{
+		img_pix_put(&(*cub)->mlx.img, i, j, 0x00FF6F06);
+		j++;
+	}
 }
 
 void	draw_line(t_cub **cub)
@@ -46,7 +48,6 @@ void	draw_line(t_cub **cub)
 	int		j;
 	double	angle;
 	double	wall_heigth;
-	int	incr;
 
 	i = 0;
 	angle = (*cub)->vision - 30;
@@ -57,29 +58,15 @@ void	draw_line(t_cub **cub)
 	{
 		(*cub)->distance = get_vector_distance((*cub)->player_x, (*cub)->player_y, angle, (*cub)->parsing);
 		// printf("distance: %f\n", (*cub)->distance);
-		wall_heigth = (10 / (*cub)->distance) * 320;
+		wall_heigth = (10 / (*cub)->distance) * 225;
+		if (wall_heigth < 300)
+			wall_heigth = 300;
 		// printf("wall_height: %f\n", wall_heigth);
-		j = (WINDOW_HEIGHT / 2) - ((int)wall_heigth / 2);
+		j = (WINDOW_HEIGHT / 2) - (int)(wall_heigth / 2);
 		// printf("j: %d\n", j);
-		incr = 0;
-		while (incr < j)
-		{
-			img_pix_put(&(*cub)->mlx.img, i, incr, color((*cub)->parsing.rgb_plafond));
-			incr++;
-		}
-		while (j < (int)wall_heigth)
-		{
-			img_pix_put(&(*cub)->mlx.img, i, j, 0x00FF6F06);
-			j++;
-		}
-		// incr = 0;
-		j = wall_heigth;
-		// printf("%d\n", j);
-		while (j < WINDOW_HEIGHT)
-		{
-			img_pix_put(&(*cub)->mlx.img, i, j, color((*cub)->parsing.rgb_floor));
-			j++;
-		}
+		draw_ceil(cub, i, j);
+		draw_wall(cub, i, j, wall_heigth);
+		draw_floor(cub, i, wall_heigth);
 		i++;
 		angle += 0.0428;
 		if (angle > 360)
@@ -91,7 +78,6 @@ void	draw_line(t_cub **cub)
 
 int	draw(t_cub **cub)
 {
-	draw_backgroud(cub);
 	printf("x: %f, y: %f, vision: %f\n", (*cub)->player_x, (*cub)->player_y, (*cub)->vision);
 	draw_line(cub);
 	mlx_put_image_to_window((*cub)->mlx.mlx_ptr, (*cub)->mlx.win_ptr, (*cub)->mlx.img.mlx_img, -1, 0);
@@ -102,7 +88,7 @@ int	draw_test_move(t_cub **cub)
 {
 	int i = 350;
 	int j;
-	draw_backgroud(cub);
+	// draw_backgroud(cub);
 	printf("x: %f, y: %f, vision: %f\n", (*cub)->player_x * 20, (*cub)->player_y * 20, (*cub)->vision);
 	while (i < 400)
 	{
