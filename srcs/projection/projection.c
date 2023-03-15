@@ -54,14 +54,25 @@ void	draw_line(t_cub *cub)
 	if (angle < 0)
 		angle += 360;
 	// printf("angle: %f\n", cub->vision);
+	printf("------------------------------------------------\n");
 	while (i < WINDOW_WIDTH)
 	{
+		if (angle >= 360)
+		{
+			angle = angle - 360;
+			continue;
+		}
+		if (angle < 0)
+		{
+			angle = angle + 360;
+			continue;
+		}
 		cub->distance = get_vector_distance(cub->player_x, cub->player_y, angle, cub->parsing);
 		// printf("distance: %f\n", cub->distance);
 		wall_heigth = (10 / cub->distance) * 225;
 		if (wall_heigth < 300)
 			wall_heigth = 300;
-		// printf("wall_height: %f\n", wall_heigth);
+		printf("wall_height: %f\n", wall_heigth);
 		j = (WINDOW_HEIGHT / 2) - (int)(wall_heigth / 2);
 		// printf("j: %d\n", j);
 		draw_ceil(cub, i, j);
@@ -69,10 +80,6 @@ void	draw_line(t_cub *cub)
 		draw_floor(cub, i, wall_heigth);
 		i++;
 		angle += 0.0428;
-		if (angle > 360)
-			angle = 0;
-		if (angle < 0)
-			angle = 360;
 	}
 }
 
