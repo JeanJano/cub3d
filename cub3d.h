@@ -105,7 +105,7 @@ int		str_search(const char *big, const char *little, size_t len);
 char	*strdup_no_breakline(char *line);
 void	error_message(char *message);
 void	free_split(char **arr);
-void	free_struct(t_cub **cub);
+void	free_struct(t_cub *cub);
 // **************************** //
 //			dda algo            //
 // **************************** //
@@ -120,7 +120,7 @@ void get_next_horizontal_intersec(double *x, double *y, t_dda *dda_data);
 // **************************** //
 //			projection          //
 // **************************** //
-int		draw(t_cub **cub);
+int		draw(t_cub *cub);
 void	img_pix_put(t_img *img, int x, int y, int color);
 int		convert_color(int *color_tab);
 double	get_player_position_x(t_parsing *parsing);
@@ -129,14 +129,14 @@ double	get_player_position_vision(t_parsing *parsing);
 // **************************** //
 //			event               //
 // **************************** //
-int		deal_key(int key, t_cub **cub);
-int		ft_close(t_cub **cub);
-void	move_right(t_cub **cub);
-void	move_left(t_cub **cub);
-void	move_backward(t_cub **cub);
-void	move_forward(t_cub **cub);
+int		deal_key(int key, t_cub *cub);
+int		ft_close(t_cub *cub);
+void	move_right(t_cub *cub);
+void	move_left(t_cub *cub);
+void	move_backward(t_cub *cub);
+void	move_forward(t_cub *cub);
 
-int	draw_test_move(t_cub **cub);
+int	draw_test_move(t_cub *cub);
 
 
 #endif
