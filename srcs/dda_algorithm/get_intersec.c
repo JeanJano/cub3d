@@ -12,9 +12,9 @@ void get_first_vertical_intersec(double *x, double *y, t_dda *dda_data)
 	}
 	if (dda_data->quartile == 1)
 	{
-		dx = ((int)*x + 1) - *x;
+		dx = (floor(*x) + 1) - *x;
 		*y = *y + dda_data->y_scale * dx;
-		*x = *x + ((int)*x + 1) - *x;
+		*x = floor(*x) + 1;
 	}
 	else if (dda_data->quartile == 2)
 	{
@@ -30,9 +30,9 @@ void get_first_vertical_intersec(double *x, double *y, t_dda *dda_data)
 	}
 	else // same as 1
 	{
-		dx = ((int)*x + 1) - *x;
+		dx = (floor(*x) + 1) - *x;
 		*y = *y + dda_data->y_scale * dx;
-		*x = *x + ((int)*x + 1) - *x;
+		*x = floor(*x) + 1;
 	}
 	dda_data->vertical_length = fabs(dx / fabs(sin((90 - dda_data->angle) * ( M_PI / 180))));
 	// printf("first vertical intersec x=%f y=%f length=%f\n", *x, *y, dda_data->vertical_length);
