@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 13:21:25 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/08 15:32:55 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/15 16:09:38 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ void	move_key(int key, t_cub *cub)
 	{
 		printf("vision: %f\n", cub->vision);
 		cub->vision -= cub->vision_incr;
-		if (cub->vision <= 0)
-			cub->vision = 360;
+		if (cub->vision < 0)
+			cub->vision += 360;
 	}
 	if (key == XK_Right)
 	{

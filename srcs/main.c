@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/14 18:42:24 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/15 16:19:44 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	init_player(t_cub *cub)
 		cub->vision = 180;
 	if (cub->vision == 83)
 		cub->vision = 90;
-	cub->vision_incr = 4;
+	cub->vision_incr = 1;
 	cub->move_incr = 0.1;
 }
 
