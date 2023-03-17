@@ -12,48 +12,51 @@
 
 #include "cub3d.h"
 
-void	draw_ceil(t_cub *cub, int i, int j)
+void	draw_ceil(int x_pixel_draw, int *y_pixel_draw, int size, t_cub *cub)
 {
-	int incr;
-
-	incr = 0;
-	while (incr < j)
+	while (*y_pixel_draw < size)
 	{
-		img_pix_put(&cub->mlx.img, i, incr, convert_color(cub->parsing.rgb_plafond));
-		incr++;
+		// printf("%d\n", *y_pixel_draw);
+		img_pix_put(&cub->mlx.img, x_pixel_draw, *y_pixel_draw, convert_color(cub->parsing.rgb_plafond));
+		(*y_pixel_draw)++;
 	}
 }
 
-void	draw_floor(t_cub *cub, int i, int j)
+void	draw_floor(int x_pixel_draw, int y_pixel_draw, int size, t_cub *cub)
 {
-	while (j < WINDOW_HEIGHT)
+	int drawn_pixel = 0;
+
+	while (drawn_pixel <= size)
 	{
-		img_pix_put(&cub->mlx.img, i, j, convert_color(cub->parsing.rgb_floor));
-		j++;
+		img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, convert_color(cub->parsing.rgb_floor));
+		y_pixel_draw--;
+		drawn_pixel++;
 	}
 }
 
-void    draw_wall(t_cub *cub, int i, int j, double wall_heigth, int wall_orientation)
+void    draw_wall(t_cub *cub, int x_pixel_draw, int y_pixel_draw, int wall_heigth, int wall_orientation)
 {
-    while (j < (int)wall_heigth)
+	int drawn_pixel = 0;
+
+    while (drawn_pixel <= wall_heigth)
     {
         if (wall_orientation == VERTICAL_HIT)
-            img_pix_put(&cub->mlx.img, i, j, 0x00FF0000);
+            img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, 0x00FF0000);
         else
-            img_pix_put(&cub->mlx.img, i, j, 0x000000FF);
-        j++;
+            img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, 0x000000FF);
+        y_pixel_draw++;
+		drawn_pixel++;
     }
 }
 
 void	draw_line(t_cub *cub)
 {
 	int		i;
-	int		j;
 	double	angle;
 	double	wall_heigth;
 	double angle_dif = 30;
 	t_dda_return *dda_return;
-
+	int y_pixel_draw;
 	i = 0;
 	angle = cub->vision - 30;
 	if (angle < 0)
@@ -62,6 +65,7 @@ void	draw_line(t_cub *cub)
 	// printf("------------------------------------------------\n");
 	while (i < WINDOW_WIDTH)
 	{
+		y_pixel_draw = 0;
 		if (angle >= 360)
 		{
 			angle = angle - 360;
@@ -77,15 +81,14 @@ void	draw_line(t_cub *cub)
 		// if (i == WINDOW_WIDTH / 2)
 		// 	printf("FUUUUUUUUUUUUUUUUUUUUUUCKED UP WALL HERE :");
 		// printf("x=%f y=%f angle=%f distance: %f\n", cub->player_x, cub->player_y, angle, distance);
-		wall_heigth = (10 / dda_return->distance) * 225;
-		if (wall_heigth < 300)
-			wall_heigth = 300;
+		wall_heigth = 64 / dda_return->distance * 20;
+		// if (wall_heigth < 300)
+		// 	wall_heigth = 300;
 		// printf("wall_height: %f\n", wall_heigth);
-		j = (WINDOW_HEIGHT / 2) - (int)(wall_heigth / 2);
 		// printf("j: %d\n", j);
-		draw_ceil(cub, i, j);
-		draw_wall(cub, i, j, wall_heigth, dda_return->wall_orientation);
-		draw_floor(cub, i, wall_heigth);
+		draw_ceil(i, &y_pixel_draw, ((WINDOW_HEIGHT - (int)(wall_heigth)) / 2), cub);
+		draw_wall(cub, i, y_pixel_draw, (int)wall_heigth, dda_return->wall_orientation);
+		draw_floor(i, WINDOW_HEIGHT, ((WINDOW_HEIGHT - (int)(wall_heigth)) / 2), cub);
 		i++;
 		angle += 0.0428;
 		angle_dif -= 0.0428;
