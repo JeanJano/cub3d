@@ -133,9 +133,10 @@ int check_map_horizontal(double x, double y, t_dda dda_data, t_parsing parsing_s
 	return (0);
 }
 
-double get_vector_distance(double player_x, double player_y, double angle, t_parsing parsing_struct)
+t_dda_return *get_vector_distance(double player_x, double player_y, double angle, t_parsing parsing_struct)
 {
 	t_dda dda_data;
+	t_dda_return *dda_return = malloc(sizeof(t_dda_return));
 
 	init_dda_struct(&dda_data, player_x, player_y, angle);
 	// printf("x_cos=%f y_sin=%f\n", x_cos, y_sin);
@@ -150,13 +151,17 @@ double get_vector_distance(double player_x, double player_y, double angle, t_par
 	{
 		if (check_map_vertical(dda_data.x_vertical, dda_data.y_vertical, dda_data, parsing_struct) && dda_data.vertical_length < dda_data.horizontal_length)
 		{
+			dda_return->distance = dda_data.vertical_length;
+			dda_return->wall_orientation = VERTICAL_HIT;
 			// printf("result verti x=%f y%f length=%f\n", dda_data.x_vertical, dda_data.y_vertical, dda_data.vertical_length);
-			return (dda_data.vertical_length);
+			return (dda_return);
 		}
 		if (check_map_horizontal(dda_data.x_horizontal, dda_data.y_horizontal, dda_data, parsing_struct) && dda_data.horizontal_length < dda_data.vertical_length)
 		{
+			dda_return->distance = dda_data.horizontal_length;
+			dda_return->wall_orientation = HORIZONTAL_HIT;
 			// printf("result hori x=%f y%f length=%f\n", dda_data.x_horizontal, dda_data.y_horizontal, dda_data.horizontal_length);
-			return (dda_data.horizontal_length);
+			return (dda_return);
 		}
 
 		if (dda_data.vertical_length < dda_data.horizontal_length)

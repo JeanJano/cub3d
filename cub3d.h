@@ -83,6 +83,12 @@ typedef	struct s_dda
 	int quartile;
 }				t_dda;
 
+typedef	struct s_dda_return
+{
+	double	distance;
+	int wall_orientation;
+}				t_dda_return;
+
 // **************************** //
 //			parsing             //
 // **************************** //
@@ -109,7 +115,7 @@ void	free_struct(t_cub *cub);
 // **************************** //
 //			dda algo            //
 // **************************** //
-double get_vector_distance(double playerX, double playerY, double angle, t_parsing parsing);
+t_dda_return *get_vector_distance(double playerX, double playerY, double angle, t_parsing parsing);
 // **************************** //
 //			get_intersec            //
 // **************************** //

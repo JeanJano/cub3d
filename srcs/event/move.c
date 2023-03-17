@@ -14,130 +14,169 @@
 
 void	move_forward(t_cub *cub)
 {
+	double x_move_to = cub->player_x;
+	double y_move_to = cub->player_y;
+
+	printf("MOVE FORWARD\n");
 	if (cub->vision > 0 && cub->vision < 90)
 	{
-		cub->player_x += sin(((90 - cub->vision)) * (M_PI / 180)) * cub->move_incr;
-		cub->player_y += cos(((90 - cub->vision)) * (M_PI / 180)) * cub->move_incr;
+		x_move_to += sin(((90 - cub->vision)) * (M_PI / 180)) * cub->move_incr;
+		y_move_to += cos(((90 - cub->vision)) * (M_PI / 180)) * cub->move_incr;
 	}
 	else if (cub->vision > 90 && cub->vision < 180)
 	{
-		cub->player_x -= sin(((cub->vision) - 90) * (M_PI / 180)) * cub->move_incr;
-		cub->player_y += cos(((cub->vision) - 90) * (M_PI / 180)) * cub->move_incr;
+		x_move_to -= sin(((cub->vision) - 90) * (M_PI / 180)) * cub->move_incr;
+		y_move_to += cos(((cub->vision) - 90) * (M_PI / 180)) * cub->move_incr;
 
 	}
 	else if (cub->vision > 180 && cub->vision < 270)
 	{
-		cub->player_x -= sin(((270 - cub->vision)) * (M_PI / 180)) * cub->move_incr;
-		cub->player_y -= cos(((270 - cub->vision)) * (M_PI / 180)) * cub->move_incr;
+		x_move_to -= sin(((270 - cub->vision)) * (M_PI / 180)) * cub->move_incr;
+		y_move_to -= cos(((270 - cub->vision)) * (M_PI / 180)) * cub->move_incr;
 	}
 	else if (cub->vision > 270 && cub->vision < 360)
 	{
-		cub->player_x += sin((cub->vision - 270) * (M_PI / 180)) * cub->move_incr;
-		cub->player_y -= cos((cub->vision - 270) * (M_PI / 180)) * cub->move_incr;	
+		x_move_to += sin((cub->vision - 270) * (M_PI / 180)) * cub->move_incr;
+		y_move_to -= cos((cub->vision - 270) * (M_PI / 180)) * cub->move_incr;	
 	}
 	else if (cub->vision == 0 || cub->vision == 360)
-		cub->player_x += cub->move_incr;
+		x_move_to += cub->move_incr;
 	else if (cub->vision == 90)
-		cub->player_y += cub->move_incr;
+		y_move_to += cub->move_incr;
 	else if (cub->vision == 180)
-		cub->player_x -= cub->move_incr;
+		x_move_to -= cub->move_incr;
 	else if (cub->vision == 270)
-		cub->player_y -= cub->move_incr;
+		y_move_to -= cub->move_incr;
+
+	if (cub->parsing.map[(int)y_move_to][(int)x_move_to] == 1)
+		return ;
+	cub->player_x = x_move_to;
+	cub->player_y = y_move_to;
+	printf("x=%f y=%f int_x=%d int_y=%d map_value=%d\n", cub->player_x, cub->player_y, (int)cub->player_x, (int)cub->player_y, cub->parsing.map[(int)y_move_to][(int)x_move_to]);
+
+
 }
 
 void	move_backward(t_cub *cub)
 {
+	double x_move_to = cub->player_x;
+	double y_move_to = cub->player_y;
+
 	if (cub->vision > 0 && cub->vision < 90)
 	{
-		cub->player_x -= sin(((90 - cub->vision)) * (M_PI / 180)) * cub->move_incr;
-		cub->player_y -= cos(((90 - cub->vision)) * (M_PI / 180)) * cub->move_incr;
+		x_move_to -= sin(((90 - cub->vision)) * (M_PI / 180)) * cub->move_incr;
+		y_move_to -= cos(((90 - cub->vision)) * (M_PI / 180)) * cub->move_incr;
 	}
 	else if (cub->vision > 90 && cub->vision < 180)
 	{
-		cub->player_x += sin(((cub->vision) - 90) * (M_PI / 180)) * cub->move_incr;
-		cub->player_y -= cos(((cub->vision) - 90) * (M_PI / 180)) * cub->move_incr;
+		x_move_to += sin(((cub->vision) - 90) * (M_PI / 180)) * cub->move_incr;
+		y_move_to -= cos(((cub->vision) - 90) * (M_PI / 180)) * cub->move_incr;
 
 	}
 	else if (cub->vision > 180 && cub->vision < 270)
 	{
-		cub->player_x += sin(((270 - cub->vision)) * (M_PI / 180)) * cub->move_incr;
-		cub->player_y += cos(((270 - cub->vision)) * (M_PI / 180)) * cub->move_incr;
+		x_move_to += sin(((270 - cub->vision)) * (M_PI / 180)) * cub->move_incr;
+		y_move_to += cos(((270 - cub->vision)) * (M_PI / 180)) * cub->move_incr;
 	}
 	else if (cub->vision > 270 && cub->vision < 360)
 	{
-		cub->player_x -= sin((cub->vision - 270) * (M_PI / 180)) * cub->move_incr;
-		cub->player_y += cos((cub->vision - 270) * (M_PI / 180)) * cub->move_incr;	
+		x_move_to -= sin((cub->vision - 270) * (M_PI / 180)) * cub->move_incr;
+		y_move_to += cos((cub->vision - 270) * (M_PI / 180)) * cub->move_incr;	
 	}
 	else if (cub->vision == 0 || cub->vision == 360)
-		cub->player_x -= cub->move_incr;
+		x_move_to -= cub->move_incr;
 	else if (cub->vision == 90)
-		cub->player_y -= cub->move_incr;
+		y_move_to -= cub->move_incr;
 	else if (cub->vision == 180)
-		cub->player_x += cub->move_incr;
+		x_move_to += cub->move_incr;
 	else if (cub->vision == 270)
-		cub->player_y += cub->move_incr;
+		y_move_to += cub->move_incr;
+	
+	if (cub->parsing.map[(int)y_move_to][(int)x_move_to] == 1)
+		return ;
+	cub->player_x = x_move_to;
+	cub->player_y = y_move_to;
+	printf("x=%f y=%f int_x=%d int_y=%d map_value=%d\n", cub->player_x, cub->player_y, (int)cub->player_x, (int)cub->player_y, cub->parsing.map[(int)y_move_to][(int)x_move_to]);
 }
 
 void	move_left(t_cub *cub)
 {
+	double x_move_to = cub->player_x;
+	double y_move_to = cub->player_y;
+
 	if (cub->vision > 0 && cub->vision < 90)
 	{
-		cub->player_x += sin(((cub->vision + 270) - 270) * (M_PI / 180)) * cub->move_incr;
-		cub->player_y -= cos(((cub->vision + 270) - 270) * (M_PI / 180)) * cub->move_incr;
+		x_move_to += sin(((cub->vision + 270) - 270) * (M_PI / 180)) * cub->move_incr;
+		y_move_to -= cos(((cub->vision + 270) - 270) * (M_PI / 180)) * cub->move_incr;
 	}
 	else if (cub->vision > 90 && cub->vision < 180)
 	{
-		cub->player_x += sin(((90 - (cub->vision - 90))) * (M_PI / 180)) * cub->move_incr;
-		cub->player_y += cos(((90 - (cub->vision - 90))) * (M_PI / 180)) * cub->move_incr;
+		x_move_to += sin(((90 - (cub->vision - 90))) * (M_PI / 180)) * cub->move_incr;
+		y_move_to += cos(((90 - (cub->vision - 90))) * (M_PI / 180)) * cub->move_incr;
 	}
 	else if (cub->vision > 180 && cub->vision < 270)
 	{
-		cub->player_x -= sin((((cub->vision) - 90) - 90) * (M_PI / 180)) * cub->move_incr;
-		cub->player_y += cos((((cub->vision) - 90) - 90) * (M_PI / 180)) * cub->move_incr;
+		x_move_to -= sin((((cub->vision) - 90) - 90) * (M_PI / 180)) * cub->move_incr;
+		y_move_to += cos((((cub->vision) - 90) - 90) * (M_PI / 180)) * cub->move_incr;
 	}
 	else if (cub->vision > 270 && cub->vision < 360)
 	{
-		cub->player_x -= sin(((270 - (cub->vision) + 90)) * (M_PI / 180)) * cub->move_incr;
-		cub->player_y -= cos(((270 - (cub->vision) + 90)) * (M_PI / 180)) * cub->move_incr;
+		x_move_to -= sin(((270 - (cub->vision) + 90)) * (M_PI / 180)) * cub->move_incr;
+		y_move_to -= cos(((270 - (cub->vision) + 90)) * (M_PI / 180)) * cub->move_incr;
 	}
 	else if (cub->vision == 0 || cub->vision == 360)
-		cub->player_y -= cub->move_incr;
+		y_move_to -= cub->move_incr;
 	else if (cub->vision == 90)
-		cub->player_x += cub->move_incr;
+		x_move_to += cub->move_incr;
 	else if (cub->vision == 180)
-		cub->player_y += cub->move_incr;
+		y_move_to += cub->move_incr;
 	else if (cub->vision == 270)
-		cub->player_x -= cub->move_incr;
+		x_move_to -= cub->move_incr;
+
+	if (cub->parsing.map[(int)y_move_to][(int)x_move_to] == 1)
+		return ;
+	cub->player_x = x_move_to;
+	cub->player_y = y_move_to;
+	printf("x=%f y=%f int_x=%d int_y=%d map_value=%d\n", cub->player_x, cub->player_y, (int)cub->player_x, (int)cub->player_y, cub->parsing.map[(int)y_move_to][(int)x_move_to]);
 }
 
 void	move_right(t_cub *cub)
 {
+	double x_move_to = cub->player_x;
+	double y_move_to = cub->player_y;
+	
 	if (cub->vision > 0 && cub->vision < 90)
 	{
-		cub->player_x -= sin(((cub->vision + 270) - 270) * (M_PI / 180)) * cub->move_incr;
-		cub->player_y += cos(((cub->vision + 270) - 270) * (M_PI / 180)) * cub->move_incr;
+		x_move_to -= sin(((cub->vision + 270) - 270) * (M_PI / 180)) * cub->move_incr;
+		y_move_to += cos(((cub->vision + 270) - 270) * (M_PI / 180)) * cub->move_incr;
 	}
 	else if (cub->vision > 90 && cub->vision < 180)
 	{
-		cub->player_x -= sin(((90 - (cub->vision - 90))) * (M_PI / 180)) * cub->move_incr;
-		cub->player_y -= cos(((90 - (cub->vision - 90))) * (M_PI / 180)) * cub->move_incr;
+		x_move_to -= sin(((90 - (cub->vision - 90))) * (M_PI / 180)) * cub->move_incr;
+		y_move_to -= cos(((90 - (cub->vision - 90))) * (M_PI / 180)) * cub->move_incr;
 	}
 	else if (cub->vision > 180 && cub->vision < 270)
 	{
-		cub->player_x -= sin(((cub->vision)) * (M_PI / 180)) * cub->move_incr;
-		cub->player_y += cos(((cub->vision)) * (M_PI / 180)) * cub->move_incr;
+		x_move_to -= sin(((cub->vision)) * (M_PI / 180)) * cub->move_incr;
+		y_move_to += cos(((cub->vision)) * (M_PI / 180)) * cub->move_incr;
 	}
 	else if (cub->vision > 270 && cub->vision < 360)
 	{
-		cub->player_x += sin(((270 - (cub->vision) + 90)) * (M_PI / 180)) * cub->move_incr;
-		cub->player_y += cos(((270 - (cub->vision) + 90)) * (M_PI / 180)) * cub->move_incr;
+		x_move_to += sin(((270 - (cub->vision) + 90)) * (M_PI / 180)) * cub->move_incr;
+		y_move_to += cos(((270 - (cub->vision) + 90)) * (M_PI / 180)) * cub->move_incr;
 	}
 	else if (cub->vision == 0 || cub->vision == 360)
-		cub->player_y += cub->move_incr;
+		y_move_to += cub->move_incr;
 	else if (cub->vision == 90)
-		cub->player_x -= cub->move_incr;
+		x_move_to -= cub->move_incr;
 	else if (cub->vision == 180)
-		cub->player_y -= cub->move_incr;
+		y_move_to -= cub->move_incr;
 	else if (cub->vision == 270)
-		cub->player_x += cub->move_incr;
+		x_move_to += cub->move_incr;
+
+	if (cub->parsing.map[(int)y_move_to][(int)x_move_to] == 1)
+		return ;
+	cub->player_x = x_move_to;
+	cub->player_y = y_move_to;
+	printf("x=%f y=%f int_x=%d int_y=%d map_value=%d\n", cub->player_x, cub->player_y, (int)cub->player_x, (int)cub->player_y, cub->parsing.map[(int)y_move_to][(int)x_move_to]);
 }

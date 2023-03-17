@@ -12,7 +12,7 @@
 
 #include "cub3d.h"
 
-double	get_player_position_x(t_parsing *parsing)
+double	get_player_position_y(t_parsing *parsing)
 {
 	int	i;
 	int	j;
@@ -32,7 +32,7 @@ double	get_player_position_x(t_parsing *parsing)
 	return (-1);
 }
 
-double	get_player_position_y(t_parsing *parsing)
+double	get_player_position_x(t_parsing *parsing)
 {
 	int	i;
 	int	j;
