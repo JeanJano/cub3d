@@ -1,7 +1,7 @@
-NO ./path_to_the_north_texture
-SO ./path_to_the_south_texture
-WE ./path_to_the_west_texture
-EA ./path_to_the_east_texture
+NO ./assets/dirt.xpm
+SO ./assets/sand.xpm
+WE ./assets/stone-block.xpm
+EA ./assets/wood.xpm
 F 20,100,0
 C 10,125,255
 

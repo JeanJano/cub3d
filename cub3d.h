@@ -50,10 +50,19 @@ typedef struct s_mlx
 	t_img	img;
 }			t_mlx;
 
+typedef struct	s_texture
+{
+	t_img	north;
+	t_img	south;
+	t_img	west;
+	t_img	east;
+}			t_texture;
+
 typedef	struct s_cub
 {
 	t_parsing	parsing;
 	t_mlx		mlx;
+	t_texture	texture;
 	double		distance;
 	double		player_x;
 	double		player_y;

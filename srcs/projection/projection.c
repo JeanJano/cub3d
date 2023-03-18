@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 18:53:06 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/17 16:57:35 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/18 18:04:52 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,23 @@ void	draw_floor(int x_pixel_draw, int y_pixel_draw, int size, t_cub *cub)
 void    draw_wall(t_cub *cub, int x_pixel_draw, int y_pixel_draw, int wall_heigth, int wall_orientation)
 {
 	int drawn_pixel = 0;
+	int	*tex_ptr;
+	int		col;
 
+	//mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->texture.north, x_pixel_draw, y_pixel_draw);
+	tex_ptr = ((int *)cub->texture.north.addr);
     while (drawn_pixel <= wall_heigth)
     {
+		// printf("%f\n", (float)drawn_pixel / wall_heigth);
+		col = *(tex_ptr + (int)(255 * ((float)drawn_pixel / wall_heigth)));
         if (wall_orientation == VERTICAL_HIT)
-            img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, 0x00FF0000);
+            img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, col);
         else
             img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, 0x000000FF);
         y_pixel_draw++;
 		drawn_pixel++;
     }
+	//mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->texture.north.mlx_img, 0, 0);
 }
 
 void	draw_line(t_cub *cub)
@@ -87,6 +94,7 @@ void	draw_line(t_cub *cub)
 		// printf("wall_height: %f\n", wall_heigth);
 		// printf("j: %d\n", j);
 		draw_ceil(i, &y_pixel_draw, ((WINDOW_HEIGHT - (int)(wall_heigth)) / 2), cub);
+		// mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->texture.north, i, y_pixel_draw);
 		draw_wall(cub, i, y_pixel_draw, (int)wall_heigth, dda_return->wall_orientation);
 		draw_floor(i, WINDOW_HEIGHT, ((WINDOW_HEIGHT - (int)(wall_heigth)) / 2), cub);
 		i++;
@@ -99,6 +107,7 @@ int	draw(t_cub *cub)
 {
 	// printf("x: %f, y: %f, vision: %f\n", cub->player_x, cub->player_y, cub->vision);
 	draw_line(cub);
+	// mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->texture.north, 3, 3);
 	mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->mlx.img.mlx_img, -1, 0);
 	return (0);
 }

@@ -71,7 +71,7 @@ int check_map_vertical(double x, double y, t_dda dda_data, t_parsing parsing_str
 {	
 	if (dda_data.quartile == 1)
 	{
-		x = x;
+		//x = x;
 		y = floor(y);
 	}
 	else if (dda_data.quartile == 2)
@@ -86,7 +86,7 @@ int check_map_vertical(double x, double y, t_dda dda_data, t_parsing parsing_str
 	}
 	else
 	{
-		x = x;
+	//	x = x;
 		y = floor(y);
 	}
 	if ((int)y < 0 || (int)x < 0 || (int)y >= parsing_struct.map_height || (int)x >= parsing_struct.map_width[(int)y])
@@ -105,12 +105,12 @@ int check_map_horizontal(double x, double y, t_dda dda_data, t_parsing parsing_s
 	if (dda_data.quartile == 1)
 	{
 		x = floor(x);
-		y = y;
+		//y = y;
 	}
 	else if (dda_data.quartile == 2)
 	{
 		x = floor(x);
-		y = y;
+		//y = y;
 	}
 	else if (dda_data.quartile == 3)
 	{
@@ -146,6 +146,8 @@ t_dda_return *get_vector_distance(double player_x, double player_y, double angle
 	get_first_horizontal_intersec(&dda_data.x_horizontal, &dda_data.y_horizontal, &dda_data);
 	int wall_hit_vertical = 0;
 	int wall_hit_horizontal = 0;
+	(void)wall_hit_vertical;
+	(void)wall_hit_horizontal;
 	// printf("delta_dist_vertical=%f delta_dist_horizontal=%f\n", dda_data.delta_dist_vertical, dda_data.delta_dist_horizontal);
 	while (1)
 	{

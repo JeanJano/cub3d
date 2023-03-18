@@ -20,9 +20,9 @@ LIB = ./libft/libft.a
 
 NAME = cub3D
 
-CC = cc -g
-# CFLAGS = -Werror -Wall -Wextra
-CFLAGS =
+CC = cc
+CFLAGS = -MMD -Werror -Wall -Wextra -g
+#CFLAGS = 
 
 # -- RULES -- #
 
