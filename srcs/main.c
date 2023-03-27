@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/27 14:11:32 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/27 17:45:17 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,41 +18,36 @@ void	print_parsing(t_parsing *parsing)
 	printf("SO: %s\n", parsing->path_south);
 	printf("WE: %s\n", parsing->path_west);
 	printf("EA: %s\n", parsing->path_east);
-	printf("floor: %d %d %d\n", parsing->rgb_floor[0], parsing->rgb_floor[1], parsing->rgb_floor[2]);
-	printf("plafond: %d %d %d\n", parsing->rgb_plafond[0], parsing->rgb_plafond[1], parsing->rgb_plafond[2]);
-	printf("map height: %d\n", parsing->map_height);
-	printf("map width: ");
-	int i = 0;
-	while (i < parsing->map_height)
-	{
-		printf("%d ", parsing->map_width[i]);
-		i++;
-	}
-	printf("\n");
-	i = 0;
-	int j;
-	while (i < parsing->map_height)
-	{
-		j = 0;
-		while (j < parsing->map_width[i])
-		{
-			printf("%d", parsing->map[i][j]);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
+	// printf("floor: %d %d %d\n", parsing->rgb_floor[0], parsing->rgb_floor[1], parsing->rgb_floor[2]);
+	// printf("plafond: %d %d %d\n", parsing->rgb_plafond[0], parsing->rgb_plafond[1], parsing->rgb_plafond[2]);
+	// printf("map height: %d\n", parsing->map_height);
+	// printf("map width: ");
+	// int i = 0;
+	// while (i < parsing->map_height)
+	// {
+	// 	printf("%d ", parsing->map_width[i]);
+	// 	i++;
+	// }
+	// printf("\n");
+	// i = 0;
+	// int j;
+	// while (i < parsing->map_height)
+	// {
+	// 	j = 0;
+	// 	while (j < parsing->map_width[i])
+	// 	{
+	// 		printf("%d", parsing->map[i][j]);
+	// 		j++;
+	// 	}
+	// 	printf("\n");
+	// 	i++;
+	// }
 }
 
 void	init_parsing_struct(t_parsing *parsing)
 {
-	parsing->map = NULL;
-	parsing->path_east = NULL;
-	parsing->path_north = NULL;
-	parsing->path_south = NULL;
-	parsing->path_west = NULL;
+	ft_memset(parsing, 0, sizeof(*parsing));
 	parsing->map_height = 0;
-	parsing->map_width = NULL;
 	parsing->rgb_floor[0] = -1;
 	parsing->rgb_floor[1] = -1;
 	parsing->rgb_floor[2] = -1;
@@ -92,6 +87,8 @@ int	init_mlx(t_cub *cub)
 	}
 	if (xpm_to_image(cub) == FALSE)
 		return (FALSE);
+	cub->mlx.img.mlx_img = mlx_new_image(cub->mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
+	cub->mlx.img.addr = mlx_get_data_addr(cub->mlx.img.mlx_img, &cub->mlx.img.bpp, &cub->mlx.img.line_len, &cub->mlx.img.endian);
 	return (TRUE);
 }
 
@@ -115,20 +112,19 @@ void	init_player(t_cub *cub)
 int	main(int ac, char **av)
 {
 	t_cub		cub;
-	t_parsing	parsing;
 
 	if (ac != 2)
 		return (error_message("wrong number of argument"), 1);
 	if (check_extension(av[1]) == FALSE)
 		return (error_message("wrong extension file"), 1);
 
-	init_parsing_struct(&parsing);
-	cub.parsing = parsing;
+	init_parsing_struct(&cub.parsing);
 	if (parser(&cub.parsing, av[1]) == 2)
 	{
 		free_struct(&cub);
 		return (1);
 	}
+	print_parsing(&cub.parsing);
 	if (check_valid_map(&cub.parsing) == FALSE)
 	{
 		free_struct(&cub);
@@ -138,15 +134,13 @@ int	main(int ac, char **av)
 	// for (double i = 0; i < 360; i += 0.06)
 		// get_vector_distance(10.770607, 5.056204, 359.045600, cub.parsing);
 
+	init_player(&cub);
 	if (init_mlx(&cub) == FALSE)
 	{
 		free_struct(&cub);
 		return (1);
 	}
-	init_player(&cub);
 	// printf("x=%f y=%f\n", cub.player_x, cub.player_y);
-	cub.mlx.img.mlx_img = mlx_new_image(cub.mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
-	cub.mlx.img.addr = mlx_get_data_addr(cub.mlx.img.mlx_img, &cub.mlx.img.bpp, &cub.mlx.img.line_len, &cub.mlx.img.endian);
 	mlx_loop_hook(cub.mlx.mlx_ptr, draw, &cub);
 	// mlx_loop_hook(cub->mlx.mlx_ptr, draw_test_move, &cub);
 	mlx_hook(cub.mlx.win_ptr, KeyPress, KeyPressMask, deal_key, &cub);

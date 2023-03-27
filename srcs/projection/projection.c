@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 18:53:06 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/27 13:43:14 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/27 18:04:21 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,12 @@ void	draw_wall(t_cub *cub, int x_pixel_draw, int y_pixel_draw, int wall_heigth, 
 		// printf("ratio: %f\n", ((float)drawn_pixel / wall_heigth) * 100000);
 		// col = *(tex_ptr + ((drawn_pixel / wall_heigth) * 1000));
         if (wall_orientation == VERTICAL_HIT)
-		{
 			img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, col);
-			bpp++;
-		}
         else
             img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, 0x000000FF);
         y_pixel_draw++;
 		drawn_pixel++;
+		bpp++;
 		if (bpp >= 7)
 			bpp = 0;
     }
@@ -120,6 +118,7 @@ void	draw_line(t_cub *cub)
 		line_len++;
 		if (line_len >= cub->texture.north.line_len)
 			line_len = 0;
+		free(dda_return);
 	}
 }
 
