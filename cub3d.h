@@ -21,6 +21,11 @@
 # define VERTICAL_HIT 1
 # define HORIZONTAL_HIT 2
 
+# define NORTH_WALL 1
+# define SOUTH_WALL 2
+# define WEST_WALL 3
+# define EST_WALL 4
+
 typedef struct	s_parsing
 {
 	char	*path_north;
@@ -96,6 +101,7 @@ typedef	struct s_dda_return
 {
 	double	distance;
 	int wall_orientation;
+	int wall_orientation2;
 }				t_dda_return;
 
 // **************************** //

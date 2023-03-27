@@ -132,7 +132,7 @@ int	main(int ac, char **av)
 	}
 
 	// for (double i = 0; i < 360; i += 0.06)
-		// get_vector_distance(5, 1, 11.302000, cub.parsing);
+		// get_vector_distance(6, 5, 220, cub.parsing);
 
 	init_player(&cub);
 	if (init_mlx(&cub) == FALSE)

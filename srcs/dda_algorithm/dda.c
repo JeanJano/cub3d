@@ -155,14 +155,22 @@ t_dda_return *get_vector_distance(double player_x, double player_y, double angle
 		{
 			dda_return->distance = dda_data.vertical_length;
 			dda_return->wall_orientation = VERTICAL_HIT;
-			// printf("result verti x=%f y%f length=%f\n", dda_data.x_vertical, dda_data.y_vertical, dda_data.vertical_length);
+			printf("result verti angle=%f x=%f y%f length=%f\n", angle, dda_data.x_vertical, dda_data.y_vertical, dda_data.vertical_length);
+			if (dda_data.quartile == 1 || dda_data.quartile == 4)
+				dda_return->wall_orientation = WEST_WALL;
+			else
+				dda_return->wall_orientation = EST_WALL;
 			return (dda_return);
 		}
 		if (check_map_horizontal(dda_data.x_horizontal, dda_data.y_horizontal, dda_data, parsing_struct) && dda_data.horizontal_length < dda_data.vertical_length)
 		{
 			dda_return->distance = dda_data.horizontal_length;
 			dda_return->wall_orientation = HORIZONTAL_HIT;
-			// printf("result hori x=%f y%f length=%f\n", dda_data.x_horizontal, dda_data.y_horizontal, dda_data.horizontal_length);
+			printf("result hori angle=%f x=%f y%f length=%f\n", angle, dda_data.x_horizontal, dda_data.y_horizontal, dda_data.horizontal_length);
+			if (dda_data.quartile == 1 || dda_data.quartile == 2)
+				dda_return->wall_orientation = NORTH_WALL;
+			else
+				dda_return->wall_orientation = SOUTH_WALL;
 			return (dda_return);
 		}
 
