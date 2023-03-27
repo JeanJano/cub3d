@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/18 16:59:20 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/27 14:11:32 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ int	xpm_to_image(t_cub *cub)
 	cub->texture.west.mlx_img = mlx_xpm_file_to_image(cub->mlx.mlx_ptr, cub->parsing.path_west, &width, &height);
 	cub->texture.west.addr = mlx_get_data_addr(cub->texture.west.mlx_img, &cub->texture.west.bpp, &cub->texture.west.line_len, &cub->texture.east.endian);
 	if (!cub->texture.north.mlx_img || !cub->texture.south.mlx_img || !cub->texture.east.mlx_img || !cub->texture.west.mlx_img)
-		return (error_message("Invalid path texture"), 0);
-	return (1);
+		return (error_message("Invalid path texture"), FALSE);
+	return (TRUE);
 }
 
 int	init_mlx(t_cub *cub)

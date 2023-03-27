@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 18:53:06 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/18 18:04:52 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/27 13:43:14 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,24 +34,39 @@ void	draw_floor(int x_pixel_draw, int y_pixel_draw, int size, t_cub *cub)
 	}
 }
 
-void    draw_wall(t_cub *cub, int x_pixel_draw, int y_pixel_draw, int wall_heigth, int wall_orientation)
+void	draw_wall(t_cub *cub, int x_pixel_draw, int y_pixel_draw, int wall_heigth, int wall_orientation, int line_len)
 {
 	int drawn_pixel = 0;
 	int	*tex_ptr;
 	int		col;
+	int		bpp = 0;
+	// int		line_len = cub->texture.north.line_len;
 
+	(void)line_len;
 	//mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->texture.north, x_pixel_draw, y_pixel_draw);
 	tex_ptr = ((int *)cub->texture.north.addr);
+	// printf("bpp: %d\n", cub->texture.north.bpp);
+	// printf("line len: %d\n", cub->texture.north.line_len);
+	// printf("line_len: %d\n", line_len);
+	// printf("%d\n", *(tex_ptr + (int)(((float)drawn_pixel / wall_heigth) * 50700)));
+	// printf("ratio: %d\n", 255 / cub->texture.north.bpp);
     while (drawn_pixel <= wall_heigth)
     {
 		// printf("%f\n", (float)drawn_pixel / wall_heigth);
-		col = *(tex_ptr + (int)(255 * ((float)drawn_pixel / wall_heigth)));
+		col = *(tex_ptr + (int)(((float)drawn_pixel / wall_heigth) * 50000));
+		// printf("ratio: %f\n", ((float)drawn_pixel / wall_heigth) * 100000);
+		// col = *(tex_ptr + ((drawn_pixel / wall_heigth) * 1000));
         if (wall_orientation == VERTICAL_HIT)
-            img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, col);
+		{
+			img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, col);
+			bpp++;
+		}
         else
             img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, 0x000000FF);
         y_pixel_draw++;
 		drawn_pixel++;
+		if (bpp >= 7)
+			bpp = 0;
     }
 	//mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->texture.north.mlx_img, 0, 0);
 }
@@ -64,6 +79,8 @@ void	draw_line(t_cub *cub)
 	double angle_dif = 30;
 	t_dda_return *dda_return;
 	int y_pixel_draw;
+	int		line_len = 0;
+
 	i = 0;
 	angle = cub->vision - 30;
 	if (angle < 0)
@@ -95,11 +112,14 @@ void	draw_line(t_cub *cub)
 		// printf("j: %d\n", j);
 		draw_ceil(i, &y_pixel_draw, ((WINDOW_HEIGHT - (int)(wall_heigth)) / 2), cub);
 		// mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->texture.north, i, y_pixel_draw);
-		draw_wall(cub, i, y_pixel_draw, (int)wall_heigth, dda_return->wall_orientation);
+		draw_wall(cub, i, y_pixel_draw, (int)wall_heigth, dda_return->wall_orientation, line_len);
 		draw_floor(i, WINDOW_HEIGHT, ((WINDOW_HEIGHT - (int)(wall_heigth)) / 2), cub);
 		i++;
 		angle += 0.0428;
 		angle_dif -= 0.0428;
+		line_len++;
+		if (line_len >= cub->texture.north.line_len)
+			line_len = 0;
 	}
 }
 

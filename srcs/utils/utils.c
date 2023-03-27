@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 19:23:57 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/16 14:39:32 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/27 14:26:02 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	str_search(const char *big, const char *little, size_t len)
 	size_t	l;
 	int		i;
 
+	while (*big == ' ')
+		big++;
 	l = len;
 	i = 0;
 	if (little[0] == 0)

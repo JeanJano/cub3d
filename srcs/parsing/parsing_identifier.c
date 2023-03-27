@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 14:35:55 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/27 18:53:53 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/27 14:24:26 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,11 @@ int	check_map_line(char *line)
 
 void	identifier_manager(t_parsing *parsing, char *line)
 {
+	int	i;
+
+	i = 0;
+	while (line[i] == ' ')
+		i++;
 	if (str_search(line, "NO", 2) == TRUE)
 		save_string_in_identifier(&parsing->path_north, line);
 	else if (str_search(line, "SO", 2) == TRUE)

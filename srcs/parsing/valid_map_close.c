@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 14:30:56 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/08 15:02:55 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/27 14:28:49 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	check_wall(int *line, int end_line)
 			break ;
 		i--;
 	}
-	if (i == 0 || line[i + 1] != 1)
+	if (line[i + 1] != 1)
 		return (FALSE);
 	return (TRUE);
 }
