@@ -37,17 +37,17 @@ void	move_key(int key, t_cub *cub)
 
 	if (key == XK_Left)
 	{
-		printf("vision: %f\n", cub->vision);
 		cub->vision -= cub->vision_incr;
 		if (cub->vision < 0)
 			cub->vision += 360;
+		printf("vision: %f x=%f y=%f\n", cub->vision, cub->player_x, cub->player_y);
 	}
 	if (key == XK_Right)
 	{
-		printf("vision: %f\n", cub->vision);
 		cub->vision += cub->vision_incr;
 		if (cub->vision >= 360)
-			cub->vision = 0;
+			cub->vision -= 360;
+		printf("vision: %f x=%f y=%f\n", cub->vision, cub->player_x, cub->player_y);
 	}
 }
 

@@ -49,12 +49,13 @@ void	move_forward(t_cub *cub)
 		y_move_to -= cub->move_incr;
 
 	if (cub->parsing.map[(int)y_move_to][(int)x_move_to] == 1)
+	{
+		printf("CANT GO WALL\n");
 		return ;
+	}
 	cub->player_x = x_move_to;
 	cub->player_y = y_move_to;
 	printf("x=%f y=%f int_x=%d int_y=%d map_value=%d\n", cub->player_x, cub->player_y, (int)cub->player_x, (int)cub->player_y, cub->parsing.map[(int)y_move_to][(int)x_move_to]);
-
-
 }
 
 void	move_backward(t_cub *cub)
@@ -93,7 +94,10 @@ void	move_backward(t_cub *cub)
 		y_move_to += cub->move_incr;
 	
 	if (cub->parsing.map[(int)y_move_to][(int)x_move_to] == 1)
+	{
+		printf("CANT GO WALL\n");
 		return ;
+	}
 	cub->player_x = x_move_to;
 	cub->player_y = y_move_to;
 	printf("x=%f y=%f int_x=%d int_y=%d map_value=%d\n", cub->player_x, cub->player_y, (int)cub->player_x, (int)cub->player_y, cub->parsing.map[(int)y_move_to][(int)x_move_to]);
@@ -134,7 +138,10 @@ void	move_left(t_cub *cub)
 		x_move_to -= cub->move_incr;
 
 	if (cub->parsing.map[(int)y_move_to][(int)x_move_to] == 1)
+	{
+		printf("CANT GO WALL\n");
 		return ;
+	}
 	cub->player_x = x_move_to;
 	cub->player_y = y_move_to;
 	printf("x=%f y=%f int_x=%d int_y=%d map_value=%d\n", cub->player_x, cub->player_y, (int)cub->player_x, (int)cub->player_y, cub->parsing.map[(int)y_move_to][(int)x_move_to]);
@@ -175,7 +182,10 @@ void	move_right(t_cub *cub)
 		x_move_to += cub->move_incr;
 
 	if (cub->parsing.map[(int)y_move_to][(int)x_move_to] == 1)
+	{
+		printf("CANT GO WALL\n");
 		return ;
+	}
 	cub->player_x = x_move_to;
 	cub->player_y = y_move_to;
 	printf("x=%f y=%f int_x=%d int_y=%d map_value=%d\n", cub->player_x, cub->player_y, (int)cub->player_x, (int)cub->player_y, cub->parsing.map[(int)y_move_to][(int)x_move_to]);

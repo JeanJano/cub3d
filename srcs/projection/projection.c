@@ -83,8 +83,9 @@ void	draw_line(t_cub *cub)
 	angle = cub->vision - 30;
 	if (angle < 0)
 		angle += 360;
-	// printf("angle: %f\n", cub->vision);
+	// printf("test: %f\n", 64 / 0);
 	// printf("------------------------------------------------\n");
+	// printf("player x=%f y=%f", cub->player_x, cub->player_y);
 	while (i < WINDOW_WIDTH)
 	{
 		y_pixel_draw = 0;
@@ -100,14 +101,12 @@ void	draw_line(t_cub *cub)
 		}
 		dda_return = get_vector_distance(cub->player_x, cub->player_y, angle, cub->parsing);
 		dda_return->distance = sin((90 - angle_dif) * (M_PI / 180)) * dda_return->distance;
-		// if (i == WINDOW_WIDTH / 2)
-		// 	printf("FUUUUUUUUUUUUUUUUUUUUUUCKED UP WALL HERE :");
-		// printf("x=%f y=%f angle=%f distance: %f\n", cub->player_x, cub->player_y, angle, distance);
-		wall_heigth = 64 / dda_return->distance * 20;
-		// if (wall_heigth < 300)
-		// 	wall_heigth = 300;
-		// printf("wall_height: %f\n", wall_heigth);
-		// printf("j: %d\n", j);
+		if (dda_return->distance == 0)
+			wall_heigth = WINDOW_HEIGHT;
+		else
+			wall_heigth = 64 / dda_return->distance * 20;
+		// printf("angle=%f dist=%f wall_h=%f\n", angle, dda_return->distance, wall_heigth);
+
 		draw_ceil(i, &y_pixel_draw, ((WINDOW_HEIGHT - (int)(wall_heigth)) / 2), cub);
 		// mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->texture.north, i, y_pixel_draw);
 		draw_wall(cub, i, y_pixel_draw, (int)wall_heigth, dda_return->wall_orientation, line_len);
@@ -131,32 +130,32 @@ int	draw(t_cub *cub)
 	return (0);
 }
 
-int	draw_test_move(t_cub *cub)
-{
-	int i = 350;
-	int j;
-	// draw_backgroud(cub);
-	printf("x: %f, y: %f, vision: %f\n", cub->player_x * 20, cub->player_y * 20, cub->vision);
-	while (i < 400)
-	{
-		j = 450;
-		while (j < 500)
-		{
-			img_pix_put(&cub->mlx.img, (cub->player_x * 30 + i), (cub->player_y * 30 + j),  0x00FF6F06);
-			j++;
-		}
-		i++;
-	}
-	// while (i < 400)
-	// {
-	// 	j = 450;
-	// 	while (j < 500)
-	// 	{
-	// 		img_pix_put(&cub->mlx.img, cub->player_x + i, cub->player_y + j,  0x00FF6F06);
-	// 		j++;
-	// 	}
-	// 	i++;
-	// }
-	mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->mlx.img.mlx_img, -1, 0);
-	return (0);
-}
+// int	draw_test_move(t_cub *cub)
+// {
+// 	int i = 350;
+// 	int j;
+// 	// draw_backgroud(cub);
+// 	printf("x: %f, y: %f, vision: %f\n", cub->player_x * 20, cub->player_y * 20, cub->vision);
+// 	while (i < 400)
+// 	{
+// 		j = 450;
+// 		while (j < 500)
+// 		{
+// 			img_pix_put(&cub->mlx.img, (cub->player_x * 30 + i), (cub->player_y * 30 + j),  0x00FF6F06);
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// 	// while (i < 400)
+// 	// {
+// 	// 	j = 450;
+// 	// 	while (j < 500)
+// 	// 	{
+// 	// 		img_pix_put(&cub->mlx.img, cub->player_x + i, cub->player_y + j,  0x00FF6F06);
+// 	// 		j++;
+// 	// 	}
+// 	// 	i++;
+// 	// }
+// 	mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->mlx.img.mlx_img, -1, 0);
+// 	return (0);
+// }

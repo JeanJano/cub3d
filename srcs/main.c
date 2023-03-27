@@ -106,7 +106,7 @@ void	init_player(t_cub *cub)
 	if (cub->vision == 83)
 		cub->vision = 90;
 	cub->vision_incr = 4;
-	cub->move_incr = 0.1;
+	cub->move_incr = 0.125;
 }
 
 int	main(int ac, char **av)
@@ -132,7 +132,7 @@ int	main(int ac, char **av)
 	}
 
 	// for (double i = 0; i < 360; i += 0.06)
-		// get_vector_distance(10.770607, 5.056204, 359.045600, cub.parsing);
+		// get_vector_distance(5, 1, 11.302000, cub.parsing);
 
 	init_player(&cub);
 	if (init_mlx(&cub) == FALSE)
