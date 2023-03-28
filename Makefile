@@ -22,7 +22,7 @@ NAME = cub3D
 
 CC = cc
 CFLAGS = -MMD -Werror -Wall -Wextra -g
-#CFLAGS = 
+CFLAGS = 
 
 # -- RULES -- #
 

@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 18:53:06 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/27 18:04:21 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/28 19:54:55 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,38 +34,57 @@ void	draw_floor(int x_pixel_draw, int y_pixel_draw, int size, t_cub *cub)
 	}
 }
 
-void	draw_wall(t_cub *cub, int x_pixel_draw, int y_pixel_draw, int wall_heigth, int wall_orientation, int line_len)
+void	draw_wall(t_cub *cub, int x_pixel_draw, int y_pixel_draw, int wall_heigth, int wall_orientation, int i, double index_hit)
 {
-	int drawn_pixel = 0;
-	int	*tex_ptr;
-	int		col;
-	int		bpp = 0;
-	// int		line_len = cub->texture.north.line_len;
+	int	drawn_pixel = 0;
+	int	*north_ptr;
+	int	*south_ptr;
+	int	*east_ptr;
+	int	*west_ptr;
+	int	col;
 
-	(void)line_len;
+
+	(void)i;
 	//mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->texture.north, x_pixel_draw, y_pixel_draw);
-	tex_ptr = ((int *)cub->texture.north.addr);
+	north_ptr = ((int *)cub->texture.north.addr);
+	south_ptr = ((int *)cub->texture.south.addr);
+	east_ptr = ((int *)cub->texture.east.addr);
+	west_ptr = ((int *)cub->texture.west.addr);
 	// printf("bpp: %d\n", cub->texture.north.bpp);
 	// printf("line len: %d\n", cub->texture.north.line_len);
 	// printf("line_len: %d\n", line_len);
-	// printf("%d\n", *(tex_ptr + (int)(((float)drawn_pixel / wall_heigth) * 50700)));
+	// printf("%d\n", *(north_ptr + (int)(((float)drawn_pixel / wall_heigth) * 50700)));
 	// printf("ratio: %d\n", 255 / cub->texture.north.bpp);
-    while (drawn_pixel <= wall_heigth)
-    {
+	while (drawn_pixel <= wall_heigth)
+	{
 		// printf("%f\n", (float)drawn_pixel / wall_heigth);
-		col = *(tex_ptr + (int)(((float)drawn_pixel / wall_heigth) * 50000));
 		// printf("ratio: %f\n", ((float)drawn_pixel / wall_heigth) * 100000);
-		// col = *(tex_ptr + ((drawn_pixel / wall_heigth) * 1000));
-        if (wall_orientation == VERTICAL_HIT)
+		// col = *(north_ptr + ((drawn_pixel / wall_heigth) * 1000));
+		if (wall_orientation == NORTH_WALL)
+		{
+			// printf("i: %d\n", i);
+			// col = *(north_ptr + (int)(((float)drawn_pixel / wall_heigth) * 50000));
+			col = *(north_ptr + (int)(((float)drawn_pixel / wall_heigth) * index_hit));
 			img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, col);
-        else
-            img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, 0x000000FF);
-        y_pixel_draw++;
+		}
+		// else if (wall_orientation == SOUTH_WALL)
+		// {
+		// 	col = *(south_ptr + (int)(((float)drawn_pixel / wall_heigth) * 50000));
+		// 	img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, col);
+		// }
+		// else if (wall_orientation == EST_WALL)
+		// {
+		// 	col = *(east_ptr + (int)(((float)drawn_pixel / wall_heigth) * 50000));
+		// 	img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, col);
+		// }
+		// else if (wall_orientation == WEST_WALL)
+		// {
+		// 	col = *(west_ptr + (int)(((float)drawn_pixel / wall_heigth) * 50000));
+		// 	img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, col);
+		// }
+		y_pixel_draw++;
 		drawn_pixel++;
-		bpp++;
-		if (bpp >= 7)
-			bpp = 0;
-    }
+	}
 	//mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->texture.north.mlx_img, 0, 0);
 }
 
@@ -109,13 +128,13 @@ void	draw_line(t_cub *cub)
 
 		draw_ceil(i, &y_pixel_draw, ((WINDOW_HEIGHT - (int)(wall_heigth)) / 2), cub);
 		// mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->texture.north, i, y_pixel_draw);
-		draw_wall(cub, i, y_pixel_draw, (int)wall_heigth, dda_return->wall_orientation, line_len);
+		draw_wall(cub, i, y_pixel_draw, (int)wall_heigth, dda_return->wall_orientation2, line_len, dda_return->index_hit_column);
 		draw_floor(i, WINDOW_HEIGHT, ((WINDOW_HEIGHT - (int)(wall_heigth)) / 2), cub);
 		i++;
 		angle += 0.0428;
 		angle_dif -= 0.0428;
 		line_len++;
-		if (line_len >= cub->texture.north.line_len)
+		if (line_len >= cub->texture.north.line_len / 5)
 			line_len = 0;
 		free(dda_return);
 	}
@@ -130,32 +149,78 @@ int	draw(t_cub *cub)
 	return (0);
 }
 
-// int	draw_test_move(t_cub *cub)
-// {
-// 	int i = 350;
-// 	int j;
-// 	// draw_backgroud(cub);
-// 	printf("x: %f, y: %f, vision: %f\n", cub->player_x * 20, cub->player_y * 20, cub->vision);
-// 	while (i < 400)
-// 	{
-// 		j = 450;
-// 		while (j < 500)
-// 		{
-// 			img_pix_put(&cub->mlx.img, (cub->player_x * 30 + i), (cub->player_y * 30 + j),  0x00FF6F06);
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// 	// while (i < 400)
-// 	// {
-// 	// 	j = 450;
-// 	// 	while (j < 500)
-// 	// 	{
-// 	// 		img_pix_put(&cub->mlx.img, cub->player_x + i, cub->player_y + j,  0x00FF6F06);
-// 	// 		j++;
-// 	// 	}
-// 	// 	i++;
-// 	// }
-// 	mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->mlx.img.mlx_img, -1, 0);
-// 	return (0);
-// }
+static void	draw_backgroud(t_cub *cub)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y <= WINDOW_WIDTH)
+	{
+		x = 0;
+		while (x <= WINDOW_HEIGHT)
+		{
+			img_pix_put(&cub->mlx.img, y, x, 0x00000000);
+			x++;
+		}
+		y++;
+	}
+}
+
+int	draw_test_move(t_cub *cub)
+{
+	int i = 0;
+	int j;
+	draw_backgroud(cub);
+	int col;
+	int	*north_ptr;
+
+	north_ptr = ((int *)cub->texture.north.addr);
+	while (north_ptr)
+	{
+		printf("%x\n", north_ptr);
+		north_ptr++;
+	}
+	int height;
+	int width;
+
+	// void	*img = mlx_xpm_file_to_image(cub->mlx.mlx_ptr, "./assets/dirt.xpm", &height, &width);
+	// mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, img, 10, 10);
+	//image
+	// while (i < 800)
+	// {
+	// 	j = 0;
+	// 	while (j < 500)
+	// 	{
+	// 		col = *(north_ptr + (int)(((float)i / j) * 0.1 * 50000));
+	// 		img_pix_put(&cub->mlx.img, i, j, col);
+	// 		j++;
+	// 	}
+	// 	i++;
+	// }
+
+	// deplacement
+	// printf("x: %f, y: %f, vision: %f\n", cub->player_x * 20, cub->player_y * 20, cub->vision);
+	// while (i < 400)
+	// {
+	// 	j = 450;
+	// 	while (j < 500)
+	// 	{
+	// 		img_pix_put(&cub->mlx.img, (cub->player_x * 30 + i), (cub->player_y * 30 + j),  0x00FF6F06);
+	// 		j++;
+	// 	}
+	// 	i++;
+	// }
+	// while (i < 400)
+	// {
+	// 	j = 450;
+	// 	while (j < 500)
+	// 	{
+	// 		img_pix_put(&cub->mlx.img, cub->player_x + i, cub->player_y + j,  0x00FF6F06);
+	// 		j++;
+	// 	}
+	// 	i++;
+	// }
+	mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->mlx.img.mlx_img, -1, 0);
+	return (0);
+}
