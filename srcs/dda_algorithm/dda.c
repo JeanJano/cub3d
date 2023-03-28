@@ -36,33 +36,20 @@ void init_dda_struct(t_dda *dda_data, double player_x, double player_y, double a
 	// printf("delta dist hori=%f\n", dda_data->delta_dist_horizontal);
 	dda_data->horizontal_length = 0;
 
-	// int map_x = (int)player_x;
-	// int step_x;
-	// int map_y = (int)player_y;
-	// int step_y;
-
 	if (angle >= 0 && angle < 90)
 	{
-		// step_x = 1;
-		// step_y = 1;
 		dda_data->quartile = 1;
 	}
 	else if (angle >= 90 && angle < 180)
 	{
-		// step_x = -1;
-		// step_y = 1;
 		dda_data->quartile = 2;
 	}
 	else if (angle >= 180 && angle < 270)
 	{
-		// step_x = -1;
-		// step_y = -1;
 		dda_data->quartile = 3;
 	}
 	else if (angle >= 270 && angle < 360)
 	{
-		// step_x = 1;
-		// step_y = -1;
 		dda_data->quartile = 4;
 	}
 }
@@ -105,12 +92,10 @@ int check_map_horizontal(double x, double y, t_dda dda_data, t_parsing parsing_s
 	if (dda_data.quartile == 1)
 	{
 		x = floor(x);
-		//y = y;
 	}
 	else if (dda_data.quartile == 2)
 	{
 		x = floor(x);
-		//y = y;
 	}
 	else if (dda_data.quartile == 3)
 	{
@@ -133,6 +118,31 @@ int check_map_horizontal(double x, double y, t_dda dda_data, t_parsing parsing_s
 	return (0);
 }
 
+void get_hit_data(t_dda dda_data, int hit_dir, t_dda_return *dda_return)
+{
+	if (hit_dir == VERTICAL_HIT)
+	{
+		dda_return->wall_orientation = VERTICAL_HIT;
+		if (dda_data.quartile == 1 || dda_data.quartile == 4)
+		{
+			dda_return->wall_orientation2 = WEST_WALL;
+		}
+		else
+			dda_return->wall_orientation2 = EST_WALL;
+		dda_return->index_hit_column = dda_data.y_vertical - floor(dda_data.y_vertical);
+	}
+	else
+	{
+		dda_return->wall_orientation = HORIZONTAL_HIT;
+		if (dda_data.quartile == 1 || dda_data.quartile == 2)
+			dda_return->wall_orientation2 = NORTH_WALL;
+		else
+			dda_return->wall_orientation2 = SOUTH_WALL;
+		dda_return->index_hit_column = dda_data.x_horizontal - floor(dda_data.x_horizontal);
+	}
+	// printf("INDEX=%f\n", dda_return->index_hit_column);
+}
+
 t_dda_return *get_vector_distance(double player_x, double player_y, double angle, t_parsing parsing_struct)
 {
 	t_dda dda_data;
@@ -144,33 +154,22 @@ t_dda_return *get_vector_distance(double player_x, double player_y, double angle
 
 	get_first_vertical_intersec(&dda_data.x_vertical, &dda_data.y_vertical, &dda_data);
 	get_first_horizontal_intersec(&dda_data.x_horizontal, &dda_data.y_horizontal, &dda_data);
-	int wall_hit_vertical = 0;
-	int wall_hit_horizontal = 0;
-	(void)wall_hit_vertical;
-	(void)wall_hit_horizontal;
 	// printf("delta_dist_vertical=%f delta_dist_horizontal=%f\n", dda_data.delta_dist_vertical, dda_data.delta_dist_horizontal);
 	while (1)
 	{
 		if (check_map_vertical(dda_data.x_vertical, dda_data.y_vertical, dda_data, parsing_struct) && dda_data.vertical_length < dda_data.horizontal_length)
 		{
 			dda_return->distance = dda_data.vertical_length;
-			dda_return->wall_orientation = VERTICAL_HIT;
-			printf("result verti angle=%f x=%f y%f length=%f\n", angle, dda_data.x_vertical, dda_data.y_vertical, dda_data.vertical_length);
-			if (dda_data.quartile == 1 || dda_data.quartile == 4)
-				dda_return->wall_orientation = WEST_WALL;
-			else
-				dda_return->wall_orientation = EST_WALL;
+			// printf("result verti angle=%f x=%f y%f length=%f\n", angle, dda_data.x_vertical, dda_data.y_vertical, dda_data.vertical_length);
+			get_hit_data(dda_data, VERTICAL_HIT, dda_return);
+
 			return (dda_return);
 		}
 		if (check_map_horizontal(dda_data.x_horizontal, dda_data.y_horizontal, dda_data, parsing_struct) && dda_data.horizontal_length < dda_data.vertical_length)
 		{
 			dda_return->distance = dda_data.horizontal_length;
-			dda_return->wall_orientation = HORIZONTAL_HIT;
-			printf("result hori angle=%f x=%f y%f length=%f\n", angle, dda_data.x_horizontal, dda_data.y_horizontal, dda_data.horizontal_length);
-			if (dda_data.quartile == 1 || dda_data.quartile == 2)
-				dda_return->wall_orientation = NORTH_WALL;
-			else
-				dda_return->wall_orientation = SOUTH_WALL;
+			get_hit_data(dda_data, HORIZONTAL_HIT, dda_return);
+			// printf("result hori angle=%f x=%f y%f length=%f\n", angle, dda_data.x_horizontal, dda_data.y_horizontal, dda_data.horizontal_length);
 			return (dda_return);
 		}
 

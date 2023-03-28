@@ -102,6 +102,7 @@ typedef	struct s_dda_return
 	double	distance;
 	int wall_orientation;
 	int wall_orientation2;
+	double	index_hit_column;
 }				t_dda_return;
 
 // **************************** //

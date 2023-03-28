@@ -132,20 +132,20 @@ int	main(int ac, char **av)
 	}
 
 	// for (double i = 0; i < 360; i += 0.06)
-		// get_vector_distance(6, 5, 220, cub.parsing);
+		get_vector_distance(6, 5, 252.4, cub.parsing);
 
-	init_player(&cub);
-	if (init_mlx(&cub) == FALSE)
-	{
-		free_struct(&cub);
-		return (1);
-	}
-	// printf("x=%f y=%f\n", cub.player_x, cub.player_y);
-	mlx_loop_hook(cub.mlx.mlx_ptr, draw, &cub);
-	// mlx_loop_hook(cub->mlx.mlx_ptr, draw_test_move, &cub);
-	mlx_hook(cub.mlx.win_ptr, KeyPress, KeyPressMask, deal_key, &cub);
-	mlx_hook(cub.mlx.win_ptr, 33, 0, ft_close, &cub);
-	mlx_loop(cub.mlx.mlx_ptr);
+	// init_player(&cub);
+	// if (init_mlx(&cub) == FALSE)
+	// {
+	// 	free_struct(&cub);
+	// 	return (1);
+	// }
+	// // printf("x=%f y=%f\n", cub.player_x, cub.player_y);
+	// mlx_loop_hook(cub.mlx.mlx_ptr, draw, &cub);
+	// // mlx_loop_hook(cub->mlx.mlx_ptr, draw_test_move, &cub);
+	// mlx_hook(cub.mlx.win_ptr, KeyPress, KeyPressMask, deal_key, &cub);
+	// mlx_hook(cub.mlx.win_ptr, 33, 0, ft_close, &cub);
+	// mlx_loop(cub.mlx.mlx_ptr);
 
 	// free_struct(&cub);
 	return (0);
