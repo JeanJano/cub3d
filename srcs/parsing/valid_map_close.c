@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 14:30:56 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/04/03 15:02:22 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/04/03 16:18:18 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,30 @@ int	check_first_and_last_wall(int *line, int end_line)
 	return (TRUE);
 }
 
+int	skip_line_with_only_one(int *line, int end_line)
+{
+	int	i;
+	int	other_char;
+
+	i = 0;
+	other_char = 0;
+	while (i < end_line - 1)
+	{
+		if (line[i] != 1 && line[i] != 676)
+			other_char++;
+		i++;
+	}
+	if (other_char > 0)
+		return (FALSE);
+	return (TRUE);
+}
+
 int	check_wall(int *line, int end_line)
 {
 	int	i;
 
+	if (skip_line_with_only_one(line, end_line) == TRUE)
+		return (TRUE);
 	i = 0;
 	while (i < end_line - 1 || (line[i] != 1 && line[i] != 676))
 	{
