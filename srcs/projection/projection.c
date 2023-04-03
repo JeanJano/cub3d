@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 18:53:06 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/29 15:00:13 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/04/03 14:43:20 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	draw_wall(t_cub *cub, int x_pixel_draw, int y_pixel_draw, int wall_heigth, 
 		{
 			// printf("i: %d\n", i);
 			col = *(north_ptr + (int)(((float)drawn_pixel / wall_heigth) * 100));
+			// printf("")
 			// col = *(north_ptr + (int)(((float)drawn_pixel / wall_heigth) * index_hit));
 			img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, col);
 		}
@@ -176,7 +177,12 @@ int	draw_test_move(t_cub *cub)
 	int	*north_ptr;
 
 	// image
-	
+
+	north_ptr = ((int *)cub->texture.north.addr);
+	// img->addr + (y * img->line_len + x * (img->bpp / 8));
+	printf("line len: %d \n", cub->texture.north.line_len);
+	// printf("%x\n", (unsigned int)(cub->texture.north.addr + (32 * cub->texture.north.line_len) + (20 * 4)));
+
 	// printf("line_len %d\n", cub->texture.north.line_len);
 	// printf("\n---start---\n");
 	// while (north_ptr[i])
@@ -190,21 +196,22 @@ int	draw_test_move(t_cub *cub)
 
 	// void	*img = mlx_xpm_file_to_image(cub->mlx.mlx_ptr, "./assets/dirt.xpm", &height, &width);
 	// mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, img, 10, 10);
-	int	col_incr = 32;
-	while (i < 700)
-	{
-		j = 0;
-		north_ptr = ((int *)cub->texture.north.addr);
-		while (j < 500)
-		{
-			img_pix_put(&cub->mlx.img, i, j, *north_ptr);
-			north_ptr++;
-			j++;
-		}
-		north_ptr += cub->texture.north.bpp;
-		col_incr++;
-		i++;
-	}
+	// int	col_incr = 32;
+	// while (i < 700)
+	// {
+	// 	j = 0;
+	// 	north_ptr = ((int *)cub->texture.north.addr);
+	// 	while (j < 500)
+	// 	{
+	// 		img_pix_put(&cub->mlx.img, i, j, *north_ptr);
+	// 		north_ptr++;
+	// 		j++;
+	// 	}
+	// 	north_ptr += cub->texture.north.bpp;
+	// 	col_incr++;
+	// 	i++;
+	// }
+	
 
 	// deplacement
 	// printf("x: %f, y: %f, vision: %f\n", cub->player_x * 20, cub->player_y * 20, cub->vision);

@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 15:39:05 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/27 14:08:32 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/29 15:17:06 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,14 @@ int	check_map_wall(t_parsing *parsing)
 		{
 			if (check_first_and_last_wall(parsing->map[i],
 					parsing->map_width[i]) == FALSE)
-				return (FALSE);
+				return (printf("1\n"), FALSE);
 		}
 		else
 		{
 			if (check_wall(parsing->map[i], parsing->map_width[i]) == FALSE)
-				return (FALSE);
+				return (printf("2\n"), FALSE);
 			if (check_wall_up_down(parsing, i) == FALSE)
-				return (FALSE);
+				return (printf("3\n"), FALSE);
 		}
 		i++;
 	}

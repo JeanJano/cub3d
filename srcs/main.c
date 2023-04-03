@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/29 14:59:41 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/03/29 17:27:11 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,8 +141,8 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	// printf("x=%f y=%f\n", cub.player_x, cub.player_y);
-	mlx_loop_hook(cub.mlx.mlx_ptr, draw, &cub);
-	// mlx_loop_hook(cub.mlx.mlx_ptr, draw_test_move, &cub);
+	// mlx_loop_hook(cub.mlx.mlx_ptr, draw, &cub);
+	mlx_loop_hook(cub.mlx.mlx_ptr, draw_test_move, &cub);
 	mlx_hook(cub.mlx.win_ptr, KeyPress, KeyPressMask, deal_key, &cub);
 	mlx_hook(cub.mlx.win_ptr, 33, 0, ft_close, &cub);
 	mlx_loop(cub.mlx.mlx_ptr);
