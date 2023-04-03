@@ -158,7 +158,7 @@ void	move_left(t_cub *cub);
 void	move_backward(t_cub *cub);
 void	move_forward(t_cub *cub);
 
-// int	draw_test_move(t_cub *cub);
+int	draw_test_move(t_cub *cub);
 
 
 #endif
