@@ -12,6 +12,40 @@
 
 #include "cub3d.h"
 
+int check_move_forward(t_cub *cub, double x_move_to, double y_move_to)
+{
+	// if (cub->vision >= 0 && cub->vision < 90)
+	// {
+	// 	printf("ICI1\n");
+	// 	if (cub->parsing.map[(int)(y_move_to + 0.1)][(int)(x_move_to + 0.1)] == 1)
+	// 		return 1;
+	// }
+	// else if (cub->vision >= 90 && cub->vision < 180)
+	// {
+	// 	printf("ICI 2\n");
+	// 	if (cub->parsing.map[(int)(y_move_to + 0.1)][(int)(x_move_to - 2)] == 1)
+	// 		return 1;
+	// }
+	// else if (cub->vision >= 180 && cub->vision < 270)
+	// {
+	// 	printf("ICI3\n");
+	// 	if (cub->parsing.map[(int)(y_move_to + 0.1)][(int)(x_move_to + 0.1)] == 1)
+	// 		return 1;
+	// }
+	// else if (cub->vision >= 0 && cub->vision < 90)
+	// {
+	// 	printf("ICI4\n");
+	// 	if (cub->parsing.map[(int)(y_move_to + 0.1)][(int)(x_move_to + 0.1)] == 1)
+	// 		return 1;
+	// }
+	if (cub->parsing.map[(int)y_move_to][(int)x_move_to] == 1)
+	{
+		printf("CANT GO WALL\n");
+		return 1;
+	}
+	return 0;
+}
+
 void	move_forward(t_cub *cub)
 {
 	double x_move_to = cub->player_x;
@@ -48,11 +82,8 @@ void	move_forward(t_cub *cub)
 	else if (cub->vision == 270)
 		y_move_to -= cub->move_incr;
 
-	if (cub->parsing.map[(int)y_move_to][(int)x_move_to] == 1)
-	{
-		printf("CANT GO WALL\n");
+	if (check_move_forward(cub, x_move_to, y_move_to))
 		return ;
-	}
 	cub->player_x = x_move_to;
 	cub->player_y = y_move_to;
 	printf("x=%f y=%f int_x=%d int_y=%d map_value=%d\n", cub->player_x, cub->player_y, (int)cub->player_x, (int)cub->player_y, cub->parsing.map[(int)y_move_to][(int)x_move_to]);
@@ -147,6 +178,21 @@ void	move_left(t_cub *cub)
 	printf("x=%f y=%f int_x=%d int_y=%d map_value=%d\n", cub->player_x, cub->player_y, (int)cub->player_x, (int)cub->player_y, cub->parsing.map[(int)y_move_to][(int)x_move_to]);
 }
 
+int check_move_right(t_cub *cub, double x_move_to, double y_move_to)
+{
+	// if (cub->vision >= 0 && cub->vision < 90)
+	// {
+	// 	if (cub->parsing.map[(int)(y_move_to + 0.1)][(int)(x_move_to + 0.1)] == 1)
+	// 		return 1;
+	// }
+	if (cub->parsing.map[(int)y_move_to][(int)x_move_to] == 1)
+	{
+		printf("CANT GO WALL\n");
+		return 1;
+	}
+	return 0;
+}
+
 void	move_right(t_cub *cub)
 {
 	double x_move_to = cub->player_x;
@@ -181,11 +227,8 @@ void	move_right(t_cub *cub)
 	else if (cub->vision == 270)
 		x_move_to += cub->move_incr;
 
-	if (cub->parsing.map[(int)y_move_to][(int)x_move_to] == 1)
-	{
-		printf("CANT GO WALL\n");
+	if (check_move_right(cub, x_move_to, y_move_to))
 		return ;
-	}
 	cub->player_x = x_move_to;
 	cub->player_y = y_move_to;
 	printf("x=%f y=%f int_x=%d int_y=%d map_value=%d\n", cub->player_x, cub->player_y, (int)cub->player_x, (int)cub->player_y, cub->parsing.map[(int)y_move_to][(int)x_move_to]);
