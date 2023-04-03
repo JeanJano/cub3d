@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 14:30:56 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/04/03 16:18:18 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/04/03 20:06:59 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ int	check_wall(int *line, int end_line)
 {
 	int	i;
 
+	if (line[end_line - 1] == 0)
+		return (FALSE);
 	if (skip_line_with_only_one(line, end_line) == TRUE)
 		return (TRUE);
 	i = 0;
