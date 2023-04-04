@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 14:30:56 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/04/03 20:06:59 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/04/04 15:14:57 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	check_wall(int *line, int end_line)
 	i = 0;
 	while (i < end_line - 1 || (line[i] != 1 && line[i] != 676))
 	{
-		if (line[i] == 0)
+		if (line[i] == 0 || check_player_composant(line[i]) == TRUE)
 			break ;
 		i++;
 	}
@@ -79,7 +79,7 @@ int	check_wall(int *line, int end_line)
 	i = end_line;
 	while (i > 0 || (line[i] != 1 && line[i] != 676))
 	{
-		if (line[i] == 0)
+		if (line[i] == 0 || check_player_composant(line[i]) == TRUE)
 			break ;
 		i--;
 	}
