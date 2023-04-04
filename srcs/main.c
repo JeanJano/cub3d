@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/03/29 17:27:11 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/04/04 16:08:51 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,21 +56,52 @@ void	init_parsing_struct(t_parsing *parsing)
 	parsing->rgb_plafond[2] = -1;
 }
 
+int	check_xpm_extension(t_cub *cub)
+{
+	if (check_extension(cub->parsing.path_north, ".xpm") == FALSE)
+		return (FALSE);
+	if (check_extension(cub->parsing.path_south, ".xpm") == FALSE)
+		return (FALSE);
+	if (check_extension(cub->parsing.path_east, ".xpm") == FALSE)
+		return (FALSE);
+	if (check_extension(cub->parsing.path_west, ".xpm") == FALSE)
+		return (FALSE);
+	return (TRUE);
+}
+
 int	xpm_to_image(t_cub *cub)
 {
 	int width;
 	int	height;
 
 	cub->texture.north.mlx_img = mlx_xpm_file_to_image(cub->mlx.mlx_ptr, cub->parsing.path_north, &width, &height);
+	if (!cub->texture.north.mlx_img)
+		return (error_message("Invalid path texture"), FALSE);
 	cub->texture.north.addr = mlx_get_data_addr(cub->texture.north.mlx_img, &cub->texture.north.bpp, &cub->texture.north.line_len, &cub->texture.north.endian);
 	cub->texture.south.mlx_img = mlx_xpm_file_to_image(cub->mlx.mlx_ptr, cub->parsing.path_south, &width, &height);
+	if (!cub->texture.south.mlx_img)
+	{
+		mlx_destroy_image(cub->mlx.mlx_ptr, cub->texture.north.mlx_img);
+		return (error_message("Invalid path texture"), FALSE);
+	}
 	cub->texture.south.addr = mlx_get_data_addr(cub->texture.south.mlx_img, &cub->texture.south.bpp, &cub->texture.south.line_len, &cub->texture.south.endian);
 	cub->texture.east.mlx_img = mlx_xpm_file_to_image(cub->mlx.mlx_ptr, cub->parsing.path_east, &width, &height);
+	if (!cub->texture.east.mlx_img)
+	{
+		mlx_destroy_image(cub->mlx.mlx_ptr, cub->texture.north.mlx_img);
+		mlx_destroy_image(cub->mlx.mlx_ptr, cub->texture.south.mlx_img);
+		return (error_message("Invalid path texture"), FALSE);
+	}
 	cub->texture.east.addr = mlx_get_data_addr(cub->texture.east.mlx_img, &cub->texture.east.bpp, &cub->texture.east.line_len, &cub->texture.east.endian);
 	cub->texture.west.mlx_img = mlx_xpm_file_to_image(cub->mlx.mlx_ptr, cub->parsing.path_west, &width, &height);
-	cub->texture.west.addr = mlx_get_data_addr(cub->texture.west.mlx_img, &cub->texture.west.bpp, &cub->texture.west.line_len, &cub->texture.east.endian);
-	if (!cub->texture.north.mlx_img || !cub->texture.south.mlx_img || !cub->texture.east.mlx_img || !cub->texture.west.mlx_img)
+	if (!cub->texture.west.mlx_img)
+	{
+		mlx_destroy_image(cub->mlx.mlx_ptr, cub->texture.north.mlx_img);
+		mlx_destroy_image(cub->mlx.mlx_ptr, cub->texture.south.mlx_img);
+		mlx_destroy_image(cub->mlx.mlx_ptr, cub->texture.east.mlx_img);
 		return (error_message("Invalid path texture"), FALSE);
+	}
+	cub->texture.west.addr = mlx_get_data_addr(cub->texture.west.mlx_img, &cub->texture.west.bpp, &cub->texture.west.line_len, &cub->texture.east.endian);
 	return (TRUE);
 }
 
@@ -82,11 +113,25 @@ int	init_mlx(t_cub *cub)
 	cub->mlx.win_ptr = mlx_new_window(cub->mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
 	if (cub->mlx.win_ptr == NULL)
 	{
+		mlx_destroy_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr);
+		mlx_destroy_display(cub->mlx.mlx_ptr);
 		free(cub->mlx.mlx_ptr);
 		return (FALSE);
 	}
+	if (check_xpm_extension(cub) == FALSE)
+	{
+		mlx_destroy_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr);
+		mlx_destroy_display(cub->mlx.mlx_ptr);
+		free(cub->mlx.mlx_ptr);
+		return (error_message("Wrong extension texture file"), FALSE);
+	}
 	if (xpm_to_image(cub) == FALSE)
+	{
+		mlx_destroy_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr);
+		mlx_destroy_display(cub->mlx.mlx_ptr);
+		free(cub->mlx.mlx_ptr);
 		return (FALSE);
+	}
 	cub->mlx.img.mlx_img = mlx_new_image(cub->mlx.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT);
 	cub->mlx.img.addr = mlx_get_data_addr(cub->mlx.img.mlx_img, &cub->mlx.img.bpp, &cub->mlx.img.line_len, &cub->mlx.img.endian);
 	return (TRUE);
@@ -114,9 +159,9 @@ int	main(int ac, char **av)
 	t_cub		cub;
 
 	if (ac != 2)
-		return (error_message("wrong number of argument"), 1);
-	if (check_extension(av[1]) == FALSE)
-		return (error_message("wrong extension file"), 1);
+		return (error_message("Wrong number of argument"), 1);
+	if (check_extension(av[1], ".cub") == FALSE)
+		return (error_message("Wrong extension map file"), 1);
 
 	init_parsing_struct(&cub.parsing);
 	if (parser(&cub.parsing, av[1]) == 2)

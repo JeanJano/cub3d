@@ -110,7 +110,7 @@ typedef	struct s_dda_return
 // **************************** //
 int		parser(t_parsing *parsing, char *path);
 int		check_valid_map(t_parsing *parsing);
-int		check_extension(char *file_name);
+int		check_extension(char *file_name, char *extension);
 int		check_all_composant(int i);
 int		check_player_composant(int i);
 int		check_void_around(int i, int j, t_parsing *parsing);
