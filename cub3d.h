@@ -105,6 +105,8 @@ typedef	struct s_dda_return
 	double	index_hit_column;
 }				t_dda_return;
 
+
+int		init_mlx(t_cub *cub);
 // **************************** //
 //			parsing             //
 // **************************** //
@@ -133,7 +135,7 @@ void	free_struct(t_cub *cub);
 // **************************** //
 t_dda_return *get_vector_distance(double playerX, double playerY, double angle, t_parsing parsing);
 // **************************** //
-//			get_intersec            //
+//			get_intersec        //
 // **************************** //
 void get_first_vertical_intersec(double *x, double *y, t_dda *dda_data);
 void get_next_vertical_intersec(double *x, double *y, t_dda *dda_data);
