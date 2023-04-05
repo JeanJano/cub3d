@@ -58,30 +58,31 @@ void draw_bigger_wall(int *pixel_ptr, t_cub *cub, int height, int x_pixel_draw, 
 	double demi_pixel_value = 1;
 	int over_wall_count = 0;
 
-	// for (int y = y_pixel_draw ; y < y_pixel_draw + height && y < WINDOW_HEIGHT ; y++)
-	// 	img_pix_put(&cub->mlx.img, x_pixel_draw, y, 0x00FFFFFF);
-
 	pixels_to_draw = height / (double)increment_value;
-	// int overwall = 0;
-	// if (height > WINDOW_HEIGHT)
-	// {
-	// 	// printf("%d\n", height);
-	// 	// int test = 0x00FFFFFFFF;
-	// 	// draw_pix(x_pixel_draw, y, &test, cub, WINDOW_HEIGHT);
-	// 	// return ;
-	// 	overwall = (height - WINDOW_HEIGHT) / 2;
-	// 	while (overwall > (int)pixels_to_draw)
-	// 	{
-	// 		pixel_ptr += increment_value;
-	// 		overwall -= (int)pixels_to_draw;
-	// 	}
-	// 	if (overwall)
-	// 	{
-	// 		draw_pix(x_pixel_draw, y, pixel_ptr, cub, (int)pixels_to_draw - overwall);
-	// 		pixel_ptr += increment_value;
-	// 		y += (int)pixels_to_draw - overwall;
-	// 	}
-	// }
+	int overwall = 0;
+	if (height > WINDOW_HEIGHT)
+	{
+		// if (x_pixel_draw == 700)
+		// {
+		// 	for(int i = WINDOW_HEIGHT; i > 0;i--)
+		// 		img_pix_put(&cub->mlx.img, x_pixel_draw, i, 0x00FFFFFF);
+		// 	return ;
+		// } 
+		printf("height=%d\n");
+		overwall = (height - WINDOW_HEIGHT) / 2;
+		while (overwall > (int)pixels_to_draw)
+		{
+			pixel_ptr += increment_value;
+			overwall -= (int)pixels_to_draw;
+		}
+		if (overwall > 0)
+		{
+			draw_pix(x_pixel_draw, y, pixel_ptr, cub, (int)pixels_to_draw - overwall);
+			pixel_ptr += increment_value;
+			y += (int)pixels_to_draw - overwall;
+		}
+			// pixel_ptr += increment_value;
+	}
 	demi_pixel_increment = pixels_to_draw - floor(pixels_to_draw);
 	pixels_to_draw = floor(pixels_to_draw);
 	// printf("ceil=%f int=%d\n", pixels_to_draw, (int)pixels_to_draw);
@@ -126,12 +127,12 @@ void draw_column(int x_pixel_draw, int y_pixel_draw, int *pixel_ptr, t_cub *cub,
 	// printf("len=%d\n", cub->texture.north.line_len / 4);
 }
 
-int	draw_test(int x_pixel_draw, int y_pixel_draw, int wall_heigth, double index_hit, t_cub *cub)
+int	draw_test(int x_pixel_draw, int y_pixel_draw, int wall_heigth, double index_hit, t_cub *cub, char *texture)
 {
 	int	*pixel_cpy;
 	int	*pixel_ptr;
 
-	pixel_cpy = (int *)(cub->texture.north.addr);
+	pixel_cpy = (int *)texture;
 	pixel_ptr = pixel_cpy;
 
 	int hit_value = get_hit_value(index_hit);
@@ -148,27 +149,13 @@ void	draw_wall(t_cub *cub, int x_pixel_draw, int y_pixel_draw, int wall_heigth, 
 
 	drawn_pixel = 0;
 	if (wall_orientation == NORTH_WALL)
-		draw_test(x_pixel_draw, y_pixel_draw, wall_heigth, index_hit, cub);
-	else
-	{
-		while (drawn_pixel <= wall_heigth && drawn_pixel <= WINDOW_HEIGHT)
-		{
-			if (wall_orientation == SOUTH_WALL)
-			{
-				img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, 0x00da291a);
-			}
-			else if (wall_orientation == EST_WALL)
-			{
-				img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, 0x00720117);
-			}
-			else if (wall_orientation == WEST_WALL)
-			{
-				img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, 0x007ddc1f);
-			}
-			y_pixel_draw++;
-			drawn_pixel++;
-		}
-	}
+		draw_test(x_pixel_draw, y_pixel_draw, wall_heigth, index_hit, cub, cub->texture.north.addr);
+	else if (wall_orientation == SOUTH_WALL)
+		draw_test(x_pixel_draw, y_pixel_draw, wall_heigth, index_hit, cub, cub->texture.south.addr);
+	else if (wall_orientation == EST_WALL)
+		draw_test(x_pixel_draw, y_pixel_draw, wall_heigth, index_hit, cub, cub->texture.east.addr);
+	else if (wall_orientation == WEST_WALL)
+		draw_test(x_pixel_draw, y_pixel_draw, wall_heigth, index_hit, cub, cub->texture.west.addr);
 }
 
 void	draw_line(t_cub *cub)
