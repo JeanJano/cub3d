@@ -83,32 +83,19 @@ void draw_column(int x_pixel_draw, int y_pixel_draw, int *pixel_ptr, t_cub *cub,
 	// 	img_pix_put(&cub->mlx.img, x_pixel_draw, y, 0x00FFFFFF);
 }
 
-int	draw_test_move(int x_pixel_draw, int y_pixel_draw, int wall_heigth, double index_hit, t_cub *cub)
+int	draw_test(int x_pixel_draw, int y_pixel_draw, int wall_heigth, double index_hit, t_cub *cub)
 {
-	// draw_backgrdoud(cub);
 	int	*pixel_cpy;
 	int	*pixel_ptr;
 
 	pixel_cpy = (int *)(cub->texture.north.addr);
 	pixel_ptr = pixel_cpy;
-	// for (int y = 0 ; y < 64 * 4 ; y += 4)
-	// {
-	// 	for (int x = 0 ; x < 64 * 1 ; x += 4)
-	// 	{
-	// 		draw_pix(x, y, pixel_ptr, cub, 4);
-	// 		pixel_ptr++;
-	// 	}
-	// }
+
 	int hit_value = get_hit_value(index_hit);
-	// int wall_heigth = 50;
 	pixel_ptr = pixel_cpy;
 	pixel_ptr += hit_value;
 	draw_column(x_pixel_draw, y_pixel_draw, pixel_ptr, cub, wall_heigth);
-	// for (int i = 0;i < 60;i++)
-	// 	img_pix_put(&cub->mlx.img, 397, i, 0x00FFFFFF);
 
-	
-	// mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->mlx.img.mlx_img, -1, 0);
 	return (0);
 }
 
@@ -118,7 +105,7 @@ void	draw_wall(t_cub *cub, int x_pixel_draw, int y_pixel_draw, int wall_heigth, 
 
 	drawn_pixel = 0;
 	if (wall_orientation == NORTH_WALL)
-		draw_test_move(x_pixel_draw, y_pixel_draw, wall_heigth, index_hit, cub);
+		draw_test(x_pixel_draw, y_pixel_draw, wall_heigth, index_hit, cub);
 	else
 	{
 		while (drawn_pixel <= wall_heigth && drawn_pixel <= WINDOW_HEIGHT)

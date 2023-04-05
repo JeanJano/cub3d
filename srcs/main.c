@@ -78,7 +78,7 @@ int	init_manager(t_cub *cub, char **av)
 	init_parsing_struct(&cub->parsing);
 	if (parser(&cub->parsing, av[1]) == 2)
 	{
-		free_struct(&cub);
+		free_struct(cub);
 		return (FALSE);
 	}
 	print_parsing(&cub->parsing);
@@ -106,8 +106,8 @@ int	main(int ac, char **av)
 		return (error_message("Wrong extension map file"), 1);
 	if (init_manager(&cub, av) == FALSE)
 		return (1);
-	// mlx_loop_hook(cub.mlx.mlx_ptr, draw, &cub);
-	mlx_loop_hook(cub.mlx.mlx_ptr, draw_test_move, &cub);
+	mlx_loop_hook(cub.mlx.mlx_ptr, draw, &cub);
+	// mlx_loop_hook(cub.mlx.mlx_ptr, draw_test_move, &cub);
 	mlx_hook(cub.mlx.win_ptr, KeyPress, KeyPressMask, deal_key, &cub);
 	mlx_hook(cub.mlx.win_ptr, 33, 0, ft_close, &cub);
 	mlx_loop(cub.mlx.mlx_ptr);
