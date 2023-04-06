@@ -59,10 +59,18 @@ void draw_bigger_wall(int *pixel_ptr, t_cub *cub, int height, int x_pixel_draw, 
 	int over_wall_count = 0;
 
 	pixels_to_draw = height / (double)increment_value;
+	demi_pixel_increment = pixels_to_draw - floor(pixels_to_draw);
+	pixels_to_draw = floor(pixels_to_draw);
 	int overwall = 0;
 	if (height > WINDOW_HEIGHT)
 	{
-		// if (x_pixel_draw == 700)
+		// if (x_pixel_draw == 1354)
+		// {
+		// 	for(int i = WINDOW_HEIGHT; i > 0;i--)
+		// 		img_pix_put(&cub->mlx.img, x_pixel_draw, i, 0x00FFFFFF);
+		// 	return ;
+		// } 
+		// if (x_pixel_draw == 1354)
 		// {
 		// 	for(int i = WINDOW_HEIGHT; i > 0;i--)
 		// 		img_pix_put(&cub->mlx.img, x_pixel_draw, i, 0x00FFFFFF);
@@ -70,10 +78,17 @@ void draw_bigger_wall(int *pixel_ptr, t_cub *cub, int height, int x_pixel_draw, 
 		// } 
 		// printf("height=%d\n");
 		overwall = (height - WINDOW_HEIGHT) / 2;
-		while (overwall > (int)pixels_to_draw)
+		while (overwall >= (int)pixels_to_draw)
 		{
+			if (demi_pixel_value >= 1)
+			{
+				overwall -= (int)pixels_to_draw + 1;
+				demi_pixel_value = demi_pixel_value - 1;
+			}
+			else
+				overwall -= (int)pixels_to_draw;
 			pixel_ptr += increment_value;
-			overwall -= (int)pixels_to_draw;
+			demi_pixel_value += demi_pixel_increment;
 		}
 		if (overwall > 0)
 		{
@@ -81,10 +96,7 @@ void draw_bigger_wall(int *pixel_ptr, t_cub *cub, int height, int x_pixel_draw, 
 			pixel_ptr += increment_value;
 			y += (int)pixels_to_draw - overwall;
 		}
-			// pixel_ptr += increment_value;
 	}
-	demi_pixel_increment = pixels_to_draw - floor(pixels_to_draw);
-	pixels_to_draw = floor(pixels_to_draw);
 	// printf("ceil=%f int=%d\n", pixels_to_draw, (int)pixels_to_draw);
 	while (y < height + y_pixel_draw && y < WINDOW_HEIGHT)
 	{
@@ -102,7 +114,6 @@ void draw_bigger_wall(int *pixel_ptr, t_cub *cub, int height, int x_pixel_draw, 
 		demi_pixel_value += demi_pixel_increment;
 		pixel_ptr += increment_value;
 	}
-	// draw_pix(x_pixel_draw, y, pixel_ptr, cub, height - y);
 }
 
 void draw_column(int x_pixel_draw, int y_pixel_draw, int *pixel_ptr, t_cub *cub, int height)
@@ -111,32 +122,15 @@ void draw_column(int x_pixel_draw, int y_pixel_draw, int *pixel_ptr, t_cub *cub,
 	double pixel_ratio;
 
 	increment_value = cub->texture.north.line_len / 4;
-	if (height > increment_value)
-		draw_bigger_wall(pixel_ptr, cub, height, x_pixel_draw, y_pixel_draw, increment_value);
-	else
-	{
-		pixel_ratio = floor(1 / (double)height * 64);
-		printf("%f\n", pixel_ratio);
-		for (int y = y_pixel_draw ; y < y_pixel_draw + height ; y++)
-		{
-			draw_pix(x_pixel_draw, y, pixel_ptr, cub, 1);
-			pixel_ptr += increment_value * (int)pixel_ratio;
-		}
-	}
-
-	// printf("len=%d\n", cub->texture.north.line_len / 4);
+	draw_bigger_wall(pixel_ptr, cub, height, x_pixel_draw, y_pixel_draw, increment_value);
 }
 
 int	draw_test(int x_pixel_draw, int y_pixel_draw, int wall_heigth, double index_hit, t_cub *cub, char *texture)
 {
-	int	*pixel_cpy;
 	int	*pixel_ptr;
 
-	pixel_cpy = (int *)texture;
-	pixel_ptr = pixel_cpy;
-
+	pixel_ptr = (int *)texture;
 	int hit_value = get_hit_value(index_hit);
-	pixel_ptr = pixel_cpy;
 	pixel_ptr += hit_value;
 	draw_column(x_pixel_draw, y_pixel_draw, pixel_ptr, cub, wall_heigth);
 
