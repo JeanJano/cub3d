@@ -14,30 +14,6 @@
 
 int check_move_forward(t_cub *cub, double x_move_to, double y_move_to)
 {
-	// if (cub->vision >= 0 && cub->vision < 90)
-	// {
-	// 	printf("ICI1\n");
-	// 	if (cub->parsing.map[(int)(y_move_to + 0.1)][(int)(x_move_to + 0.1)] == 1)
-	// 		return 1;
-	// }
-	// else if (cub->vision >= 90 && cub->vision < 180)
-	// {
-	// 	printf("ICI 2\n");
-	// 	if (cub->parsing.map[(int)(y_move_to + 0.1)][(int)(x_move_to - 2)] == 1)
-	// 		return 1;
-	// }
-	// else if (cub->vision >= 180 && cub->vision < 270)
-	// {
-	// 	printf("ICI3\n");
-	// 	if (cub->parsing.map[(int)(y_move_to + 0.1)][(int)(x_move_to + 0.1)] == 1)
-	// 		return 1;
-	// }
-	// else if (cub->vision >= 0 && cub->vision < 90)
-	// {
-	// 	printf("ICI4\n");
-	// 	if (cub->parsing.map[(int)(y_move_to + 0.1)][(int)(x_move_to + 0.1)] == 1)
-	// 		return 1;
-	// }
 	if (cub->parsing.map[(int)y_move_to][(int)x_move_to] == 1)
 	{
 		printf("CANT GO WALL\n");

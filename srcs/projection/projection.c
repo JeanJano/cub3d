@@ -20,24 +20,17 @@ void	draw_ceil(int x_pixel_draw, int *y_pixel_draw, int size, t_cub *cub)
 		img_pix_put(&cub->mlx.img, x_pixel_draw, *y_pixel_draw, convert_color(cub->parsing.rgb_plafond));
 		(*y_pixel_draw)++;
 	}
+	// printf("ceil size=%d\n", size);
 }
 
-void	draw_floor(int x_pixel_draw, int y_pixel_draw, int size, t_cub *cub)
+void	draw_floor(int x_pixel_draw, int y_pixel_draw, t_cub *cub)
 {
-	int drawn_pixel = 0;
-
-	while (drawn_pixel <= size)
+	while (y_pixel_draw < WINDOW_HEIGHT)
 	{
 		img_pix_put(&cub->mlx.img, x_pixel_draw, y_pixel_draw, convert_color(cub->parsing.rgb_floor));
-		y_pixel_draw--;
-		drawn_pixel++;
+		y_pixel_draw++;
 	}
-}
-
-void draw_pix(int x, int y, int *pixel_ptr, t_cub *cub, int size)
-{
-	for (int i = 0; i < size ; i++)
-		img_pix_put(&cub->mlx.img, x, y + i, *pixel_ptr);
+	// printf("floor size=%d\n---\n", size);
 }
 
 int get_hit_value(double hit_coord)
@@ -50,113 +43,74 @@ int get_hit_value(double hit_coord)
 	return((int)hit_coord);
 }
 
-void draw_bigger_wall(int *pixel_ptr, t_cub *cub, int height, int x_pixel_draw, int y_pixel_draw, int increment_value)
+int *get_corresponding_pixel(int *pixel_ptr, int line, int increment_value)
 {
-	int y = y_pixel_draw;
-	double pixels_to_draw;
-	double demi_pixel_increment;
-	double demi_pixel_value = 1;
-	int over_wall_count = 0;
+	int *return_value;
 
-	pixels_to_draw = height / (double)increment_value;
-	demi_pixel_increment = pixels_to_draw - floor(pixels_to_draw);
-	pixels_to_draw = floor(pixels_to_draw);
-	int overwall = 0;
-	if (height > WINDOW_HEIGHT)
-	{
-		// if (x_pixel_draw == 1354)
-		// {
-		// 	for(int i = WINDOW_HEIGHT; i > 0;i--)
-		// 		img_pix_put(&cub->mlx.img, x_pixel_draw, i, 0x00FFFFFF);
-		// 	return ;
-		// } 
-		// if (x_pixel_draw == 1354)
-		// {
-		// 	for(int i = WINDOW_HEIGHT; i > 0;i--)
-		// 		img_pix_put(&cub->mlx.img, x_pixel_draw, i, 0x00FFFFFF);
-		// 	return ;
-		// } 
-		// printf("height=%d\n");
-		overwall = (height - WINDOW_HEIGHT) / 2;
-		while (overwall >= (int)pixels_to_draw)
-		{
-			if (demi_pixel_value >= 1)
-			{
-				overwall -= (int)pixels_to_draw + 1;
-				demi_pixel_value = demi_pixel_value - 1;
-			}
-			else
-				overwall -= (int)pixels_to_draw;
-			pixel_ptr += increment_value;
-			demi_pixel_value += demi_pixel_increment;
-		}
-		if (overwall > 0)
-		{
-			draw_pix(x_pixel_draw, y, pixel_ptr, cub, (int)pixels_to_draw - overwall);
-			pixel_ptr += increment_value;
-			y += (int)pixels_to_draw - overwall;
-		}
-	}
-	// printf("ceil=%f int=%d\n", pixels_to_draw, (int)pixels_to_draw);
-	while (y < height + y_pixel_draw && y < WINDOW_HEIGHT)
-	{
-		if (demi_pixel_value >= 1)
-		{
-			draw_pix(x_pixel_draw, y, pixel_ptr, cub, (int)pixels_to_draw + 1);
-			demi_pixel_value = demi_pixel_value - 1;
-			y += (int)pixels_to_draw + 1;
-		}
-		else
-		{
-			draw_pix(x_pixel_draw, y, pixel_ptr, cub, (int)pixels_to_draw);
-			y += (int)pixels_to_draw;
-		}
-		demi_pixel_value += demi_pixel_increment;
-		pixel_ptr += increment_value;
-	}
+	if (line == 64)
+		line = 63;
+	// printf("%d\n", line);
+	return_value = pixel_ptr + (line * increment_value);
+	return (return_value);
 }
 
-void draw_column(int x_pixel_draw, int y_pixel_draw, int *pixel_ptr, t_cub *cub, int height)
+void overwall_skip(int *y, int wall_height)
 {
-	int increment_value;
-	double pixel_ratio;
+	int overwall;
 
-	increment_value = cub->texture.north.line_len / 4;
-	draw_bigger_wall(pixel_ptr, cub, height, x_pixel_draw, y_pixel_draw, increment_value);
+	overwall = (wall_height - WINDOW_HEIGHT) / 2;
+	while (*y < overwall)
+		(*y)++;
 }
 
-int	draw_test(int x_pixel_draw, int y_pixel_draw, int wall_heigth, double index_hit, t_cub *cub, char *texture)
+void draw_column(int x_pixel_draw, int *y_pixel_draw, int wall_height, double index_hit, t_cub *cub, char *texture)
 {
+	int y;
+	int hit_value;
 	int	*pixel_ptr;
+	int increment_value;
+	int *corresponding_pixel;
+	int wall_pixel_y;
 
+	y = 0;
+	wall_pixel_y = 0;
 	pixel_ptr = (int *)texture;
-	int hit_value = get_hit_value(index_hit);
+	hit_value = get_hit_value(index_hit);
 	pixel_ptr += hit_value;
-	draw_column(x_pixel_draw, y_pixel_draw, pixel_ptr, cub, wall_heigth);
+	increment_value = cub->texture.north.line_len / 4; // to change
 
-	return (0);
+	if (wall_height > WINDOW_HEIGHT)
+		overwall_skip(&wall_pixel_y, wall_height);
+	while (y < wall_height && *y_pixel_draw < WINDOW_HEIGHT)
+	{
+		corresponding_pixel = get_corresponding_pixel(pixel_ptr, (int)(((double)wall_pixel_y / ((double)wall_height - 1)) * 64), increment_value);
+		img_pix_put(&cub->mlx.img, x_pixel_draw, *y_pixel_draw, *corresponding_pixel);
+		wall_pixel_y++;
+		y++;
+		(*y_pixel_draw)++;
+	}
 }
 
-void	draw_wall(t_cub *cub, int x_pixel_draw, int y_pixel_draw, int wall_heigth, int wall_orientation, int i, double index_hit)
+void	draw_wall(t_cub *cub, int x_pixel_draw, int *y_pixel_draw, int wall_height, int wall_orientation, int i, double index_hit)
 {
 	int	drawn_pixel;
 
 	drawn_pixel = 0;
 	if (wall_orientation == NORTH_WALL)
-		draw_test(x_pixel_draw, y_pixel_draw, wall_heigth, index_hit, cub, cub->texture.north.addr);
+		draw_column(x_pixel_draw, y_pixel_draw, wall_height, index_hit, cub, cub->texture.north.addr);
 	else if (wall_orientation == SOUTH_WALL)
-		draw_test(x_pixel_draw, y_pixel_draw, wall_heigth, index_hit, cub, cub->texture.south.addr);
+		draw_column(x_pixel_draw, y_pixel_draw, wall_height, index_hit, cub, cub->texture.south.addr);
 	else if (wall_orientation == EST_WALL)
-		draw_test(x_pixel_draw, y_pixel_draw, wall_heigth, index_hit, cub, cub->texture.east.addr);
+		draw_column(x_pixel_draw, y_pixel_draw, wall_height, index_hit, cub, cub->texture.east.addr);
 	else if (wall_orientation == WEST_WALL)
-		draw_test(x_pixel_draw, y_pixel_draw, wall_heigth, index_hit, cub, cub->texture.west.addr);
+		draw_column(x_pixel_draw, y_pixel_draw, wall_height, index_hit, cub, cub->texture.west.addr);
 }
 
 void	draw_line(t_cub *cub)
 {
 	int		i;
 	double	angle;
-	double	wall_heigth;
+	double	wall_height;
 	double angle_dif = 30;
 	t_dda_return *dda_return;
 	int y_pixel_draw;
@@ -166,9 +120,7 @@ void	draw_line(t_cub *cub)
 	angle = cub->vision - 30;
 	if (angle < 0)
 		angle += 360;
-	// printf("test: %f\n", 64 / 0);
-	// printf("------------------------------------------------\n");
-	// printf("player x=%f y=%f", cub->player_x, cub->player_y);
+
 	while (i < WINDOW_WIDTH)
 	{
 		y_pixel_draw = 0;
@@ -185,14 +137,14 @@ void	draw_line(t_cub *cub)
 		dda_return = get_vector_distance(cub->player_x, cub->player_y, angle, cub->parsing);
 		dda_return->distance = sin((90 - angle_dif) * (M_PI / 180)) * dda_return->distance;
 		if (dda_return->distance == 0)
-			wall_heigth = WINDOW_HEIGHT;
+			wall_height = WINDOW_HEIGHT;
 		else
-			wall_heigth = 64 / dda_return->distance * 20;
-		// printf("angle=%f dist=%f wall_h=%f\n", angle, dda_return->distance, wall_heigth);
-
-		draw_ceil(i, &y_pixel_draw, ((WINDOW_HEIGHT - (int)(wall_heigth)) / 2), cub);
-		draw_wall(cub, i, y_pixel_draw, (int)wall_heigth, dda_return->wall_orientation2, line_len, dda_return->index_hit_column);
-		draw_floor(i, WINDOW_HEIGHT, ((WINDOW_HEIGHT - (int)(wall_heigth)) / 2), cub);
+			wall_height = 64 / dda_return->distance * 20;
+		if ((int)wall_height % 2 == 1)
+			wall_height++;
+		draw_ceil(i, &y_pixel_draw, ((WINDOW_HEIGHT - (int)(wall_height)) / 2), cub);
+		draw_wall(cub, i, &y_pixel_draw, (int)wall_height, dda_return->wall_orientation2, line_len, dda_return->index_hit_column);
+		draw_floor(i, y_pixel_draw, cub);
 		i++;
 		angle += 0.0428;
 		angle_dif -= 0.0428;

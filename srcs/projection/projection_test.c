@@ -3,10 +3,8 @@
 // void draw_pix(int x, int y, int *pixel_ptr, t_cub *cub, int size)
 // {
 // 	for (int i = 0; i < size ; i++)
-// 	{
-// 		for (int j = 0; j < size ; j++)
+// 		for (int j = 0; j < 10 ; j++)
 // 			img_pix_put(&cub->mlx.img, x + j, y + i, *pixel_ptr);
-// 	}
 // }
 
 // int get_hit_value(double hit_coord)
@@ -19,40 +17,28 @@
 // 	return((int)hit_coord);
 // }
 
-// void draw_bigger_wall(int *pixel_ptr, t_cub *cub, int height, int x_pos, int increment_value)
+// int *get_corresponding_pixel(int *pixel_ptr, int line, int increment_value)
+// {
+// 	int *return_value;
+
+// 	printf("line=%d incr=%d\n", line, increment_value);
+// 	return_value = pixel_ptr + (line * increment_value);
+// 	return (return_value);
+// }
+
+// void test_1(int *pixel_ptr, t_cub *cub, int height, int x_pixel_draw, int increment_value)
 // {
 // 	int y = 0;
-// 	double pixels_to_draw;
-// 	double demi_pixel_increment;
-// 	double demi_pixel_value = 0;
+// 	int *corresponding_pixel;
 
-// 	pixels_to_draw = height / (double)increment_value;
-// 	demi_pixel_increment = pixels_to_draw - floor(pixels_to_draw);
-// 	pixels_to_draw = floor(pixels_to_draw);
-// 	// printf("ceil=%f int=%d\n", pixels_to_draw, (int)pixels_to_draw);
-// 	while (y < height)
+// 	while (y < height && y < WINDOW_HEIGHT)
 // 	{
-// 		if (demi_pixel_value >= 2)
-// 		{
-// 			draw_pix(x_pos, y, pixel_ptr, cub, (int)pixels_to_draw + 2);
-// 			// demi_pixel_value = 0;
-// 			demi_pixel_value = demi_pixel_value - 2;
-// 			y += (int)pixels_to_draw + 2;
-// 			if (y + (int)pixels_to_draw + 2 > height)
-// 				break ;
-// 		}
-// 		else
-// 		{
-// 			draw_pix(x_pos, y, pixel_ptr, cub, (int)pixels_to_draw);
-// 			y += (int)pixels_to_draw;
-// 			if (y + (int)pixels_to_draw > height)
-// 				break ;
-// 		}
-// 		demi_pixel_value += demi_pixel_increment;
-// 		pixel_ptr += increment_value;
+// 		corresponding_pixel = get_corresponding_pixel(pixel_ptr, (int)(((double)y / (double)height) * 64), increment_value);
+// 		// printf("pixel=%d\n", *corresponding_pixel);
+// 		// draw_pix(x_pixel_draw, y, corresponding_pixel, cub, 1);
+// 		img_pix_put(&cub->mlx.img, x_pixel_draw, y, *corresponding_pixel);
+// 		y++;
 // 	}
-// 	draw_pix(x_pos, y, pixel_ptr, cub, height - y);
-// 	// printf("%d\n", y);
 // }
 
 // void draw_column(int *pixel_ptr, t_cub *cub, int height, int x_pos)
@@ -60,53 +46,43 @@
 // 	int increment_value;
 // 	double pixels_to_draw;
 
-// 	int test = 0;
-
 // 	increment_value = cub->texture.north.line_len / 4;
-// 	if (height > increment_value)
-// 		draw_bigger_wall(pixel_ptr, cub, height, x_pos, increment_value);
-// 	else
-// 	{
-// 		pixels_to_draw = floor(1 / (double)height * 64);
-// 		printf("%f\n", pixels_to_draw);
-// 		for (int y = 0 ; y < height ; y++)
-// 		{
-// 			draw_pix(x_pos, y, pixel_ptr, cub, 1);
-// 			pixel_ptr += increment_value * (int)pixels_to_draw;
-// 		}
-// 	}
+// 	test_1(pixel_ptr, cub, height, x_pos, increment_value);
 // 	// printf("len=%d\n", cub->texture.north.line_len / 4);
 // }
 
+// // void draw_texture_preview(int *texture_ptr, t_cub *cub)
+// // {
+// // 	for (int y = 0 ; y < 64 * 4 ; y += 4)
+// // 	{
+// // 		for (int x = 0 ; x < 64 * 4 ; x += 4)
+// // 		{
+// // 			draw_pix(x, y, texture_ptr, cub, 10);
+// // 			texture_ptr++;
+// // 		}
+// // 	}
+// // }
+
 // int	draw_test_move(t_cub *cub)
 // {
-// 	// draw_backgrdoud(cub);
-// 	int	*pixel_cpy;
-// 	int	*pixel_ptr;
+// 	int *texture_start_ptr;
 
-// 	pixel_cpy = (int *)(cub->texture.north.addr);
-// 	pixel_ptr = pixel_cpy;
-// 	for (int y = 0 ; y < 64 * 4 ; y += 4)
-// 	{
-// 		for (int x = 0 ; x < 64 * 4 ; x += 4)
-// 		{
-// 			draw_pix(x, y, pixel_ptr, cub, 4);
-// 			pixel_ptr++;
-// 		}
-// 	}
-// 	int hit_value = get_hit_value(5);
-// 	int wall_height = 700;
-// 	pixel_ptr = pixel_cpy;
-// 	pixel_ptr += hit_value;
-// 	// for (int i = 0 ; i < 700 ; i++)
-// 	// 	img_pix_put(&cub->mlx.img, 399, i, 0x00FFFFFF);
-// 	// draw_column(pixel_ptr, cub, wall_height, 400);
-// 	// pixel_ptr = pixel_cpy;
-// 	for (int i = 0 ; i < 600 ; i++)
+// 	texture_start_ptr = (int *)(cub->texture.north.addr);
+// 	draw_texture_preview(texture_start_ptr, cub);
+
+// 	int hit_value = get_hit_value(0);
+// 	int wall_height = 640;
+
+// 	for (int i = 0 ; i < wall_height ; i++)
 // 		img_pix_put(&cub->mlx.img, 419, i, 0x00FFFFFF);
-// 	draw_column(pixel_ptr, cub, 600, 420);
+// 	texture_start_ptr = (int *)(cub->texture.north.addr);
+// 	texture_start_ptr += hit_value;
+// 	for (int i = 0;i<64;i++)
+// 	{
+// 		draw_column(texture_start_ptr, cub, wall_height, 420 + i);
+// 		texture_start_ptr += 1;
+// 	}
 
-	
 // 	mlx_put_image_to_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr, cub->mlx.img.mlx_img, -1, 0);
 // 	return (0);
 // }

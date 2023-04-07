@@ -49,6 +49,7 @@ void	move_key(int key, t_cub *cub)
 			cub->vision -= 360;
 		printf("vision: %f x=%f y=%f\n", cub->vision, cub->player_x, cub->player_y);
 	}
+	draw(cub);
 }
 
 int	deal_key(int key, t_cub *cub)

@@ -106,8 +106,7 @@ int	main(int ac, char **av)
 		return (error_message("Wrong extension map file"), 1);
 	if (init_manager(&cub, av) == FALSE)
 		return (1);
-	mlx_loop_hook(cub.mlx.mlx_ptr, draw, &cub);
-	// mlx_loop_hook(cub.mlx.mlx_ptr, draw_test_move, &cub);
+	draw(&cub);
 	mlx_hook(cub.mlx.win_ptr, KeyPress, KeyPressMask, deal_key, &cub);
 	mlx_hook(cub.mlx.win_ptr, 33, 0, ft_close, &cub);
 	mlx_loop(cub.mlx.mlx_ptr);
