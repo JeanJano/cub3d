@@ -57,7 +57,6 @@ void	move_forward(t_cub *cub)
 		x_move_to -= cub->move_incr;
 	else if (cub->vision == 270)
 		y_move_to -= cub->move_incr;
-
 	if (check_move_forward(cub, x_move_to, y_move_to))
 		return ;
 	cub->player_x = x_move_to;
