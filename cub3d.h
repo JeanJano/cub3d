@@ -105,6 +105,17 @@ typedef	struct s_dda_return
 	double	index_hit_column;
 }				t_dda_return;
 
+typedef struct s_draw
+{
+	double	wall_height;
+	double	angle;
+	double	angle_dif;
+	int		x_pixel_draw;
+	int		y_pixel_draw;
+	int		hit_value;
+	int		wall_pixel_y;
+}				t_draw;
+
 
 int		init_mlx(t_cub *cub);
 // **************************** //
@@ -150,6 +161,7 @@ int		convert_color(int *color_tab);
 double	get_player_position_x(t_parsing *parsing);
 double	get_player_position_y(t_parsing *parsing);
 double	get_player_position_vision(t_parsing *parsing);
+void	draw_wall(t_cub *cub, t_draw *draw, t_dda_return *dda_return);
 // **************************** //
 //			event               //
 // **************************** //
