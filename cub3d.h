@@ -148,10 +148,10 @@ t_dda_return *get_vector_distance(double playerX, double playerY, double angle, 
 // **************************** //
 //			get_intersec        //
 // **************************** //
-void get_first_vertical_intersec(double *x, double *y, t_dda *data);
-void get_next_vertical_intersec(double *x, double *y, t_dda *data);
-void get_first_horizontal_intersec(double *x, double *y, t_dda *data);
-void get_next_horizontal_intersec(double *x, double *y, t_dda *data);
+void get_first_vertical_intersec(t_dda *data);
+void get_next_vertical_intersec(t_dda *data);
+void get_first_horizontal_intersec(t_dda *data);
+void get_next_horizontal_intersec(t_dda *data);
 // **************************** //
 //			projection          //
 // **************************** //

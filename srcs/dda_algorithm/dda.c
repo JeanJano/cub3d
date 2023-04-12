@@ -25,52 +25,42 @@ void	init_struct(t_dda *data, double player_x, double player_y, double angle)
 		data->quartile = 4;
 }
 
-int	check_map_vertical(double x, double y, t_dda data, t_parsing parsing_struct)
-{	
-	if (data.quartile == 1)
-		y = floor(y);
-	else if (data.quartile == 2)
-	{
-		x = x - 1;
-		y = floor(y);
-	}
-	else if (data.quartile == 3)
-	{
-		x = x - 1;
-		y = floor(y);
-	}
-	else
-		y = floor(y);
-	if ((int)y < 0 || (int)x < 0)
+int	check_map_vertical(t_dda data, t_parsing parsing_struct)
+{
+	int	x;
+	int	y;
+
+	if (data.vertical_length > data.horizontal_length)
 		return (0);
-	if ((int)y >= parsing_struct.map_height || (int)x >= parsing_struct.map_width[(int)y])
+	x = (int)data.x_vertical;
+	if (data.quartile == 2 || data.quartile == 3)
+		x = (int)(data.x_vertical - 1);
+	y = (int)floor(data.y_vertical);
+	if (y < 0 || x < 0)
 		return (0);
-	if (parsing_struct.map[(int)y][(int)x] == 1)
+	if (y >= parsing_struct.map_height || x >= parsing_struct.map_width[y])
+		return (0);
+	if (parsing_struct.map[y][x] == 1)
 		return (1);
 	return (0);
 }
 
-int	check_map_horizontal(double x, double y, t_dda data, t_parsing parsing_struct)
+int	check_map_horizontal(t_dda data, t_parsing parsing_struct)
 {
-	if (data.quartile == 1)
-		x = floor(x);
-	else if (data.quartile == 2)
-		x = floor(x);
-	else if (data.quartile == 3)
-	{
-		x = floor(x);
-		y = y - 1;
-	}
-	else
-	{
-		x = floor(x);
-		y = y - 1;
-	}
-	if ((int)y < 0 || (int)x < 0)
+	int	x;
+	int	y;
+
+	if (data.horizontal_length > data.vertical_length)
 		return (0);
-	if ((int)y >= parsing_struct.map_height || (int)x >= parsing_struct.map_width[(int)y])
+	y = (int)data.y_horizontal;
+	if (data.quartile == 3 || data.quartile == 4)
+		y = (int)(data.y_horizontal - 1);
+	x = (int)floor(data.x_horizontal);
+	if (y < 0 || x < 0)
 		return (0);
-	if (parsing_struct.map[(int)y][(int)x] == 1)
+	if (y >= parsing_struct.map_height || x >= parsing_struct.map_width[y])
+		return (0);
+	if (parsing_struct.map[y][x] == 1)
 		return (1);
 	return (0);
 }
@@ -106,24 +96,24 @@ t_dda_return	*get_vector_distance(double player_x, double player_y, double angle
 
 	dda_return = malloc(sizeof(t_dda_return));
 	init_struct(&data, player_x, player_y, angle);
-	get_first_vertical_intersec(&data.x_vertical, &data.y_vertical, &data);
-	get_first_horizontal_intersec(&data.x_horizontal, &data.y_horizontal, &data);
+	get_first_vertical_intersec(&data);
+	get_first_horizontal_intersec(&data);
 	while (1)
 	{
-		if (check_map_vertical(data.x_vertical, data.y_vertical, data, parsing_struct) && data.vertical_length < data.horizontal_length)
+		if (check_map_vertical(data, parsing_struct))
 		{
 			get_hit_data(data, VERTICAL_HIT, dda_return);
 			return (dda_return);
 		}
-		if (check_map_horizontal(data.x_horizontal, data.y_horizontal, data, parsing_struct) && data.horizontal_length < data.vertical_length)
+		if (check_map_horizontal(data, parsing_struct))
 		{
 			get_hit_data(data, HORIZONTAL_HIT, dda_return);
 			return (dda_return);
 		}
 		if (data.vertical_length < data.horizontal_length)
-			get_next_vertical_intersec(&data.x_vertical, &data.y_vertical, &data);
+			get_next_vertical_intersec(&data);
 		else
-			get_next_horizontal_intersec(&data.x_horizontal, &data.y_horizontal, &data);
+			get_next_horizontal_intersec(&data);
 	}
 	return (0);
 }
