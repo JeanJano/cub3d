@@ -86,12 +86,12 @@ typedef	struct s_dda
 
     double x_horizontal;
     double y_horizontal;
-	double delta_dist_horizontal;
+	double delta_dist_hori;
 	double horizontal_length;
 
 	double x_vertical;
 	double y_vertical;
-	double delta_dist_vertical;
+	double delta_dist_verti;
 	double vertical_length;
 
 	int quartile;
@@ -137,10 +137,10 @@ t_dda_return *get_vector_distance(double playerX, double playerY, double angle, 
 // **************************** //
 //			get_intersec        //
 // **************************** //
-void get_first_vertical_intersec(double *x, double *y, t_dda *dda_data);
-void get_next_vertical_intersec(double *x, double *y, t_dda *dda_data);
-void get_first_horizontal_intersec(double *x, double *y, t_dda *dda_data);
-void get_next_horizontal_intersec(double *x, double *y, t_dda *dda_data);
+void get_first_vertical_intersec(double *x, double *y, t_dda *data);
+void get_next_vertical_intersec(double *x, double *y, t_dda *data);
+void get_first_horizontal_intersec(double *x, double *y, t_dda *data);
+void get_next_horizontal_intersec(double *x, double *y, t_dda *data);
 // **************************** //
 //			projection          //
 // **************************** //
