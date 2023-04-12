@@ -145,6 +145,9 @@ int		check_wall_up_down(t_parsing *parsing, int i);
 void	identifier_manager(t_parsing *parsing, char *line);
 int		check_valid_identifier(t_parsing *parsing);
 int		check_map_line(char *line);
+int		init_map(t_parsing *parsing);
+void	create_map_line_manage(t_parsing *parsing, char *line, int fd);
+int		create_map_tab(t_parsing *parsing, char *line);
 // **************************** //
 //			utils               //
 // **************************** //
@@ -153,6 +156,7 @@ char	*strdup_no_breakline(char *line);
 void	error_message(char *message);
 void	free_split(char **arr);
 void	free_struct(t_cub *cub);
+void	free_error_tab(t_parsing *parsing, char *line, int fd);
 // **************************** //
 //			dda algo            //
 // **************************** //

@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 16:14:46 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/02/28 15:22:09 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/04/12 19:56:11 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	is_player_orientation(char c)
 	return (FALSE);
 }
 
-void	create_map_tab(t_parsing *parsing, char *line)
+int	create_map_tab(t_parsing *parsing, char *line)
 {
 	static int	i;
 	int			j;
@@ -31,9 +31,11 @@ void	create_map_tab(t_parsing *parsing, char *line)
 	if (line[j] != '\n')
 		j++;
 	parsing->map[i] = malloc(sizeof(int *) * j);
+	if (!parsing->map[i])
+		return (1);
 	parsing->map_width[i] = j;
-	j = 0;
-	while (line[j])
+	j = -1;
+	while (line[++j])
 	{
 		if (line[j] == ' ')
 			parsing->map[i][j] = 676;
@@ -41,9 +43,9 @@ void	create_map_tab(t_parsing *parsing, char *line)
 			parsing->map[i][j] = line[j];
 		else
 			parsing->map[i][j] = line[j] - 48;
-		j++;
 	}
 	i++;
+	return (0);
 }
 
 int	error_char_after_map(int fd, char *line)
@@ -81,7 +83,7 @@ int	parser_map(t_parsing *parsing, int fd)
 		}
 		if (check_map_line(line) == TRUE)
 		{
-			create_map_tab(parsing, line);
+			create_map_line_manage(parsing, line, fd);
 			i++;
 		}
 		free(line);
@@ -107,8 +109,8 @@ int	parser(t_parsing *parsing, char *path)
 		line = get_next_line(fd);
 	}
 	close(fd);
-	parsing->map_width = malloc(sizeof(int) * parsing->map_height);
-	parsing->map = malloc(sizeof(int *) * parsing->map_height);
+	if (init_map(parsing) == -1)
+		return (-1);
 	fd = open(path, O_RDONLY);
 	map = parser_map(parsing, fd);
 	close(fd);

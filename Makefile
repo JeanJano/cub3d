@@ -21,8 +21,8 @@ LIB = ./libft/libft.a
 NAME = cub3D
 
 CC = cc
-CFLAGS = -MMD -Werror -Wall -Wextra -g
-CFLAGS = 
+# CFLAGS = -MMD -Werror -Wall -Wextra -g
+# CFLAGS = -fsanitize=address -g3
 
 # -- RULES -- #
 

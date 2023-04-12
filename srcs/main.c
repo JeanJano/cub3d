@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 14:13:31 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/04/12 15:46:26 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/04/12 18:14:54 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,13 @@ void	init_player(t_cub *cub)
 
 int	init_manager(t_cub *cub, char **av)
 {
+	int	parser_return;
+
 	init_parsing_struct(&cub->parsing);
-	if (parser(&cub->parsing, av[1]) == 2)
+	parser_return = parser(&cub->parsing, av[1]);
+	if (parser_return == -1)
+		return (FALSE);
+	if (parser_return == 2)
 	{
 		free_struct(cub);
 		return (FALSE);
