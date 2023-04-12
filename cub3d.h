@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rvincent  <rvincent@student.42.fr   >      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 1970/01/01 01:00:00 by rvincent          #+#    #+#             */
+/*   Updated: 2023/04/12 17:33:12 by rvincent         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -81,8 +93,8 @@ typedef	struct s_dda
 	double angle;
     double x_cos;
     double y_sin;
-	double x_scale; // x scale to move 1 y
-	double y_scale; // y scale to move 1 x
+	double x_scale;
+	double y_scale;
 
     double x_horizontal;
     double y_horizontal;
@@ -101,8 +113,7 @@ typedef	struct s_dda_return
 {
 	double	distance;
 	int wall_orientation;
-	int wall_orientation2;
-	double	index_hit_column;
+	double	index_hit;
 }				t_dda_return;
 
 typedef struct s_draw
@@ -114,6 +125,7 @@ typedef struct s_draw
 	int		y_pixel_draw;
 	int		hit_value;
 	int		wall_pixel_y;
+	t_img	texture;
 }				t_draw;
 
 
@@ -144,7 +156,7 @@ void	free_struct(t_cub *cub);
 // **************************** //
 //			dda algo            //
 // **************************** //
-t_dda_return *get_vector_distance(double playerX, double playerY, double angle, t_parsing parsing);
+t_dda_return *get_dist(double playerX, double playerY, double angle, t_parsing parsing);
 // **************************** //
 //			get_intersec        //
 // **************************** //
@@ -171,8 +183,5 @@ void	move_right(t_cub *cub);
 void	move_left(t_cub *cub);
 void	move_backward(t_cub *cub);
 void	move_forward(t_cub *cub);
-
-// int	draw_test(int x_pixel_draw, int y_pixel_draw, int wall_heigth, double index_hit, t_cub *cub, char *texture);
-// int	draw_test_move(t_cub *cub);
 
 #endif

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dda.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rvincent  <rvincent@student.42.fr   >      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 1970/01/01 01:00:00 by rvincent          #+#    #+#             */
+/*   Updated: 2023/04/12 17:37:08 by rvincent         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	init_struct(t_dda *data, double player_x, double player_y, double angle)
@@ -71,41 +83,41 @@ void	get_hit_data(t_dda data, int hit_dir, t_dda_return *dda_return)
 	{
 		dda_return->wall_orientation = VERTICAL_HIT;
 		if (data.quartile == 1 || data.quartile == 4)
-			dda_return->wall_orientation2 = WEST_WALL;
+			dda_return->wall_orientation = WEST_WALL;
 		else
-			dda_return->wall_orientation2 = EST_WALL;
-		dda_return->index_hit_column = data.y_vertical - floor(data.y_vertical);
+			dda_return->wall_orientation = EST_WALL;
+		dda_return->index_hit = data.y_vertical - floor(data.y_vertical);
 		dda_return->distance = data.vertical_length;
 	}
 	else
 	{
 		dda_return->wall_orientation = HORIZONTAL_HIT;
 		if (data.quartile == 1 || data.quartile == 2)
-			dda_return->wall_orientation2 = NORTH_WALL;
+			dda_return->wall_orientation = NORTH_WALL;
 		else
-			dda_return->wall_orientation2 = SOUTH_WALL;
-		dda_return->index_hit_column = data.x_horizontal - floor(data.x_horizontal);
+			dda_return->wall_orientation = SOUTH_WALL;
+		dda_return->index_hit = data.x_horizontal - floor(data.x_horizontal);
 		dda_return->distance = data.horizontal_length;
 	}
 }
 
-t_dda_return	*get_vector_distance(double player_x, double player_y, double angle, t_parsing parsing_struct)
+t_dda_return	*get_dist(double x, double y, double angle, t_parsing parsing)
 {
 	t_dda			data;
 	t_dda_return	*dda_return;
 
 	dda_return = malloc(sizeof(t_dda_return));
-	init_struct(&data, player_x, player_y, angle);
+	init_struct(&data, x, y, angle);
 	get_first_vertical_intersec(&data);
 	get_first_horizontal_intersec(&data);
 	while (1)
 	{
-		if (check_map_vertical(data, parsing_struct))
+		if (check_map_vertical(data, parsing))
 		{
 			get_hit_data(data, VERTICAL_HIT, dda_return);
 			return (dda_return);
 		}
-		if (check_map_horizontal(data, parsing_struct))
+		if (check_map_horizontal(data, parsing))
 		{
 			get_hit_data(data, HORIZONTAL_HIT, dda_return);
 			return (dda_return);

@@ -52,7 +52,7 @@ void	move_left(t_cub *cub)
 		y_move_to += cub->move_incr;
 	else if (cub->vision == 270)
 		x_move_to -= cub->move_incr;
-	if (cub->parsing.map[(int)y_move_to][(int)x_move_to] == 1)
+	if (cub->parsing.map[(int)(y_move_to - 0.1)][(int)x_move_to] == 1)
 		return ;
 	cub->player_x = x_move_to;
 	cub->player_y = y_move_to;
