@@ -26,8 +26,8 @@ void	init_parsing_struct(t_parsing *parsing)
 
 void	init_player(t_cub *cub)
 {
-	cub->player_x = get_player_position_x(&cub->parsing);
-	cub->player_y = get_player_position_y(&cub->parsing);
+	cub->player_x = get_player_position_x(&cub->parsing) + 0.5;
+	cub->player_y = get_player_position_y(&cub->parsing) + 0.5;
 	cub->vision = get_player_position_vision(&cub->parsing);
 	if (cub->vision == 78)
 		cub->vision = 270;

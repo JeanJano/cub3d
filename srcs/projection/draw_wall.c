@@ -45,7 +45,6 @@ void	draw_column(t_draw *draw, int wall_height, double index_hit, t_cub *cub)
 	int	y;
 	int	*pixel_ptr;
 	int	increment_value;
-	int	*corresponding_pixel;
 	int	line;
 
 	y = 0;

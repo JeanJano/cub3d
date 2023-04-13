@@ -55,9 +55,10 @@ int	draw_init(t_draw *draw, int i)
 	return (1);
 }
 
-int	draw_line(t_cub *cub, t_draw *draw, t_dda_return *dda_return, int i)
+int	draw_line(t_cub *cub, t_draw *draw, int i)
 {
-	int	y;
+	int				y;
+	t_dda_return	*dda_return;
 
 	y = 0;
 	dda_return = get_dist(cub->player_x, cub->player_y,
@@ -79,7 +80,6 @@ int	draw_line(t_cub *cub, t_draw *draw, t_dda_return *dda_return, int i)
 
 int	draw(t_cub *cub)
 {
-	t_dda_return	*dda_return;
 	t_draw			draw;
 	int				i;
 
@@ -92,7 +92,7 @@ int	draw(t_cub *cub)
 	{
 		if (draw_init(&draw, i) == 0)
 			continue ;
-		if (draw_line(cub, &draw, dda_return, i) == 0)
+		if (draw_line(cub, &draw, i) == 0)
 			continue ;
 		draw.angle += 0.0428;
 		draw.angle_dif -= 0.0428;
