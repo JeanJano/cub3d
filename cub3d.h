@@ -157,10 +157,11 @@ void	error_message(char *message);
 void	free_split(char **arr);
 void	free_struct(t_cub *cub);
 void	free_error_tab(t_parsing *parsing, char *line, int fd);
+void	free_mlx(t_cub *cub);
 // **************************** //
 //			dda algo            //
 // **************************** //
-t_dda_return *get_dist(double playerX, double playerY, double angle, t_parsing parsing);
+t_dda_return *get_dist(double playerX, double playerY, double angle, t_cub *cub);
 // **************************** //
 //			get_intersec        //
 // **************************** //

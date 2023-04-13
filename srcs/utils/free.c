@@ -64,3 +64,15 @@ void	free_error_tab(t_parsing *parsing, char *line, int fd)
 		line = get_next_line(fd);
 	}
 }
+
+void free_mlx(t_cub *cub)
+{
+	mlx_destroy_image(cub->mlx.mlx_ptr, cub->mlx.img.mlx_img);
+	mlx_destroy_image(cub->mlx.mlx_ptr, cub->texture.north.mlx_img);
+	mlx_destroy_image(cub->mlx.mlx_ptr, cub->texture.east.mlx_img);
+	mlx_destroy_image(cub->mlx.mlx_ptr, cub->texture.south.mlx_img);
+	mlx_destroy_image(cub->mlx.mlx_ptr, cub->texture.west.mlx_img);
+	mlx_destroy_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr);
+	mlx_destroy_display(cub->mlx.mlx_ptr);
+	free(cub->mlx.mlx_ptr);
+}

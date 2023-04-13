@@ -101,27 +101,27 @@ void	get_hit_data(t_dda data, int hit_dir, t_dda_return *dda_return)
 	}
 }
 
-t_dda_return	*get_dist(double x, double y, double angle, t_parsing parsing)
+t_dda_return	*get_dist(double x, double y, double angle, t_cub *cub)
 {
 	t_dda			data;
 	t_dda_return	*dda_return;
 
 	dda_return = malloc(sizeof(t_dda_return));
+	if (!dda_return)
+	{
+		free_mlx(cub);
+		free_struct(cub);
+		exit (1);
+	}
 	init_struct(&data, x, y, angle);
 	get_first_vertical_intersec(&data);
 	get_first_horizontal_intersec(&data);
 	while (1)
 	{
-		if (check_map_vertical(data, parsing))
-		{
-			get_hit_data(data, VERTICAL_HIT, dda_return);
-			return (dda_return);
-		}
-		if (check_map_horizontal(data, parsing))
-		{
-			get_hit_data(data, HORIZONTAL_HIT, dda_return);
-			return (dda_return);
-		}
+		if (check_map_vertical(data, cub->parsing))
+			return (get_hit_data(data, VERTICAL_HIT, dda_return), dda_return);
+		if (check_map_horizontal(data, cub->parsing))
+			return (get_hit_data(data, HORIZONTAL_HIT, dda_return), dda_return);
 		if (data.vertical_length < data.horizontal_length)
 			get_next_vertical_intersec(&data);
 		else

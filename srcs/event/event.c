@@ -41,14 +41,7 @@ int	deal_key(int key, t_cub *cub)
 {
 	if (key == XK_Escape)
 	{
-		mlx_destroy_image(cub->mlx.mlx_ptr, cub->mlx.img.mlx_img);
-		mlx_destroy_image(cub->mlx.mlx_ptr, cub->texture.north.mlx_img);
-		mlx_destroy_image(cub->mlx.mlx_ptr, cub->texture.east.mlx_img);
-		mlx_destroy_image(cub->mlx.mlx_ptr, cub->texture.south.mlx_img);
-		mlx_destroy_image(cub->mlx.mlx_ptr, cub->texture.west.mlx_img);
-		mlx_destroy_window(cub->mlx.mlx_ptr, cub->mlx.win_ptr);
-		mlx_destroy_display(cub->mlx.mlx_ptr);
-		free(cub->mlx.mlx_ptr);
+		free_mlx(cub);
 		free_struct(cub);
 		exit(0);
 	}

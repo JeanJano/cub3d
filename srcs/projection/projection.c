@@ -61,7 +61,7 @@ int	draw_line(t_cub *cub, t_draw *draw, t_dda_return *dda_return, int i)
 
 	y = 0;
 	dda_return = get_dist(cub->player_x, cub->player_y,
-			draw->angle, cub->parsing);
+			draw->angle, cub);
 	dda_return->distance = sin((90 - draw->angle_dif) * (M_PI / 180))
 		* dda_return->distance;
 	if (dda_return->distance == 0)

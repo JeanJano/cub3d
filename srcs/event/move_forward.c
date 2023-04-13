@@ -14,7 +14,7 @@
 
 static int	check_move_forward(t_cub *cub, double x_move_to, double y_move_to)
 {
-	if (cub->parsing.map[(int)(y_move_to)][(int)(x_move_to + 0.1)] == 1)
+	if (cub->parsing.map[(int)(y_move_to)][(int)(x_move_to)] == 1)
 		return (1);
 	if (cub->vision > 0 && cub->vision < 90 && 
 		cub->parsing.map[(int)(y_move_to - 0.1)][(int)(x_move_to)] == 1)
