@@ -65,7 +65,7 @@ void	free_error_tab(t_parsing *parsing, char *line, int fd)
 	}
 }
 
-void free_mlx(t_cub *cub)
+void	free_mlx(t_cub *cub)
 {
 	mlx_destroy_image(cub->mlx.mlx_ptr, cub->mlx.img.mlx_img);
 	mlx_destroy_image(cub->mlx.mlx_ptr, cub->texture.north.mlx_img);
