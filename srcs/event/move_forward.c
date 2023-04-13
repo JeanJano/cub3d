@@ -6,7 +6,7 @@
 /*   By: jsauvage <jsauvage@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:40:35 by jsauvage          #+#    #+#             */
-/*   Updated: 2023/04/12 14:56:34 by jsauvage         ###   ########.fr       */
+/*   Updated: 2023/04/13 14:24:17 by jsauvage         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,19 @@
 
 static int	check_move_forward(t_cub *cub, double x_move_to, double y_move_to)
 {
-	if (cub->parsing.map[(int)y_move_to][(int)x_move_to] == 1)
+	if (cub->parsing.map[(int)(y_move_to)][(int)(x_move_to + 0.1)] == 1)
+		return (1);
+	if (cub->vision > 0 && cub->vision < 90 && 
+		cub->parsing.map[(int)(y_move_to - 0.1)][(int)(x_move_to)] == 1)
+		return (1);
+	if (cub->vision > 90 && cub->vision < 180 && 
+		cub->parsing.map[(int)(y_move_to)][(int)(x_move_to - 0.1)] == 1)
+		return (1);
+	if (cub->vision > 180 && cub->vision < 270 && 
+		cub->parsing.map[(int)(y_move_to + 0.1)][(int)(x_move_to)] == 1)
+		return (1);
+	if (cub->vision > 270 && cub->vision < 360 && 
+		cub->parsing.map[(int)(y_move_to)][(int)(x_move_to + 0.1)] == 1)
 		return (1);
 	return (0);
 }
